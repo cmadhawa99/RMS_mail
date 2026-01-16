@@ -38,10 +38,13 @@ def sector_dashboard(request):
     # HANDLE ACTIONS
     if request.method == 'POST':
         letter_id = request.POST.get('letter_id')
+        reply_date = request.POST.get('reply_date')
+
         letter = get_object_or_404(Letter, id=letter_id, target_sector=user_sector)
 
-        if not letter.is_replied:
+        if not letter.is_replied and reply_date:
             letter.is_replied = True
+            letter.replied_at = reply_date
             letter.save()
 
         return redirect(f"{request.path}?sector={selected_sector}")
@@ -71,6 +74,10 @@ def letter_detail(request, pk):
         user_sector = user_profile.sector
     except SectorProfile.DoesNotExist:
         user_sector = "ADMIN"
+
+    #SECURITY CHECK
+    if user_sector != "ADMIN" and letter.target_sector != user_sector:
+        return render(request, 'letters/access_denied.html', {})
 
     return render(request, 'letters/letter_detail.html', {
         'letter': letter,

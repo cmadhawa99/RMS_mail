@@ -32,8 +32,11 @@ class Letter(models.Model):
     is_replied = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    replied_at = models.DateTimeField(null=True, blank=True)
+    attachment = models.FileField(upload_to='letters/', null=True, blank=True)
+
     def __str__(self):
-        return f"Letter #{self.serial_number} from {self.sender_name}"
+        return f"{self.serial_number} ({self.get_target_sector_display()})"
 
 class SectorProfile(models.Model):
     """

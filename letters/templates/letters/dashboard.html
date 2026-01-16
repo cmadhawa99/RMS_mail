@@ -192,13 +192,24 @@
                             {% for letter in letters %}
                             <tr>
                                 <td>#{{ letter.serial_number }}</td>
+
+
                                 <td>
+                                {% if letter.target_sector == user_sector or user_sector == 'ADMIN' %}
                                     <a href="{% url 'letter_detail' letter.id %}" class="text-decoration-none text-dark fw-bold">
                                         {{ letter.letter_type }}
                                     </a>
-                                    <br>
-                                    <span class="text-muted small">{{ letter.sender_name }}</span>
-                                </td>
+                                {% else %}
+                                    <span class="text-muted fw-bold" style="cursor: not-allowed;" title="Access Restricted">
+                                        {{ letter.letter_type }} <i class="fas fa-lock fa-xs ms-1"></i>
+                                    </span>
+                                {% endif %}
+
+                                <br>
+                                <span class="text-muted small">{{ letter.sender_name }}</span>
+                            </td>
+
+
                                 <td>
                                     <span class="badge bg-light text-dark border">{{ letter.get_target_sector_display }}</span>
                                     <br><small class="text-muted">{{ letter.date_received }}</small>
@@ -210,20 +221,26 @@
                                         <span class="status-badge status-pending">Pending</span>
                                     {% endif %}
                                 </td>
+
                                 <td>
                                     {% if letter.is_replied %}
                                         <button class="btn btn-success btn-sm disabled" disabled>
                                             <i class="fas fa-check-double"></i> Done
                                         </button>
 
+
                                     {% elif letter.target_sector == user_sector %}
-                                        <form method="POST">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="letter_id" value="{{ letter.id }}">
-                                            <button type="submit" class="btn btn-outline-primary btn-sm">
-                                                <i class="far fa-square"></i> Mark Replied
-                                            </button>
-                                        </form>
+                                    <form method="POST" class="d-flex flex-column gap-2">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="letter_id" value="{{ letter.id }}">
+
+                                        <input type="datetime-local" name="reply_date" class="form-control form-control-sm" required>
+
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-check"></i> Mark Replied
+                                        </button>
+                                    </form>
+
 
                                     {% else %}
                                         <span class="text-muted small"><i class="fas fa-lock"></i> View Only</span>
