@@ -1,38 +1,55 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import Letter, SectorProfile
 
 @login_required
 def sector_dashboard(request):
+
+    # IDENTIFY THE USER
     try:
         user_profile = request.user.sectorprofile
         user_sector = user_profile.sector
     except SectorProfile.DoesNotExist:
         user_sector = "ADMIN"
 
+    letters = Letter.objects.all().order_by('-date_received')
+
     selected_sector = request.GET.get('sector', 'ALL')
 
-    if selected_sector == "ALL":
-        letters = Letter.objects.all().order_by('-date_received')
-    else:
-        letters = Letter.objects.filter(target_sector=selected_sector).order_by('-date_received')
+    if selected_sector != "ALL":
+        letters = letters.filter(target_sector=selected_sector)
 
-    all_letters = Letter.objects.all()
-    total_count = all_letters.count()
-    resolved_count = all_letters.filter(is_repaired=True).count()
+    # SEARCH LOGIC
+    search_query = request.GET.get('q', '')
+
+    if search_query:
+        letters = letters.filter(
+            Q(serial_number__icontains=search_query) |
+            Q(sender_name__icontains=search_query) |
+            Q(letter_type__icontains=search_query)
+        )
+
+    # CALCULATE STATS
+    total_count = letters.count()
+    resolved_count = letters.filter(is_replied=True).count()
     pending_count = total_count - resolved_count
 
+    # HANDLE ACTIONS
     if request.method == 'POST':
         letter_id = request.POST.get('letter_id')
         letter = get_object_or_404(Letter, id=letter_id, target_sector=user_sector)
+
         if not letter.is_replied:
             letter.is_replied = True
             letter.save()
-        return redirect('dashboard')
+
+        return redirect(f"{request.path}?sector={selected_sector}")
 
     context = {
         'user_sector': user_sector,
         'selected_sector': selected_sector,
+        'search_query': search_query,
         'letters': letters,
         'total': total_count,
         'pending': pending_count,
