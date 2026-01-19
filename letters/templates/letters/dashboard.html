@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>City Council Portal</title>
+    <title>ප්‍රාදේශීය සභා ද්වාරය</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Noto Sans Sinhala Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Noto Sans Sinhala', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
 
         .sidebar {
             background-color: #1a233a;
@@ -62,69 +68,79 @@
 <div class="container-fluid">
     <div class="row">
 
+        <!-- Sidebar -->
         <div class="col-md-2 sidebar p-0">
             <div class="sidebar-brand">
                 <i class="fas fa-university me-2"></i> වැලිගෙපොල ප්‍රාදේශීය සභාව
             </div>
             <nav class="nav flex-column mt-3">
                 <a class="nav-link {% if selected_sector == 'ALL' %}active{% endif %}" href="?sector=ALL">
-                    <i class="fas fa-layer-group"></i> All Sectors
+                    <i class="fas fa-layer-group"></i> සියළුම අංශ
                 </a>
 
-                <div class="px-3 mt-3 mb-1 text-muted small">DEPARTMENTS</div>
+                <div class="px-3 mt-3 mb-1 text-muted small">දෙපාර්තමේන්තු</div>
 
                 <a class="nav-link d-flex justify-content-between align-items-center {% if selected_sector == 'GOVERNING' %}active{% endif %}" href="?sector=GOVERNING">
-                    <span><i class="fas fa-gavel"></i> Governing</span>
-                    {% if user_sector == 'GOVERNING' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">YOU</span>{% endif %}
+                    <span><i class="fas fa-gavel"></i> පාලන අංශය</span>
+                    {% if user_sector == 'GOVERNING' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">ඔබ</span>{% endif %}
                 </a>
 
                 <a class="nav-link d-flex justify-content-between align-items-center {% if selected_sector == 'HEALTH' %}active{% endif %}" href="?sector=HEALTH">
-                    <span><i class="fas fa-heartbeat"></i> Health</span>
-                    {% if user_sector == 'HEALTH' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">YOU</span>{% endif %}
+                    <span><i class="fas fa-heartbeat"></i> සෞඛ්‍ය අංශය</span>
+                    {% if user_sector == 'HEALTH' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">ඔබ</span>{% endif %}
                 </a>
 
                 <a class="nav-link d-flex justify-content-between align-items-center {% if selected_sector == 'DEVELOPMENT' %}active{% endif %}" href="?sector=DEVELOPMENT">
-                    <span><i class="fas fa-hard-hat"></i> Development</span>
-                    {% if user_sector == 'DEVELOPMENT' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">YOU</span>{% endif %}
+                    <span><i class="fas fa-hard-hat"></i> සංවර්ධන අංශය</span>
+                    {% if user_sector == 'DEVELOPMENT' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">ඔබ</span>{% endif %}
                 </a>
 
                 <a class="nav-link d-flex justify-content-between align-items-center {% if selected_sector == 'INCOME' %}active{% endif %}" href="?sector=INCOME">
-                    <span><i class="fas fa-coins"></i> Income</span>
-                    {% if user_sector == 'INCOME' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">YOU</span>{% endif %}
+                    <span><i class="fas fa-coins"></i> ආදායම් අංශය</span>
+                    {% if user_sector == 'INCOME' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">ඔබ</span>{% endif %}
                 </a>
 
                 <a class="nav-link d-flex justify-content-between align-items-center {% if selected_sector == 'ACCOUNTS' %}active{% endif %}" href="?sector=ACCOUNTS">
-                    <span><i class="fas fa-file-invoice-dollar"></i> Accounts</span>
-                    {% if user_sector == 'ACCOUNTS' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">YOU</span>{% endif %}
+                    <span><i class="fas fa-file-invoice-dollar"></i> ගිණුම් අංශය</span>
+                    {% if user_sector == 'ACCOUNTS' %}<span class="badge bg-warning text-dark" style="font-size: 0.6rem">ඔබ</span>{% endif %}
                 </a>
 
                 <div class="mt-5 pt-5 px-3">
-                    <small class="text-muted">SYSTEM STATUS</small>
-                    <div class="text-success mt-1"><i class="fas fa-circle fa-xs"></i> Online</div>
+                    <small class="text-muted">පද්ධති තත්වය</small>
+                    <div class="text-success mt-1"><i class="fas fa-circle fa-xs"></i> සක්‍රීයයි (Online)</div>
                 </div>
             </nav>
         </div>
 
+        <!-- Main Content -->
         <div class="col-md-10 content-area">
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h2>
-                        {% if selected_sector == 'ALL' %} All Sectors
-                        {% else %} {{ selected_sector|title }} Sector
+                        {% if selected_sector == 'ALL' %} සියළුම අංශ
+                        {% else %} {{ selected_sector|title }} අංශය
                         {% endif %}
                     </h2>
-                    <span class="text-muted">Logged in as: {{ user.username }} ({{ user_sector|title }})</span>
+                    <span class="text-muted">පිවිසී සිටින්නේ: {{ user.username }} ({{ user_sector|title }})</span>
                 </div>
-                <a href="/accounts/logout/" class="btn btn-dark btn-sm"><i class="fas fa-lock"></i> Logout</a>
+
+                <form action="{% url 'logout' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-dark btn-sm">
+                        <i class="fas fa-lock"></i> ඉවත් වන්න
+                    </button>
+                </form>
+
             </div>
 
+            <!-- Stats Row -->
             <div class="row mb-4">
                 <div class="col-md-4">
                     <div class="card stat-card p-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-muted">Total Queries</h6>
+                                <h6 class="text-muted">මුළු විමසීම්</h6>
                                 <h3>{{ total }}</h3>
                             </div>
                             <div class="icon-box bg-blue-light"><i class="fas fa-layer-group"></i></div>
@@ -135,7 +151,7 @@
                     <div class="card stat-card p-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-muted">Pending Action</h6>
+                                <h6 class="text-muted">විමර්ශනය වෙමින් පවතී</h6>
                                 <h3>{{ pending }}</h3>
                             </div>
                             <div class="icon-box bg-yellow-light"><i class="fas fa-clock"></i></div>
@@ -146,7 +162,7 @@
                     <div class="card stat-card p-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-muted">Resolved</h6>
+                                <h6 class="text-muted">විසඳන ලද</h6>
                                 <h3>{{ resolved }}</h3>
                             </div>
                             <div class="icon-box bg-green-light"><i class="fas fa-check"></i></div>
@@ -159,7 +175,7 @@
 
                 <div class="row mb-4 align-items-center">
                     <div class="col-md-6">
-                        <h5 class="mb-0">Sector Queries & Records</h5>
+                        <h5 class="mb-0">අංශ විමසීම් සහ වාර්තා</h5>
                     </div>
                     <div class="col-md-6">
                         <form method="GET" action="" class="d-flex">
@@ -167,11 +183,11 @@
                                 <input type="hidden" name="sector" value="{{ selected_sector }}">
                             {% endif %}
 
-                            <input type="text" name="q" class="form-control me-2" placeholder="Search ID, Name, or Type..." value="{{ search_query }}">
+                            <input type="text" name="q" class="form-control me-2" placeholder="අංකය, නම හෝ වර්ගය සොයන්න..." value="{{ search_query }}">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
 
                             {% if search_query %}
-                                <a href="?sector={{ selected_sector }}" class="btn btn-outline-secondary ms-2" title="Clear Search"><i class="fas fa-times"></i></a>
+                                <a href="?sector={{ selected_sector }}" class="btn btn-outline-secondary ms-2" title="සෙවුම මකන්න"><i class="fas fa-times"></i></a>
                             {% endif %}
                         </form>
                     </div>
@@ -181,11 +197,11 @@
                     <table class="table table-hover align-middle">
                         <thead>
                             <tr class="text-muted small">
-                                <th>ID</th>
-                                <th>SUBJECT / SENDER</th>
-                                <th>SECTOR / DATE</th>
-                                <th>STATUS</th>
-                                <th>ACTION</th>
+                                <th>අංකය</th>
+                                <th>විෂය / එවන ලද්දේ</th>
+                                <th>අංශය / දිනය</th>
+                                <th>තත්වය</th>
+                                <th>ක්‍රියාමාර්ග</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -193,14 +209,13 @@
                             <tr>
                                 <td>#{{ letter.serial_number }}</td>
 
-
                                 <td>
                                 {% if letter.target_sector == user_sector or user_sector == 'ADMIN' %}
-                                    <a href="{% url 'letter_detail' letter.id %}" class="text-decoration-none text-dark fw-bold">
+                                    <a href="{% url 'letter_detail' letter.pk %}" class="text-decoration-none text-dark fw-bold">
                                         {{ letter.letter_type }}
                                     </a>
                                 {% else %}
-                                    <span class="text-muted fw-bold" style="cursor: not-allowed;" title="Access Restricted">
+                                    <span class="text-muted fw-bold" style="cursor: not-allowed;" title="ප්‍රවේශය සීමා කර ඇත">
                                         {{ letter.letter_type }} <i class="fas fa-lock fa-xs ms-1"></i>
                                     </span>
                                 {% endif %}
@@ -209,56 +224,81 @@
                                 <span class="text-muted small">{{ letter.sender_name }}</span>
                             </td>
 
-
                                 <td>
                                     <span class="badge bg-light text-dark border">{{ letter.get_target_sector_display }}</span>
                                     <br><small class="text-muted">{{ letter.date_received }}</small>
                                 </td>
                                 <td>
                                     {% if letter.is_replied %}
-                                        <span class="status-badge status-resolved">Resolved</span>
+                                        <span class="status-badge status-resolved">විසඳන ලදී</span>
                                     {% else %}
-                                        <span class="status-badge status-pending">Pending</span>
+                                        <span class="status-badge status-pending">විමර්ශනය වෙමින්</span>
                                     {% endif %}
                                 </td>
 
                                 <td>
                                     {% if letter.is_replied %}
                                         <button class="btn btn-success btn-sm disabled" disabled>
-                                            <i class="fas fa-check-double"></i> Done
+                                            <i class="fas fa-check-double"></i> අවසන්
                                         </button>
-
 
                                     {% elif letter.target_sector == user_sector %}
                                     <form method="POST" class="d-flex flex-column gap-2">
                                         {% csrf_token %}
-                                        <input type="hidden" name="letter_id" value="{{ letter.id }}">
+                                        <input type="hidden" name="letter_id" value="{{ letter.pk }}">
 
                                         <input type="datetime-local" name="reply_date" class="form-control form-control-sm" required>
 
                                         <button type="submit" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-check"></i> Mark Replied
+                                            <i class="fas fa-check"></i> පිළිතුරු සපයන්න
                                         </button>
                                     </form>
 
-
                                     {% else %}
-                                        <span class="text-muted small"><i class="fas fa-lock"></i> View Only</span>
+                                        <span class="text-muted small"><i class="fas fa-lock"></i> බැලීම පමණි</span>
 
                                     {% endif %}
                                 </td>
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="5" class="text-center py-4 text-muted">No records found matching your search.</td>
+                                <td colspan="5" class="text-center py-4 text-muted">ඔබගේ සෙවුමට ගැලපෙන වාර්තා හමු නොවීය.</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
 
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="text-muted small">
+                        පිටු {{ letters.paginator.num_pages }} න් {{ letters.number }} වැනි පිටුව
+                    </span>
+
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            {% if letters.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1&sector={{ selected_sector }}&q={{ search_query }}">&laquo; මුල් පිටුව</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ letters.previous_page_number }}&sector={{ selected_sector }}&q={{ search_query }}">පෙර</a>
+                                </li>
+                            {% endif %}
+
+                            {% if letters.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ letters.next_page_number }}&sector={{ selected_sector }}&q={{ search_query }}">ඊළඟ</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ letters.paginator.num_pages }}&sector={{ selected_sector }}&q={{ search_query }}">අවසාන &raquo;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+
                 <div class="text-center mt-3 text-muted small">
-                    © 2026 Divisional Council Management System. All rights reserved.
+                    © 2026 ප්‍රාදේශීය සභා කළමනාකරණ පද්ධතිය. සියලුම හිමිකම් ඇවිරිණි.
                 </div>
             </div>
 

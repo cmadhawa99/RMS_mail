@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-0817m29j!=!8i@_t%v7c!_tnmo+q&shg&a!x&l&hfw6h2u@*#%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'council_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'council_db',
+        'USER': 'postgres',
+        'PASSWORD': 'su753421#2',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -117,6 +121,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 LOGIN_URL = '/accounts/login/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

@@ -21,7 +21,7 @@ SECTOR_CHOICES = [
 class Letter(models.Model):
     """The blueprint for every incoming letter"""
 
-    serial_number = models.CharField(max_length=10, unique=True, verbose_name="අනු අංකය")
+    serial_number = models.CharField(max_length=10, unique=True, verbose_name="අනු අංකය", primary_key=True)
     date_received = models.DateField()
     sender_name = models.CharField(max_length=200)
     sender_address = models.TextField()

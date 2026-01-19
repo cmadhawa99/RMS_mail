@@ -68,7 +68,7 @@ class Command(BaseCommand):
         self.stdout.write(f"Generating {count} random Sinhala letters...")
 
         for i in range(count):
-            serial = f"2024/{random.choice(['A', 'B', 'C', 'D'])}/{fake.unique.random_number(digits=6)}"
+            serial = f"24/{random.choice(['A', 'B'])}/{fake.unique.random_number(digits=4)}"
 
             Letter.objects.create(
                 serial_number=serial,
