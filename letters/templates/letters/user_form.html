@@ -1,0 +1,95 @@
+{% extends 'letters/admin_base.html' %}
+
+{% block admin_content %}
+<div class="container" style="max-width: 600px;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                <i class="fas fa-user-edit me-2"></i>{{ title }}
+            </h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Username</label>
+                    {{ form.username }}
+                    <div class="form-text text-muted">{{ form.username.help_text }}</div>
+                    <div class="text-danger">{{ form.username.errors }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">First Name</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Last Name</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Assigned Sector</label>
+                    {{ form.sector }}
+                </div>
+
+                <hr>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Password</label>
+                    <div class="input-group">
+                        {{ form.new_password }}
+
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="fas fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                    {% if form.new_password.help_text %}
+                        <div class="form-text text-muted">{{ form.new_password.help_text }}</div>
+                    {% endif %}
+                    <div class="text-danger">{{ form.new_password.errors }}</div>
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Save User</button>
+                    <a href="{% url 'custom_admin_users' %}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript to toggle password visibility
+    const toggleBtn = document.querySelector('#togglePassword');
+    const passwordBox = document.querySelector('#id_new_password');
+    const eyeIcon = document.querySelector('#eyeIcon');
+
+    if(toggleBtn && passwordBox) {
+        toggleBtn.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = passwordBox.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordBox.setAttribute('type', type);
+
+            // Toggle the eye icon
+            eyeIcon.classList.toggle('fa-eye');
+            eyeIcon.classList.toggle('fa-eye-slash');
+        });
+    }
+</script>
+
+<style>
+    input[type="text"], input[type="password"], select {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+</style>
+{% endblock %}

@@ -2,12 +2,22 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Letter, SectorProfile
-from django.views.decorators.cache import never_cache
+from django.views.decorators.cache import never_cache  # <--- CRITICAL SECURITY TOOL
 from django.core.paginator import Paginator
+from .forms import UserForm, LetterForm
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import logout  # <--- Needed for logout
 
-@never_cache
+
+# --- PUBLIC PORTAL ---
+
+@never_cache  # Security: Prevents "Back" button from showing this after logout
 @login_required
 def sector_dashboard(request):
+    if request.user.is_superuser:
+        return redirect('custom_admin_dashboard')
+
     try:
         user_profile = request.user.sectorprofile
         user_sector = user_profile.sector
@@ -66,6 +76,7 @@ def sector_dashboard(request):
 
     return render(request, 'letters/dashboard.html', context)
 
+
 @never_cache
 @login_required
 def letter_detail(request, pk):
@@ -88,3 +99,154 @@ def letter_detail(request, pk):
         'user_sector': user_sector
     })
 
+
+# ------- CUSTOM ADMIN PANEL VIEWS -------
+
+@never_cache
+@login_required
+def custom_admin_dashboard(request):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+    return render(request, 'letters/admin_dashboard.html')
+
+
+@never_cache
+@login_required
+def custom_admin_users(request):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+    users = User.objects.filter(is_superuser=False).select_related('sectorprofile')
+    return render(request, 'letters/admin_users.html', {'users': users})
+
+
+@never_cache
+@login_required
+def custom_admin_letters(request):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+    letters_list = Letter.objects.all().order_by('-date_received')
+    paginator = Paginator(letters_list, 20)
+    page_number = request.GET.get('page')
+    letters = paginator.get_page(page_number)
+    return render(request, 'letters/admin_letters.html', {'letters': letters})
+
+
+# --- ADMIN DETAILS (With Security) ---
+
+@never_cache
+@login_required
+def admin_user_detail(request, user_id):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+    user_obj = get_object_or_404(User, pk=user_id)
+    return render(request, 'letters/admin_user_detail.html', {'user_obj': user_obj})
+
+
+@never_cache
+@login_required
+def admin_letter_detail(request, pk):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+    letter = get_object_or_404(Letter, pk=pk)
+    return render(request, 'letters/admin_letter_detail.html', {'letter': letter})
+
+
+# --- ACTION VIEWS ---
+
+@never_cache
+@login_required
+def create_user(request):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New officer account created successfully!")
+            return redirect('custom_admin_users')
+    else:
+        form = UserForm()
+
+    return render(request, 'letters/user_form.html', {'form': form, 'title': 'Create New Officer'})
+
+
+@never_cache
+@login_required
+def edit_user(request, user_id):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+
+    user_obj = get_object_or_404(User, pk=user_id)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user_obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Details for {user_obj.username} updated.")
+            return redirect('admin_user_detail', user_id=user_obj.id)
+    else:
+        form = UserForm(instance=user_obj)
+
+    return render(request, 'letters/user_form.html', {'form': form, 'title': 'Edit Officer Details'})
+
+
+@login_required
+def delete_user(request, user_id):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+
+    if request.method == 'POST':
+        user_to_delete = get_object_or_404(User, pk=user_id)
+        if not user_to_delete.is_superuser:
+            user_to_delete.delete()
+            messages.success(request, "User account deleted.")
+
+    return redirect('custom_admin_users')
+
+
+@never_cache
+@login_required
+def add_letter(request):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+
+    if request.method == 'POST':
+        form = LetterForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New letter added successfully.")
+            return redirect('custom_admin_letters')
+    else:
+        form = LetterForm()
+
+    return render(request, 'letters/letter_form.html', {'form': form, 'title': 'Add New Letter'})
+
+
+@never_cache
+@login_required
+def edit_letter(request, pk):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+    letter = get_object_or_404(Letter, pk=pk)
+
+    if request.method == 'POST':
+        form = LetterForm(request.POST, request.FILES, instance=letter)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Letter updated successfully.")
+            return redirect('admin_letter_detail', pk=letter.pk)
+    else:
+        form = LetterForm(instance=letter)
+
+    return render(request, 'letters/letter_form.html', {'form': form, 'title': 'Edit Letter'})
+
+
+@login_required
+def delete_letter(request, pk):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+
+    letter = get_object_or_404(Letter, pk=pk)
+    if request.method == 'POST':
+        letter.delete()
+        messages.success(request, "Letter permanently deleted.")
+
+    return redirect('custom_admin_letters')
+
+
+# --- LOGOUT VIEW (NEW) ---
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, "You have been logged out.")
+    return redirect('login')

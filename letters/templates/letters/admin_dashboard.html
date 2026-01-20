@@ -1,0 +1,19 @@
+{% extends 'letters/admin_base.html' %}
+
+{% block admin_content %}
+<div class="alert alert-info">
+    <h4>Welcome to the Control Panel</h4>
+    <p>Select an option from the sidebar to manage the system.</p>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">System Health</div>
+            <div class="card-body">
+                <h5 class="card-title">System Online</h5>
+                <p class="card-text">Database is connected and active.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

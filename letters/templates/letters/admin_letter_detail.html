@@ -1,0 +1,82 @@
+{% extends 'letters/admin_base.html' %}
+
+{% block admin_content %}
+<div class="container mt-4">
+    <a href="{% url 'custom_admin_letters' %}" class="btn btn-outline-secondary mb-3">&larr; Back to List</a>
+
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Letter #{{ letter.serial_number }}</h4>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Sender:</strong> {{ letter.sender_name }}</p>
+                    <p><strong>Date Received:</strong> {{ letter.date_received }}</p>
+                    <p><strong>Type:</strong> {{ letter.letter_type }}</p>
+                    <p><strong>Serial No:</strong> {{ letter.serial_number }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Target Sector:</strong> <span class="badge bg-info text-dark">{{ letter.target_sector }}</span></p>
+                    <p><strong>Administrated By:</strong> {{ letter.administrated_by }}</p>
+
+                    <div class="p-2 border rounded bg-light">
+                        <p class="mb-1"><strong>Current Status:</strong>
+                            {% if letter.is_replied %}
+                                <span class="badge bg-success">RESOLVED / REPLIED</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">PENDING</span>
+                            {% endif %}
+                        </p>
+
+                        {% if letter.is_replied and letter.replied_at %}
+                            <p class="mb-0 text-muted small">
+                                <i class="fas fa-clock"></i> Replied on: {{ letter.replied_at }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="mt-4 border-bottom pb-2">Attachment</h5>
+            {% if letter.attachment %}
+                <div class="text-center bg-light p-3 border rounded">
+                    <img src="{{ letter.attachment.url }}" class="img-fluid" style="max-height: 500px;" alt="Scanned Letter">
+                    <br>
+                    <a href="{{ letter.attachment.url }}" target="_blank" class="btn btn-sm btn-outline-dark mt-2">
+                        <i class="fas fa-expand"></i> View Full Size
+                    </a>
+                </div>
+            {% else %}
+                <div class="alert alert-secondary">No image attached to this letter.</div>
+            {% endif %}
+
+            <hr class="mt-4">
+
+            <div class="d-flex gap-2">
+                <a href="{% url 'edit_letter' letter.pk %}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Letter
+                </a>
+
+                <button onclick="confirmDelete()" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Delete Letter
+                </button>
+            </div>
+
+            <form id="delete-form" action="{% url 'delete_letter' letter.pk %}" method="POST" style="display:none;">
+                {% csrf_token %}
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function confirmDelete() {
+    if(confirm("Are you sure you want to PERMANENTLY delete this letter?")) {
+        document.getElementById('delete-form').submit();
+    }
+}
+</script>
+{% endblock %}

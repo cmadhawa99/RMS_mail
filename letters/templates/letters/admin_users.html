@@ -1,0 +1,32 @@
+{% extends 'letters/admin_base.html' %}
+{% block admin_content %}
+<h2>Select user to change</h2>
+<div class="card mt-3">
+    <table class="table table-striped table-hover mb-0">
+        <thead style="background-color: #e9ecef;">
+            <tr>
+                <th>USERNAME</th>
+                <th>SECTOR</th>
+                <th>ACTIONS</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+            <tr>
+                <td class="fw-bold">
+                    <a href="{% url 'admin_user_detail' u.id %}" class="text-decoration-none text-primary">
+                        {{ u.username }}
+                    </a>
+                </td>
+                <td>{{ u.sectorprofile.sector }}</td>
+                <td>
+                    <a href="{% url 'admin_user_detail' u.id %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-eye"></i> View Details
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
