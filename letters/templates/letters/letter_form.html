@@ -1,27 +1,87 @@
 {% extends 'letters/admin_base.html' %}
+
 {% block admin_content %}
-<div class="container" style="max-width: 800px;">
-    <div class="card shadow">
-        <div class="card-header bg-dark text-white">
-            <h4 class="mb-0">{{ title }}</h4>
+<div class="container" style="max-width: 900px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 text-primary fw-bold">{{ title }}</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body p-4">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="row">
-                    {% for field in form %}
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label fw-bold">{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.help_text %}
-                        <div class="form-text text-muted">{{ field.help_text }}</div>
-                        {% endif %}
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Serial Number</label>
+                            {{ form.serial_number }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Date Received</label>
+                            {{ form.date_received }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Sender Name</label>
+                            {{ form.sender_name }}
+                        </div>
                     </div>
-                    {% endfor %}
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Target Sector</label>
+                            {{ form.target_sector }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Subject / Type</label>
+                            {{ form.letter_type }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Administrated By</label>
+                            {{ form.administrated_by }}
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-success mt-3">Save Letter</button>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                         <div class="p-3 bg-light rounded border">
+                            <label class="form-label fw-bold"><i class="fas fa-paperclip me-2"></i>Attachment</label>
+                            {{ form.attachment }}
+                            <small class="text-muted d-block mt-1">Upload scanned images or PDFs.</small>
+                         </div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <h6 class="text-muted text-uppercase small fw-bold mb-3">Status Update</h6>
+                <div class="row align-items-end g-3">
+                    <div class="col-md-4">
+                        <div class="form-check form-switch">
+                             {{ form.is_replied }}
+                             <label class="form-check-label fw-bold" for="{{ form.is_replied.id_for_label }}">Mark as Replied</label>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label fw-bold">Reply Date & Time</label>
+                        {{ form.replied_at }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-5">
+                    <a href="{% url 'custom_admin_letters' %}" class="btn btn-light">Cancel</a>
+                    <button type="submit" class="btn btn-success px-4"><i class="fas fa-save me-2"></i>Save Letter</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    input[type="text"], select, input[type="date"], input[type="datetime-local"], input[type="file"] {
+        display: block; width: 100%; padding: 0.5rem 0.75rem;
+        border: 1px solid #ced4da; border-radius: 0.375rem;
+    }
+    .form-check-input { width: 3em; height: 1.5em; margin-right: 10px; }
+</style>
 {% endblock %}

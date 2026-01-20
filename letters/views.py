@@ -114,7 +114,16 @@ def custom_admin_dashboard(request):
 def custom_admin_users(request):
     if not request.user.is_superuser: return redirect('sector_dashboard')
     users = User.objects.filter(is_superuser=False).select_related('sectorprofile')
-    return render(request, 'letters/admin_users.html', {'users': users})
+
+    search_query = request.GET.get('q', '')
+    if search_query:
+        users = users.filter(
+            Q(username__icontains=search_query) |
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query)
+        )
+
+    return render(request, 'letters/admin_users.html', {'users': users, 'search_query': search_query})
 
 
 @never_cache
@@ -122,10 +131,20 @@ def custom_admin_users(request):
 def custom_admin_letters(request):
     if not request.user.is_superuser: return redirect('sector_dashboard')
     letters_list = Letter.objects.all().order_by('-date_received')
+
+    search_query = request.GET.get('q', '')
+    if search_query:
+        letters_list = letters_list.filter(
+            Q(serial_number__icontains=search_query) |
+            Q(sender_name__icontains=search_query) |
+            Q(letter_type__icontains=search_query) |
+            Q(target_sector__icontains=search_query)
+        )
+
     paginator = Paginator(letters_list, 20)
     page_number = request.GET.get('page')
     letters = paginator.get_page(page_number)
-    return render(request, 'letters/admin_letters.html', {'letters': letters})
+    return render(request, 'letters/admin_letters.html', {'letters': letters, 'search_query': search_query})
 
 
 # --- ADMIN DETAILS (With Security) ---

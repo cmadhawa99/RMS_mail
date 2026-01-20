@@ -1,47 +1,27 @@
 {% extends 'letters/admin_base.html' %}
 
 {% block admin_content %}
-<div class="container" style="max-width: 600px;">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">
-                <i class="fas fa-user-edit me-2"></i>{{ title }}
-            </h4>
+<div class="container" style="max-width: 700px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-white py-3">
+            <h4 class="mb-0 text-primary fw-bold"><i class="fas fa-user-cog me-2"></i>{{ title }}</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body p-4">
             <form method="post">
                 {% csrf_token %}
+
+                <h6 class="text-uppercase text-muted small fw-bold mb-3">Account Credentials</h6>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Username</label>
                     {{ form.username }}
-                    <div class="form-text text-muted">{{ form.username.help_text }}</div>
-                    <div class="text-danger">{{ form.username.errors }}</div>
+                    <div class="form-text">{{ form.username.help_text }}</div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">First Name</label>
-                        {{ form.first_name }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Last Name</label>
-                        {{ form.last_name }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Assigned Sector</label>
-                    {{ form.sector }}
-                </div>
-
-                <hr>
-
-                <div class="mb-3">
+                <div class="mb-4">
                     <label class="form-label fw-bold">Password</label>
                     <div class="input-group">
                         {{ form.new_password }}
-
                         <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                             <i class="fas fa-eye" id="eyeIcon"></i>
                         </button>
@@ -49,16 +29,32 @@
                     {% if form.new_password.help_text %}
                         <div class="form-text text-muted">{{ form.new_password.help_text }}</div>
                     {% endif %}
-                    <div class="text-danger">{{ form.new_password.errors }}</div>
+                    <div class="text-danger small">{{ form.new_password.errors }}</div>
                 </div>
 
-                {% if form.non_field_errors %}
-                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
-                {% endif %}
+                <h6 class="text-uppercase text-muted small fw-bold mb-3 mt-4">Personal Details</h6>
 
-                <div class="d-grid gap-2 mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">Save User</button>
-                    <a href="{% url 'custom_admin_users' %}" class="btn btn-outline-secondary">Cancel</a>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">First Name</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Last Name</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+
+                <div class="mb-4 mt-3">
+                    <label class="form-label fw-bold">Assigned Sector</label>
+                    {{ form.sector }}
+                </div>
+
+                <hr class="my-4">
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'custom_admin_users' %}" class="btn btn-light">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -66,18 +62,13 @@
 </div>
 
 <script>
-    // JavaScript to toggle password visibility
     const toggleBtn = document.querySelector('#togglePassword');
     const passwordBox = document.querySelector('#id_new_password');
     const eyeIcon = document.querySelector('#eyeIcon');
-
     if(toggleBtn && passwordBox) {
         toggleBtn.addEventListener('click', function () {
-            // Toggle the type attribute
             const type = passwordBox.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordBox.setAttribute('type', type);
-
-            // Toggle the eye icon
             eyeIcon.classList.toggle('fa-eye');
             eyeIcon.classList.toggle('fa-eye-slash');
         });
@@ -85,11 +76,23 @@
 </script>
 
 <style>
-    input[type="text"], input[type="password"], select {
+    /* Styling for standard form inputs */
+    input[type="text"], input[type="password"], select, input[type="date"], input[type="datetime-local"] {
+        display: block;
         width: 100%;
-        padding: 0.375rem 0.75rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
         border: 1px solid #ced4da;
-        border-radius: 0.25rem;
+        border-radius: 0.375rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    input:focus, select:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
     }
 </style>
 {% endblock %}
