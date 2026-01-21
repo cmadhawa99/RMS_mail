@@ -9,6 +9,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import logout  # <--- Needed for logout
 
+import openpyxl
+from django.http import HttpResponse
+from datetime import datetime
 
 # --- PUBLIC PORTAL ---
 
@@ -269,3 +272,72 @@ def logout_view(request):
     logout(request)
     messages.info(request, "You have been logged out.")
     return redirect('login')
+
+
+
+@never_cache
+@login_required
+def export_letters_excel(request):
+    if not request.user.is_superuser: return redirect('sector_dashboard')
+
+    # 1. Get the data (Apply search filter if it exists)
+    letters = Letter.objects.all().order_by('-date_received')
+    search_query = request.GET.get('q', '')
+
+    if search_query:
+        letters = letters.filter(
+            Q(serial_number__icontains=search_query) |
+            Q(sender_name__icontains=search_query) |
+            Q(letter_type__icontains=search_query) |
+            Q(target_sector__icontains=search_query)
+        )
+        # Clean the filename to remove special characters
+        clean_query = "".join([c for c in search_query if c.isalnum() or c in (' ', '-', '_')]).strip()
+        filename = f"Search_Result_{clean_query}.xlsx"
+    else:
+        year = datetime.now().year
+        filename = f"Weligepola_Pradeshiya_sabha_letters_database_{year}.xlsx"
+
+    # 2. Create the Excel Workbook
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Letters Data"
+
+    # 3. Add Headers
+    headers = ['Serial Number', 'Date Received', 'Sender Name', 'Type', 'Target Sector', 'Administrated By', 'Status',
+               'Replied Date']
+    ws.append(headers)
+
+    # Style the header (Optional: make it bold)
+    for cell in ws[1]:
+        cell.font = openpyxl.styles.Font(bold=True)
+
+    # 4. Add Rows
+    for letter in letters:
+        status = "Replied" if letter.is_replied else "Pending"
+
+        # Handle date formatting safely
+        replied_at = ""
+        if letter.replied_at:
+            # removing timezone info for Excel compatibility
+            replied_at = letter.replied_at.replace(tzinfo=None)
+
+        ws.append([
+            letter.serial_number,
+            letter.date_received,
+            letter.sender_name,
+            letter.letter_type,
+            letter.target_sector,
+            letter.administrated_by,
+            status,
+            replied_at
+        ])
+
+    # 5. Prepare the response
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    wb.save(response)
+    return response
+
+

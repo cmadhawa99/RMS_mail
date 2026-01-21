@@ -15,6 +15,10 @@
                 </div>
             </form>
 
+            <a href="{% url 'export_letters_excel' %}?q={{ search_query }}" class="btn btn-success shadow-sm text-nowrap">
+                <i class="fas fa-file-excel me-2"></i>Export Excel
+            </a>
+
             <a href="{% url 'add_letter' %}" class="btn btn-primary shadow-sm text-nowrap">
                 <i class="fas fa-file-import me-2"></i>Register Letter
             </a>

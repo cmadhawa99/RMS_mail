@@ -30,4 +30,7 @@ urlpatterns = [
     path('custom-admin/letters/view/<path:pk>/', views.admin_letter_detail, name='admin_letter_detail'),
     path('custom-admin/letters/edit/<path:pk>/', views.edit_letter, name='edit_letter'),
     path('custom-admin/letters/delete/<path:pk>/', views.delete_letter, name='delete_letter'),
+
+
+path('custom-admin/letters/export/', views.export_letters_excel, name='export_letters_excel'),
 ]

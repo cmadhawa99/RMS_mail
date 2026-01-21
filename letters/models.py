@@ -32,7 +32,9 @@ class Letter(models.Model):
     is_replied = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    replied_at = models.DateTimeField(null=True, blank=True)
+    replied_at = models.DateTimeField(null=True, blank=True)\
+
+
     attachment = models.FileField(upload_to='letters/', null=True, blank=True)
 
     def __str__(self):
