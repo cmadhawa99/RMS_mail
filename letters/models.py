@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 OFFICER_CHOICES = [
+    ('-', '-'),
     ('CHAIRMAN', 'සභාපති'),
     ('SECRETARY', 'ලේකම්'),
     ('CMO', 'ප්‍රධාන කළමණාකරන නිළධාරී'),
@@ -23,9 +24,9 @@ class Letter(models.Model):
 
     serial_number = models.CharField(max_length=10, unique=True, verbose_name="අනු අංකය", primary_key=True)
     date_received = models.DateField()
-    sender_name = models.CharField(max_length=200)
-    sender_address = models.TextField()
-    letter_type = models.CharField(max_length=200)
+    sender_name = models.CharField(max_length=255)
+    sender_address = models.TextField(blank=True, null=True)
+    letter_type = models.CharField(max_length=255)
     accepting_officer_id = models.CharField(max_length=50)
     target_sector = models.CharField(max_length=20, choices=SECTOR_CHOICES)
     administrated_by = models.CharField(max_length=20, choices=OFFICER_CHOICES)

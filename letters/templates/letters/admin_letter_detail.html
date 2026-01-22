@@ -33,6 +33,15 @@
                             <small class="text-uppercase text-muted fw-bold">Assigned Sector</small>
                             <div><span class="badge bg-light text-dark border">{{ letter.target_sector }}</span></div>
                         </div>
+
+                        <div class="col-sm-6">
+                            <small class="text-uppercase text-muted fw-bold">Administrated By</small>
+                            <div class="fs-5">{{ letter.administrated_by|default:"-" }}</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <small class="text-uppercase text-muted fw-bold">Accepting Officer ID</small>
+                            <div class="fs-5 text-primary">{{ letter.accepting_officer_id|default:"-" }}</div>
+                        </div>
                     </div>
 
                     <div class="bg-light p-3 rounded border">
@@ -60,9 +69,9 @@
                     <h6 class="fw-bold mb-3">Current Status</h6>
                     {% if letter.is_replied %}
                         <div class="alert alert-success mb-0 border-0">
-                            <i class="fas fa-check-circle me-2"></i> <strong>Replied</strong>
+                            <i class="fas fa-check-circle me-2"></i> <strong>Replied / Resolved</strong>
                             {% if letter.replied_at %}
-                            <div class="small mt-1">on {{ letter.replied_at|date:"M d, Y H:i" }}</div>
+                            <div class="small mt-1">on {{ letter.replied_at|date:"M d, Y" }}</div>
                             {% endif %}
                         </div>
                     {% else %}

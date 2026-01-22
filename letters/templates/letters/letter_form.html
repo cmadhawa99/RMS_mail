@@ -7,68 +7,40 @@
             <h4 class="mb-0 text-primary fw-bold">{{ title }}</h4>
         </div>
         <div class="card-body p-4">
+
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Please correct the errors below:</strong>
+                </div>
+            {% endif %}
+
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Serial Number</label>
-                            {{ form.serial_number }}
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Date Received</label>
-                            {{ form.date_received }}
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Sender Name</label>
-                            {{ form.sender_name }}
-                        </div>
-                    </div>
+                    {% for field in form %}
+                    <div class="col-md-6"> <div class="mb-3">
+                            <label class="form-label fw-bold">{{ field.label }}</label>
 
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Target Sector</label>
-                            {{ form.target_sector }}
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Subject / Type</label>
-                            {{ form.letter_type }}
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Administrated By</label>
-                            {{ form.administrated_by }}
+                            {{ field }}
+
+                            {% if field.help_text %}
+                            <div class="form-text text-muted small">{{ field.help_text }}</div>
+                            {% endif %}
+
+                            {% if field.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in field.errors %}
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
 
-                <div class="row mt-3">
-                    <div class="col-12">
-                         <div class="p-3 bg-light rounded border">
-                            <label class="form-label fw-bold"><i class="fas fa-paperclip me-2"></i>Attachment</label>
-                            {{ form.attachment }}
-                            <small class="text-muted d-block mt-1">Upload scanned images or PDFs.</small>
-                         </div>
-                    </div>
-                </div>
-
-                <hr class="my-4">
-
-                <h6 class="text-muted text-uppercase small fw-bold mb-3">Status Update</h6>
-                <div class="row align-items-end g-3">
-                    <div class="col-md-4">
-                        <div class="form-check form-switch">
-                             {{ form.is_replied }}
-                             <label class="form-check-label fw-bold" for="{{ form.is_replied.id_for_label }}">Mark as Replied</label>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <label class="form-label fw-bold">Reply Date & Time</label>
-                        {{ form.replied_at }}
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-end gap-2 mt-5">
+                <div class="d-flex justify-content-end gap-2 mt-4">
                     <a href="{% url 'custom_admin_letters' %}" class="btn btn-light">Cancel</a>
                     <button type="submit" class="btn btn-success px-4"><i class="fas fa-save me-2"></i>Save Letter</button>
                 </div>
@@ -78,10 +50,44 @@
 </div>
 
 <style>
-    input[type="text"], select, input[type="date"], input[type="datetime-local"], input[type="file"] {
-        display: block; width: 100%; padding: 0.5rem 0.75rem;
-        border: 1px solid #ced4da; border-radius: 0.375rem;
+    /* 1. Added 'textarea' to this list so it gets the nice border and padding */
+    input[type="text"],
+    select,
+    input[type="date"],
+    input[type="datetime-local"],
+    input[type="file"],
+    textarea {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        font-family: inherit; /* Ensures it uses the same font as the rest of the page */
+        background-color: #fff;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
-    .form-check-input { width: 3em; height: 1.5em; margin-right: 10px; }
+
+    /* 2. Added Focus State for the blue glow effect */
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    /* 3. FIXED: This removes the drag handle so the UI doesn't break */
+    textarea {
+        resize: none;
+    }
+
+    /* Style checkboxes (like is_replied) differently */
+    input[type="checkbox"] {
+        width: 1.2em;
+        height: 1.2em;
+        margin-top: 0.25em;
+        vertical-align: top;
+        cursor: pointer;
+    }
 </style>
 {% endblock %}

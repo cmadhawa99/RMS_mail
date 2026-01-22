@@ -38,12 +38,19 @@ def sector_dashboard(request):
         letters = letters.filter(target_sector=selected_sector)
 
     search_query = request.GET.get('q', '')
+    search_type = request.GET.get('search_type', 'all')
 
     if search_query:
-        letters = letters.filter(
+        if search_type == 'serial':
+            letters = letters.filter(serial_number__iexact=search_query)
+        elif search_type == 'date':
+            letters = letters.filter(date_received__icontains=search_query)
+        else:
+            letters = letters.filter(
             Q(serial_number__icontains=search_query) |
             Q(sender_name__icontains=search_query) |
             Q(letter_type__icontains=search_query)
+
         )
 
     total_count = letters.count()
@@ -71,6 +78,7 @@ def sector_dashboard(request):
         'user_sector': user_sector,
         'selected_sector': selected_sector,
         'search_query': search_query,
+        'search_type': search_type,
         'letters': page_obj,
         'total': total_count,
         'pending': pending_count,
@@ -136,8 +144,14 @@ def custom_admin_letters(request):
     letters_list = Letter.objects.all().order_by('-date_received')
 
     search_query = request.GET.get('q', '')
+    search_type = request.GET.get('search_type', 'all')
     if search_query:
-        letters_list = letters_list.filter(
+        if search_type == 'serial':
+            letters_list = letters_list.filter(serial_number__iexact=search_query)
+        elif search_type == 'date':
+            letters_list = letters_list.filter(date_received__icontains=search_query)
+        else:
+            letters_list = letters_list.filter(
             Q(serial_number__icontains=search_query) |
             Q(sender_name__icontains=search_query) |
             Q(letter_type__icontains=search_query) |

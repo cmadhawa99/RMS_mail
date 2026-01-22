@@ -2,25 +2,30 @@
 
 {% block admin_content %}
 <div class="row align-items-center mb-4">
-    <div class="col-md-6">
+    <div class="col-md-5">
         <h3 class="fw-bold text-secondary mb-0">Letter Registry</h3>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="d-flex gap-2 justify-content-md-end">
-            <form method="get" class="d-flex flex-grow-1" style="max-width: 300px;">
+            <form method="get" class="d-flex flex-grow-1">
                 <div class="input-group shadow-sm">
-                    <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
-                    <input type="text" name="q" class="form-control border-start-0 ps-0" placeholder="Serial, Sender, Type..." value="{{ search_query }}">
+                    <select name="search_type" class="form-select bg-light border-end-0" style="max-width: 130px;">
+                        <option value="all" {% if search_type == 'all' %}selected{% endif %}>All Fields</option>
+                        <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>Serial No.</option>
+                        <option value="date" {% if search_type == 'date' %}selected{% endif %}>Date</option>
+                    </select>
+
+                    <input type="text" name="q" class="form-control border-start-0" placeholder="Search..." value="{{ search_query }}">
                     <button type="submit" class="btn btn-outline-secondary">Go</button>
                 </div>
             </form>
 
-            <a href="{% url 'export_letters_excel' %}?q={{ search_query }}" class="btn btn-success shadow-sm text-nowrap">
-                <i class="fas fa-file-excel me-2"></i>Export Excel
+            <a href="{% url 'export_letters_excel' %}?q={{ search_query }}&search_type={{ search_type }}" class="btn btn-success shadow-sm text-nowrap">
+                <i class="fas fa-file-excel"></i>
             </a>
 
             <a href="{% url 'add_letter' %}" class="btn btn-primary shadow-sm text-nowrap">
-                <i class="fas fa-file-import me-2"></i>Register Letter
+                <i class="fas fa-plus"></i> New
             </a>
         </div>
     </div>
@@ -87,10 +92,10 @@
             <small class="text-muted">Showing page {{ letters.number }} of {{ letters.paginator.num_pages }}</small>
             <div>
                 {% if letters.has_previous %}
-                    <a href="?page={{ letters.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="btn btn-sm btn-outline-secondary me-1">Previous</a>
+                    <a href="?page={{ letters.previous_page_number }}{% if search_query %}&q={{ search_query }}&search_type={{ search_type }}{% endif %}" class="btn btn-sm btn-outline-secondary me-1">Previous</a>
                 {% endif %}
                 {% if letters.has_next %}
-                    <a href="?page={{ letters.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="btn btn-sm btn-outline-secondary">Next</a>
+                    <a href="?page={{ letters.next_page_number }}{% if search_query %}&q={{ search_query }}&search_type={{ search_type }}{% endif %}" class="btn btn-sm btn-outline-secondary">Next</a>
                 {% endif %}
             </div>
         </div>
