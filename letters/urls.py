@@ -3,6 +3,9 @@ from django.contrib.auth import views as auth_views  # Import standard auth view
 from . import views
 
 urlpatterns = [
+
+    path('letter/view-docs/<path:pk>/', views.view_letter_images, name='view_letter_images'),
+
     # --- AUTHENTICATION ---
     # 1. Login Page (Points to your 'registration/login.html')
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
@@ -12,6 +15,7 @@ urlpatterns = [
 
     # --- PUBLIC PORTAL ---
     path('', views.sector_dashboard, name='sector_dashboard'),
+    path('letter/<path:pk>/', views.letter_detail, name='letter_detail'),
     path('letter/<path:pk>/', views.letter_detail, name='letter_detail'),
 
     # --- CUSTOM ADMIN PANEL ---
@@ -30,7 +34,5 @@ urlpatterns = [
     path('custom-admin/letters/view/<path:pk>/', views.admin_letter_detail, name='admin_letter_detail'),
     path('custom-admin/letters/edit/<path:pk>/', views.edit_letter, name='edit_letter'),
     path('custom-admin/letters/delete/<path:pk>/', views.delete_letter, name='delete_letter'),
-
-
-path('custom-admin/letters/export/', views.export_letters_excel, name='export_letters_excel'),
+    path('custom-admin/letters/export/', views.export_letters_excel, name='export_letters_excel'),
 ]

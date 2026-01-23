@@ -51,3 +51,11 @@ class SectorProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.get_sector_display()}"
+
+class LetterImage(models.Model):
+    letter = models.ForeignKey(Letter, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='letters/pages/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Page for Letter #{self.letter.serial_number}"

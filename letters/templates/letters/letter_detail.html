@@ -69,14 +69,6 @@
             word-break: break-word;     /* Forces break on long words */
         }
 
-        .attachment-box {
-            background-color: #f8f9fa;
-            border: 2px dashed #dee2e6;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-        }
-
         .btn-back {
             transition: transform 0.2s;
         }
@@ -176,30 +168,30 @@
 
             <div class="mt-5">
                 <h5 class="mb-3 fw-bold border-bottom pb-2">
-                    <i class="fas fa-paperclip me-2 text-secondary"></i> ලිපියේ ඡායාරූප පිටපත (Scanned Copy)
+                    <i class="fas fa-paperclip me-2 text-secondary"></i> ලිපියේ ඡායාරූප (Scanned Documents)
                 </h5>
 
-                {% if letter.attachment %}
-                    <div class="attachment-box">
-                        <img src="{{ letter.attachment.url }}" class="img-fluid rounded shadow-sm mb-3" style="max-height: 500px;" alt="Scanned Letter">
-                        <br>
-                        <a href="{{ letter.attachment.url }}" class="btn btn-dark" target="_blank" download>
-                            <i class="fas fa-download me-2"></i> ඡායාරූපය බාගත කරන්න (Download)
-                        </a>
-                        <a href="{{ letter.attachment.url }}" class="btn btn-outline-dark" target="_blank">
-                            <i class="fas fa-expand me-2"></i> විශාල කර බලන්න (View Full)
-                        </a>
-                    </div>
-                {% else %}
-                    <div class="alert alert-secondary d-flex align-items-center" role="alert">
-                        <i class="fas fa-info-circle fs-4 me-3"></i>
-                        <div>
-                            <strong>ලේඛනයක් අමුණා නොමැත</strong> (No scanned document attached).
-                            <br><small>පරිපාලක විසින් කිසිදු ලේඛනයක් මෙම ලිපියට අමුණා නැත.</small>
-                        </div>
-                    </div>
-                {% endif %}
+                <div class="p-4 bg-light rounded text-center border">
+                    <i class="fas fa-file-invoice fa-3x text-secondary mb-3"></i>
+                    <br>
+                    <p class="fw-bold text-secondary">මෙම ලිපියට අදාළ ලේඛන බැලීමට පහත බොත්තම භාවිතා කරන්න.</p>
+
+                    <a href="{% url 'view_letter_images' letter.pk %}" class="btn btn-primary btn-lg shadow-sm mt-2 px-4">
+                        <i class="fas fa-search-plus me-2"></i> ලිපි ලේඛන පරීක්ෂා කරන්න (Open Secure Viewer)
+                    </a>
+                </div>
             </div>
+            {% if not letter.is_replied %}
+            <div class="mt-5 p-4 rounded bg-warning bg-opacity-10 border border-warning">
+                <div class="d-flex align-items-center text-warning">
+                    <i class="fas fa-check-circle fs-2 me-3"></i>
+                    <div>
+                        <div class="fw-bold text-uppercase small opacity-75">තත්වය (Status)</div>
+                        <h4 class="mb-1 fw-bold">පිළිතුරු යොමු කර නැත (Not Replied)</h4>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
 
             {% if letter.is_replied %}
             <div class="mt-5 p-4 rounded bg-success bg-opacity-10 border border-success">

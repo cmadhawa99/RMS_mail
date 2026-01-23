@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Letter, SectorProfile
+from .models import Letter, SectorProfile, LetterImage
 from django.views.decorators.cache import never_cache  # <--- CRITICAL SECURITY TOOL
 from django.core.paginator import Paginator
 from .forms import UserForm, LetterForm
@@ -109,6 +109,35 @@ def letter_detail(request, pk):
         'letter': letter,
         'user_sector': user_sector
     })
+
+@login_required
+def view_letter_images(request, pk):
+    letter = get_object_or_404(Letter, pk=pk)
+
+    try:
+        user_profile =  request.user.sectorprofile
+        user_sector = user_profile.sector
+    except SectorProfile.DoesNotExist:
+        user_sector = "NONE"
+
+        if not request.user.is_superuser:
+            if user_sector != "ADMIN" and letter.target_sector != user_sector:
+                return render(request, 'letters/access_denied.html')
+
+    images = letter.images.all()
+
+    if not images and letter.attachment:
+        legacy_image = letter.attachment
+    else:
+        legacy_image = None
+
+    return render(request, 'letters/letter_images.html', {
+        'letter': letter,
+        'images': images,
+        'legacy_image': legacy_image
+    })
+
+
 
 
 # ------- CUSTOM ADMIN PANEL VIEWS -------
@@ -241,8 +270,19 @@ def add_letter(request):
     if request.method == 'POST':
         form = LetterForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            messages.success(request, "New letter added successfully.")
+            letter = form.save(commit=False)
+
+            images = request.FILES.getlist('images')
+
+            if images:
+                letter.attachment = images[0]
+
+            letter.save()
+
+            for img in images:
+                LetterImage.objects.create(letter=letter, image=img)
+
+            messages.success(request, "New letter and pages added successfully.")
             return redirect('custom_admin_letters')
     else:
         form = LetterForm()
