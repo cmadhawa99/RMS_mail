@@ -20,7 +20,6 @@
 
         body {
             background-color: var(--primary-bg);
-            /* Priority for Sinhala Fonts */
             font-family: 'Noto Sans Sinhala', 'Abhaya Libre', sans-serif;
             font-size: 0.95rem;
             color: var(--text-main);
@@ -95,7 +94,7 @@
 
         /* --- System Status (Bottom Left) --- */
         .system-status-container {
-            margin-top: auto; /* Pushes this to the bottom */
+            margin-top: auto;
             padding: 20px;
             background: rgba(0,0,0,0.3);
             border-top: 1px solid rgba(255,255,255,0.05);
@@ -124,7 +123,7 @@
 
         /* --- Main Content Area --- */
         .content-wrapper {
-            margin-left: 16.666667%; /* Offset for sidebar */
+            margin-left: 16.666667%;
             padding: 30px;
             min-height: 100vh;
         }
@@ -195,7 +194,7 @@
             padding: 16px 25px;
             vertical-align: middle;
             border-bottom: 1px solid #f3f4f6;
-            line-height: 1.5; /* Important for Sinhala readability */
+            line-height: 1.5;
         }
 
         .table-hover tbody tr:hover { background-color: #f9fafb; }
@@ -219,7 +218,7 @@
             .sidebar { width: 100%; height: auto; position: relative; }
             .content-wrapper { margin-left: 0; padding: 15px; }
             .sidebar-brand { justify-content: center; }
-            .system-status-container { display: none; } /* Hide fixed bottom status on mobile */
+            .system-status-container { display: none; }
         }
     </style>
 </head>
@@ -292,12 +291,26 @@
                 <div>
                     <h2 class="fw-bold mb-1">
                         {% if selected_sector == 'ALL' %} සියළුම අංශ
-                        {% else %} {{ selected_sector|title }} අංශය
+                        {% elif selected_sector == 'GOVERNING' %} පාලන අංශය
+                        {% elif selected_sector == 'HEALTH' %} සෞඛ්‍ය අංශය
+                        {% elif selected_sector == 'DEVELOPMENT' %} සංවර්ධන අංශය
+                        {% elif selected_sector == 'INCOME' %} ආදායම් අංශය
+                        {% elif selected_sector == 'ACCOUNTS' %} ගිණුම් අංශය
+                        {% else %} {{ selected_sector }} අංශය
                         {% endif %}
                     </h2>
+
                     <div class="text-muted d-flex align-items-center gap-2">
                         <span>ආයුබෝවන්, <strong class="text-dark">{{ user.username }}</strong></span>
-                        <span class="badge bg-secondary rounded-pill">{{ user_sector|title }}</span>
+                        <span class="badge bg-secondary rounded-pill">
+                            {% if user_sector == 'GOVERNING' %} පාලන අංශය
+                            {% elif user_sector == 'HEALTH' %} සෞඛ්‍ය අංශය
+                            {% elif user_sector == 'DEVELOPMENT' %} සංවර්ධන අංශය
+                            {% elif user_sector == 'INCOME' %} ආදායම් අංශය
+                            {% elif user_sector == 'ACCOUNTS' %} ගිණුම් අංශය
+                            {% else %} {{ user_sector }}
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
 
@@ -347,13 +360,13 @@
                             {% endif %}
 
                             <div class="input-group">
-                                <select name="search_type" class="form-select bg-light border-end-0" style="max-width: 140px; font-size: 0.9rem;">
+                                <select name="search_type" id="userSearchType" class="form-select bg-light border-end-0" style="max-width: 140px; font-size: 0.9rem;">
                                     <option value="all" {% if search_type == 'all' %}selected{% endif %}>සියල්ල (All)</option>
                                     <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>අංකය (Serial)</option>
                                     <option value="date" {% if search_type == 'date' %}selected{% endif %}>දිනය (Date)</option>
                                 </select>
 
-                                <input type="text" name="q" class="form-control border-start-0 bg-light" placeholder="සොයන්න..." value="{{ search_query }}">
+                                <input type="text" name="q" id="userSearchInput" class="form-control border-start-0 bg-light" placeholder="සොයන්න..." value="{{ search_query }}">
                             </div>
                             <button type="submit" class="btn btn-primary px-3">සොයන්න</button>
                         </form>
@@ -462,9 +475,29 @@
                         </ul>
                     </nav>
                 </div>
-            </div> </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeSelect = document.getElementById('userSearchType');
+        const searchInput = document.getElementById('userSearchInput');
+
+        if(typeSelect && searchInput) {
+            function updateInput() {
+                if(typeSelect.value === 'date') {
+                    searchInput.type = 'date';
+                } else {
+                    searchInput.type = 'text';
+                }
+            }
+            typeSelect.addEventListener('change', updateInput);
+            updateInput(); // Run on load to set correct state
+        }
+    });
+</script>
 
 </body>
 </html>
