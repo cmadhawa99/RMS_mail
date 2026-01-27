@@ -81,7 +81,9 @@ class LetterForm(forms.ModelForm):
         fields = [
             'serial_number', 'date_received', 'sender_name', 'sender_address',
             'letter_type', 'target_sector', 'administrated_by',
-            'accepting_officer_id', 'attachment', 'is_replied', 'replied_at'
+            'accepting_officer_id', 'is_replied', 'replied_at',
+            'attachment_1', 'attachment_2', 'attachment_3', 'attachment_4',
+            'attachment_5', 'attachment_6'
         ]
         labels = {
             'serial_number': 'Serial Number',
@@ -91,8 +93,13 @@ class LetterForm(forms.ModelForm):
             'target_sector': 'Assign to Sector',
             'administrated_by': 'Administrated By',
             'accepting_officer_id': 'Accepting Officer ID',
-            'attachment': 'Scan/Photo (Optional)',
             'is_replied': 'Mark as Resolved/Replied',
+            'attachment_1': 'Attachment 1',
+            'attachment_2': 'Attachment 2',
+            'attachment_3': 'Attachment 3',
+            'attachment_4': 'Attachment 4',
+            'attachment_5': 'Attachment 5',
+            'attachment_6': 'Attachment 6'
         }
 
         widgets = {

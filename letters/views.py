@@ -124,17 +124,17 @@ def view_letter_images(request, pk):
             if user_sector != "ADMIN" and letter.target_sector != user_sector:
                 return render(request, 'letters/access_denied.html')
 
-    images = letter.images.all()
-
-    if not images and letter.attachment:
-        legacy_image = letter.attachment
-    else:
-        legacy_image = None
+    attachments = []
+    if letter.attachment_1: attachments.append(letter.attachment_1)
+    if letter.attachment_2: attachments.append(letter.attachment_2)
+    if letter.attachment_3: attachments.append(letter.attachment_3)
+    if letter.attachment_4: attachments.append(letter.attachment_4)
+    if letter.attachment_5: attachments.append(letter.attachment_5)
+    if letter.attachment_6: attachments.append(letter.attachment_6)
 
     return render(request, 'letters/letter_images.html', {
         'letter': letter,
-        'images': images,
-        'legacy_image': legacy_image
+        'attachments': attachments,
     })
 
 
