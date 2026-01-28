@@ -12,12 +12,15 @@ from django.contrib.auth import logout  # <--- Needed for logout
 import openpyxl
 from django.http import HttpResponse
 from datetime import datetime
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, Alignment
 
 # --- PUBLIC PORTAL ---
 
 @never_cache  # Security: Prevents "Back" button from showing this after logout
 @login_required
 def sector_dashboard(request):
+    # 1) Redirect Superusers to Admin Panel
     if request.user.is_superuser:
         return redirect('custom_admin_dashboard')
 
@@ -29,6 +32,7 @@ def sector_dashboard(request):
             user_sector = "ADMIN"
         else:
             user_sector = "NONE"
+
 
     letters = Letter.objects.all().order_by('-date_received')
 
@@ -65,12 +69,36 @@ def sector_dashboard(request):
         letter_id = request.POST.get('letter_id')
         reply_date = request.POST.get('reply_date')
 
-        letter = get_object_or_404(Letter, pk=letter_id, target_sector=user_sector)
+        letter = get_object_or_404(Letter, pk=letter_id, target_sector=user_sector) #check for problems this line
 
-        if not letter.is_replied and reply_date:
-            letter.is_replied = True
+        #Updated part 2026-01-28 3.14PM
+        #Security: Ensure user owns this sector
+        if letter.target_sector != user_sector:
+            messages.error(request, "Access Denied: You cannot update letters from other sectors.")
+            return redirect(f"{request.path}?sector={selected_sector}&page={page_obj.number}")
+
+        # Update Text Fields
+        if reply_date:
             letter.replied_at = reply_date
-            letter.save()
+            letter.is_replied = True
+
+        # Handle File Uploads (Slots 1-6)
+        # Iterate through attachment_1 to attachment_6
+        files_uploaded = False
+        for i in range(1, 7):
+            field_name = f'attachment_{i}'
+            #Check if a file was sent for this specific slot
+            if request.FILES.get(field_name):
+                setattr(letter, field_name, request.FILES.get(field_name))
+                files_uploaded = True
+        letter.save()
+
+        #Success Message
+        msg = f"letter #{letter.serial_number} updated successfully"
+        if files_uploaded:
+            msg += " (Documents uploaded)"
+
+        messages.success(request, msg)
 
         return redirect(f"{request.path}?sector={selected_sector}&page={page_obj.number}")
 
@@ -318,13 +346,12 @@ def logout_view(request):
     return redirect('login')
 
 
-
 @never_cache
 @login_required
 def export_letters_excel(request):
     if not request.user.is_superuser: return redirect('sector_dashboard')
 
-    # 1. Get the data (Apply search filter if it exists)
+    #1) Get the data (Apply search filter if it exists)
     letters = Letter.objects.all().order_by('-date_received')
     search_query = request.GET.get('q', '')
 
@@ -335,35 +362,66 @@ def export_letters_excel(request):
             Q(letter_type__icontains=search_query) |
             Q(target_sector__icontains=search_query)
         )
-        # Clean the filename to remove special characters
+
         clean_query = "".join([c for c in search_query if c.isalnum() or c in (' ', '-', '_')]).strip()
-        filename = f"Search_Result_{clean_query}.xlsx"
+        filename = f"Search_Results_{clean_query}.xlsx"
+
     else:
         year = datetime.now().year
         filename = f"Weligepola_Pradeshiya_sabha_letters_database_{year}.xlsx"
 
-    # 2. Create the Excel Workbook
+
+    # 2) Create the Excel Workbook
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Letters Data"
 
-    # 3. Add Headers
-    headers = ['Serial Number', 'Date Received', 'Sender Name', 'Type', 'Target Sector', 'Administrated By', 'Status',
-               'Replied Date']
+    # 3) Add Headers (In Sinhala)
+    headers = [
+        'ලිපි අංකය (Serial)',
+        'ලැබුණු දිනය (Date)',
+        'එවූ අයගේ නම (Sender)',
+        'ලිපියේ වර්ගය (Type)',
+        'අංශය (Sector)',
+        'පරිපාලනය කළේ (Admin By)',
+        'භාරගත් නිලධාරී (Accepting Officer)',
+        'තත්වය (Status)',
+        'පිළිතුරු දුන් දිනය (Replied Date)'
+
+    ]
     ws.append(headers)
 
-    # Style the header (Optional: make it bold)
+    # Style the header
+    header_font = Font(bold=True)
     for cell in ws[1]:
-        cell.font = openpyxl.styles.Font(bold=True)
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal='center')
 
-    # 4. Add Rows
+    # -- --
+    def get_sinhala_sector(value):
+        sector_map = {
+            'GOVERNING': 'පාලන අංශය',
+            'HEALTH': 'සෞඛ්‍ය අංශය',
+            'DEVELOPMENT': 'සංවර්ධන අංශය',
+            'INCOME': 'ආදායම් අංශය',
+            'ACCOUNTS': 'ගිණුම් අංශය',
+        }
+        return  sector_map.get(value, value)
+
+    # 4) Add Rows
     for letter in letters:
-        status = "Replied" if letter.is_replied else "Pending"
+        #Translate status
+        status = "පිළිතුරු යොමු කර ඇත" if letter.is_replied else "විමර්ශනය වෙමින් පවතී "
 
-        # Handle date formatting safely
+        #Translate Sector
+        sector_display = get_sinhala_sector(letter.target_sector)
+
+        #Handle Admin By
+        admin_by_display = letter.get_administrated_by_display()
+
+        #Handle date formatting
         replied_at = ""
         if letter.replied_at:
-            # removing timezone info for Excel compatibility
             replied_at = letter.replied_at.replace(tzinfo=None)
 
         ws.append([
@@ -371,17 +429,31 @@ def export_letters_excel(request):
             letter.date_received,
             letter.sender_name,
             letter.letter_type,
-            letter.target_sector,
-            letter.administrated_by,
+            sector_display,
+            admin_by_display,
+            letter.accepting_officer_id,
             status,
             replied_at
         ])
 
-    # 5. Prepare the response
+    # 5) Auto-adjust column width
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+
+        adjusted_width = (max_length + 2)
+        ws.column_dimensions[column].width = adjusted_width
+
+
+    # 6) Prepare the response
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
     wb.save(response)
     return response
-
-

@@ -20,7 +20,10 @@
                 </div>
             </form>
 
-            <a href="{% url 'export_letters_excel' %}?q={{ search_query }}&search_type={{ search_type }}" class="btn btn-success d-flex align-items-center gap-2">
+            {% url 'export_letters_excel' as export_url %}
+            <a href="{{ export_url }}?q={{ search_query }}&search_type={{ search_type }}"
+               onclick="handleExport(event, this.href)"
+               class="btn btn-success d-flex align-items-center gap-2">
                 <i class="fas fa-file-excel"></i> Export
             </a>
 
@@ -42,6 +45,7 @@
                         <th>Sender</th>
                         <th>Received Date</th>
                         <th>Target Sector</th>
+                        <th>Accepting Officer</th>
                         <th>Status</th>
                         <th class="text-end pe-4">Actions</th>
                     </tr>
@@ -56,6 +60,15 @@
                         <td>{{ letter.sender_name|truncatechars:20 }}</td>
                         <td>{{ letter.date_received }}</td>
                         <td><span class="badge bg-light text-dark border">{{ letter.get_target_sector_display }}</span></td>
+
+                        <td>
+                            {% if letter.accepting_officer_id %}
+                                <span class="small text-muted">{{ letter.accepting_officer_id }}</span>
+                            {% else %}
+                                <span class="small text-muted">-</span>
+                            {% endif %}
+                        </td>
+
                         <td>
                             {% if letter.is_replied %}
                                 <span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="fas fa-check-circle me-1"></i>Replied</span>
@@ -71,7 +84,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="text-center py-5">
+                        <td colspan="8" class="text-center py-5">
                             <div class="text-muted">
                                 <i class="fas fa-folder-open fa-2x mb-3 opacity-50"></i>
                                 <p>No letters found matching your criteria.</p>
@@ -103,6 +116,7 @@
 </div>
 
 <script>
+    // 1. Search Bar Logic (Date Switcher)
     document.addEventListener('DOMContentLoaded', function() {
         const typeSelect = document.getElementById('adminSearchType');
         const searchInput = document.getElementById('adminSearchInput');
@@ -116,9 +130,65 @@
                 }
             }
             typeSelect.addEventListener('change', updateInput);
-            updateInput(); // Run immediately to set initial state
+            updateInput();
         }
     });
+
+    function handleExport(e, url) {
+        // Check if we are inside the Python Wrapper (pywebview)
+        if (window.pywebview) {
+            e.preventDefault(); // Stop standard download
+
+            // Give user visual feedback
+            const btn = e.currentTarget; // Ensure we get the button, not the icon
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            btn.classList.add('disabled');
+
+            fetch(url)
+                .then(response => {
+                    // --- NEW: EXTRACT FILENAME FROM HEADERS ---
+                    let filename = "Letters_Export.xlsx"; // Fallback default
+
+                    const disposition = response.headers.get('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        // Regex to grab text between filename="KEYWORD"
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) {
+                            filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+
+                    // Return both the data blob AND the extracted filename
+                    return response.blob().then(blob => ({ blob, filename }));
+                })
+                .then(({ blob, filename }) => {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = function() {
+                        var base64data = reader.result.split(',')[1];
+
+                        // Call Python function with the DYNAMIC filename
+                        window.pywebview.api.save_excel_file(filename, base64data)
+                            .then(resp => {
+                                if(resp.status === 'error') {
+                                    alert("Error saving file: " + resp.message);
+                                }
+                                // Reset button
+                                btn.innerHTML = originalText;
+                                btn.classList.remove('disabled');
+                            });
+                    }
+                })
+                .catch(err => {
+                    alert("Download failed: " + err);
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('disabled');
+                });
+        }
+        // If not in wrapper (normal browser), do nothing (let standard download happen)
+    }
 </script>
 
 {% endblock %}
