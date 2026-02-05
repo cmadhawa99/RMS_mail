@@ -1,522 +1,596 @@
 <!DOCTYPE html>
-<html lang="si" dir="ltr">
+<html lang="si" dir="ltr" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ප්‍රාදේශීය සභා ද්වාරය - Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --primary-bg: #f3f4f6;
-            --sidebar-bg: #111827;
-            --sidebar-hover: #1f2937;
-            --accent-color: #3b82f6;
-            --text-main: #374151;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Sinhala"', 'sans-serif'],
+                    },
+                    colors: {
+                        sector: {
+                            governing: '#d99694',
+                            health: '#b3a2c7',
+                            development: '#e46c0a',
+                            income: '#ffff00',
+                            accounts: '#95b3d7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            /* --- Glassmorphism Utilities --- */
+            .glass {
+                @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-lg;
+            }
+
+            .glass-panel {
+                @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-xl transition-all duration-300;
+            }
+
+            .glass-btn {
+                @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-md backdrop-blur-sm hover:shadow-lg hover:border-white/40;
+            }
+
+            /* --- Custom Scrollbar --- */
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                @apply bg-gray-400/50 dark:bg-gray-500/50 rounded-full hover:bg-[var(--accent)];
+            }
         }
 
+        /* --- Global Background --- */
         body {
-            background-color: var(--primary-bg);
-            font-family: 'Noto Sans Sinhala', 'Abhaya Libre', sans-serif;
-            font-size: 0.95rem;
-            color: var(--text-main);
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            background:
+                radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(var(--accent-rgb), 0.10) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(var(--accent-rgb), 0.10) 0px, transparent 50%),
+                linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+        }
+        .dark body {
+            background:
+                radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(var(--accent-rgb), 0.2) 0px, transparent 50%),
+                linear-gradient(to bottom right, #111827, #1f2937);
         }
 
-        /* --- Sidebar & Layout --- */
-        .sidebar {
-            background-color: var(--sidebar-bg);
-            color: #9ca3af;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0; bottom: 0; left: 0;
-            z-index: 100;
-            width: 16.666667%;
+        /* --- Income Yellow Contrast Fixes --- */
+        .light .text-accent-adaptive { color: #b45309; }
+        .dark .text-accent-adaptive { color: #ffff00; }
+
+        /* Badges */
+        .badge-sector-GOVERNING { background-color: #d99694; color: white; }
+        .badge-sector-HEALTH { background-color: #b3a2c7; color: white; }
+        .badge-sector-DEVELOPMENT { background-color: #e46c0a; color: white; }
+        .badge-sector-INCOME { background-color: #ffff00; color: #451a03; font-weight: 800; }
+        .badge-sector-ACCOUNTS { background-color: #95b3d7; color: white; }
+
+        /* Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
         }
-
-        .sidebar-brand {
-            padding: 20px;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            background: rgba(0,0,0,0.2);
-            display: flex; align-items: center; gap: 10px;
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
         }
-
-        .nav-link {
-            color: #d1d5db; padding: 12px 20px; margin: 2px 10px; border-radius: 6px;
-            transition: all 0.2s ease; font-weight: 500; display: flex; align-items: center;
-        }
-        .nav-link:hover { background-color: var(--sidebar-hover); color: #fff; transform: translateX(3px); }
-        .nav-link.active { background-color: var(--accent-color); color: #fff; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
-        .nav-link i { width: 24px; margin-right: 10px; text-align: center; }
-
-        .content-wrapper { margin-left: 16.666667%; padding: 30px; min-height: 100vh; }
-
-        /* --- Cards --- */
-        .stat-card {
-            background: #fff; border: none; border-radius: 12px; padding: 24px;
-            box-shadow: var(--card-shadow); transition: transform 0.2s; position: relative; overflow: hidden; height: 100%;
-        }
-        .stat-card:hover { transform: translateY(-4px); }
-        .stat-icon {
-            width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem; margin-bottom: 16px;
-        }
-        .stat-value { font-size: 2rem; font-weight: 700; color: #111827; line-height: 1; margin-bottom: 5px; }
-        .stat-label { color: #6b7280; font-size: 0.9rem; font-weight: 500; }
-
-        .bg-blue-soft { background-color: #eff6ff; color: #2563eb; }
-        .bg-yellow-soft { background-color: #fefce8; color: #d97706; }
-        .bg-green-soft { background-color: #f0fdf4; color: #16a34a; }
-
-        /* --- Table --- */
-        .table-card { background: #fff; border-radius: 12px; box-shadow: var(--card-shadow); overflow: hidden; margin-top: 30px; }
-        .table-header { padding: 20px 25px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #fff; }
-        .table thead th { background-color: #f9fafb; font-weight: 600; color: #4b5563; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; border-bottom: 2px solid #e5e7eb; padding: 15px 25px; }
-        .table tbody td { padding: 16px 25px; vertical-align: middle; border-bottom: 1px solid #f3f4f6; line-height: 1.5; }
-        .table-hover tbody tr:hover { background-color: #f9fafb; }
-
-        /* --- Upload Box Styles --- */
-        .upload-slot {
-            height: 120px;
-            border: 2px dashed #dee2e6;
-            border-radius: 8px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; position: relative; overflow: hidden; background: #f8f9fa;
-            transition: all 0.2s;
-        }
-        .upload-slot:hover { border-color: #3b82f6; background: #eff6ff; }
-        .upload-slot.locked { border-style: solid; border-color: #e9ecef; background: #fff; cursor: default; }
-
-        .slot-preview { width: 100%; height: 100%; object-fit: cover; }
-        .slot-label { font-size: 0.75rem; font-weight: bold; color: #6c757d; margin-top: 5px; }
-
-        /* --- RED CLOSE BUTTON STYLE --- */
-        .btn-clear {
-            position: absolute; top: 5px; right: 5px;
-            width: 25px; height: 25px;
-            border-radius: 50%; background-color: #dc3545; border: 2px solid white; color: white;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 0.2s; font-size: 10px;
-        }
-        .btn-clear:hover { transform: scale(1.1); background-color: #bb2d3b; }
-
-        .system-status-container { margin-top: auto; padding: 20px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.05); }
-        .status-box { display: flex; align-items: center; gap: 12px; }
-        .status-indicator { width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
     </style>
 </head>
-<body>
 
-<div class="container-fluid p-0">
-    <div class="row g-0">
+{% if selected_sector == 'GOVERNING' %}     <style>:root{ --accent: #d99694; --accent-rgb: 217, 150, 148; }</style>
+{% elif selected_sector == 'HEALTH' %}      <style>:root{ --accent: #b3a2c7; --accent-rgb: 179, 162, 199; }</style>
+{% elif selected_sector == 'DEVELOPMENT' %} <style>:root{ --accent: #e46c0a; --accent-rgb: 228, 108, 10; }</style>
+{% elif selected_sector == 'INCOME' %}      <style>:root{ --accent: #ffd700; --accent-rgb: 255, 215, 0; }</style>
+{% elif selected_sector == 'ACCOUNTS' %}    <style>:root{ --accent: #95b3d7; --accent-rgb: 149, 179, 215; }</style>
+{% else %}                                  <style>:root{ --accent: #3b82f6; --accent-rgb: 59, 130, 246; }</style>
+{% endif %}
 
-        <div class="col-md-2 sidebar d-none d-md-flex">
-            <div class="sidebar-brand">
-                <i class="fas fa-university text-primary"></i>
-                <div style="line-height: 1.1;">
-                    <div style="font-size: 0.9rem; opacity: 0.7;">ප්‍රාදේශීය සභාව</div>
-                    <div style="font-size: 1.1rem;">වැලිගෙපොල</div>
+<body class="h-screen w-screen overflow-hidden text-gray-700 dark:text-gray-200 transition-colors duration-500 selection:bg-[var(--accent)] selection:text-white">
+
+    <div class="flex h-full w-full p-4 gap-4">
+
+        <aside class="w-72 hidden md:flex flex-col glass rounded-3xl z-20 relative h-full transition-all duration-300">
+
+            <div class="p-6 flex items-center gap-4 border-b border-gray-200/30 dark:border-gray-700/30">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-gray-400 flex items-center justify-center text-white text-xl shadow-lg">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">ප්‍රාදේශීය සභාව</div>
+                    <div class="text-xl font-black tracking-tight dark:text-white">වැලිගෙපොල</div>
                 </div>
             </div>
 
-            <nav class="nav flex-column mt-2 w-100 overflow-auto" style="flex: 1;">
-                <div style="padding: 20px 20px 10px; font-size: 0.75rem; text-transform: uppercase; color: #6b7280; font-weight: 600;">ප්‍රධාන මෙනුව</div>
-                <a class="nav-link {% if selected_sector == 'ALL' %}active{% endif %}" href="?sector=ALL"><i class="fas fa-th-large"></i> <span>සියළුම අංශ</span></a>
-                <div style="padding: 20px 20px 10px; font-size: 0.75rem; text-transform: uppercase; color: #6b7280; font-weight: 600;">අංශ (Departments)</div>
-                <a class="nav-link {% if selected_sector == 'GOVERNING' %}active{% endif %}" href="?sector=GOVERNING"><i class="fas fa-gavel"></i> <span>පාලන අංශය</span></a>
-                <a class="nav-link {% if selected_sector == 'HEALTH' %}active{% endif %}" href="?sector=HEALTH"><i class="fas fa-heartbeat"></i> <span>සෞඛ්‍ය අංශය</span></a>
-                <a class="nav-link {% if selected_sector == 'DEVELOPMENT' %}active{% endif %}" href="?sector=DEVELOPMENT"><i class="fas fa-hard-hat"></i> <span>සංවර්ධන අංශය</span></a>
-                <a class="nav-link {% if selected_sector == 'INCOME' %}active{% endif %}" href="?sector=INCOME"><i class="fas fa-coins"></i> <span>ආදායම් අංශය</span></a>
-                <a class="nav-link {% if selected_sector == 'ACCOUNTS' %}active{% endif %}" href="?sector=ACCOUNTS"><i class="fas fa-file-invoice-dollar"></i> <span>ගිණුම් අංශය</span></a>
+            <nav class="flex-1 overflow-y-auto px-4 space-y-2 custom-scrollbar py-6">
+                <div class="px-2 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">ප්‍රධාන මෙනුව</div>
+
+                <a href="?sector=ALL" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 group {% if selected_sector == 'ALL' %}bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/30{% else %}hover:bg-white/40 dark:hover:bg-white/10 hover:translate-x-1{% endif %}">
+                    <i class="fas fa-th-large w-6 text-center"></i>
+                    <span class="font-bold ml-3 text-sm">සියළුම අංශ</span>
+                </a>
+
+                <div class="px-2 mt-8 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">අංශ (Departments)</div>
+
+                {% with 'GOVERNING HEALTH DEVELOPMENT INCOME ACCOUNTS' as sectors %}
+                    {% for sec in sectors.split %}
+                    <a href="?sector={{ sec }}" class="relative flex items-center px-4 py-3 rounded-xl transition-all duration-200 group mb-1
+                        {% if selected_sector == sec %}
+                            bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/40
+                            {% if sec == 'INCOME' %}!text-black{% endif %}
+                        {% else %}
+                            hover:bg-white/40 dark:hover:bg-white/10 hover:translate-x-1 text-gray-600 dark:text-gray-400
+                        {% endif %}
+                        {% if user_sector == sec and selected_sector != sec %}
+                            border-2 border-[var(--accent)] text-[var(--accent)]
+                        {% endif %}
+                        ">
+
+                        <i class="fas {% if sec == 'GOVERNING' %}fa-gavel{% elif sec == 'HEALTH' %}fa-heartbeat{% elif sec == 'DEVELOPMENT' %}fa-hard-hat{% elif sec == 'INCOME' %}fa-coins{% else %}fa-file-invoice-dollar{% endif %} w-6 text-center"></i>
+                        <span class="font-bold ml-3 text-sm">
+                            {% if sec == 'GOVERNING' %}පාලන{% elif sec == 'HEALTH' %}සෞඛ්‍ය{% elif sec == 'DEVELOPMENT' %}සංවර්ධන{% elif sec == 'INCOME' %}ආදායම්{% else %}ගිණුම්{% endif %}
+                        </span>
+
+                        {% if user_sector == sec %}
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                                {% if selected_sector == sec %}
+                                    <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                                {% else %}
+                                    <span class="text-[8px] font-black uppercase bg-[var(--accent)] text-white px-1.5 py-0.5 rounded">MY</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </a>
+                    {% endfor %}
+                {% endwith %}
             </nav>
 
-            <div class="system-status-container">
-                <div class="status-box">
-                    <div class="status-indicator"></div>
-                    <div><div class="text-white small fw-bold">පද්ධතිය සක්‍රීයයි</div><div style="color: #6b7280; font-size: 0.75rem;">System Online</div></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-10 content-wrapper">
-            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-                <div>
-                    <h2 class="fw-bold mb-1">
-                        {% if selected_sector == 'ALL' %} සියළුම අංශ {% elif selected_sector == 'GOVERNING' %} පාලන අංශය {% elif selected_sector == 'HEALTH' %} සෞඛ්‍ය අංශය {% elif selected_sector == 'DEVELOPMENT' %} සංවර්ධන අංශය {% elif selected_sector == 'INCOME' %} ආදායම් අංශය {% elif selected_sector == 'ACCOUNTS' %} ගිණුම් අංශය {% else %} {{ selected_sector }} අංශය {% endif %}
-                    </h2>
-                    <div class="text-muted d-flex align-items-center gap-2">
-                        <span>ආයුබෝවන්, <strong class="text-dark">{{ user.username }}</strong></span>
+            <div class="p-6 mt-auto">
+                <div class="glass-panel p-4 rounded-2xl flex items-center gap-3">
+                    <div class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400">System Online</div>
+                        <div class="text-[10px] opacity-60 uppercase tracking-wider">v2.4 Glass UI</div>
                     </div>
                 </div>
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3 py-2"><i class="fas fa-sign-out-alt"></i> ඉවත් වන්න</button>
-                </form>
             </div>
+        </aside>
 
-            <div class="row g-4 mb-5">
-                <div class="col-md-4"><div class="stat-card"><div class="stat-icon bg-blue-soft"><i class="fas fa-inbox"></i></div><div class="stat-value">{{ total }}</div><div class="stat-label">මුළු ලිපි ගොනු (Total Files)</div></div></div>
-                <div class="col-md-4"><div class="stat-card"><div class="stat-icon bg-yellow-soft"><i class="fas fa-clock"></i></div><div class="stat-value text-warning">{{ pending }}</div><div class="stat-label">විමර්ශනය වෙමින් පවතින ලිපි (Pending)</div></div></div>
-                <div class="col-md-4"><div class="stat-card"><div class="stat-icon bg-green-soft"><i class="fas fa-check"></i></div><div class="stat-value text-success">{{ resolved }}</div><div class="stat-label">පිළිතුරු යොමු කර ඇති ලිපි (Completed)</div></div></div>
-            </div>
+        <main class="flex-1 flex flex-col h-full relative z-10 glass rounded-3xl overflow-hidden">
+            <header class="h-20 px-8 flex justify-between items-center shrink-0 border-b border-gray-200/30 dark:border-gray-700/30 bg-white/20 dark:bg-black/10 backdrop-blur-md">
+                <div>
+                    <h1 class="text-2xl font-black dark:text-white flex items-center gap-3 drop-shadow-sm
+                        {% if selected_sector == 'INCOME' %}text-accent-adaptive{% else %}text-[var(--accent)]{% endif %}">
+                        {% if selected_sector == 'ALL' %} සියළුම අංශ
+                        {% elif selected_sector == 'GOVERNING' %} පාලන අංශය
+                        {% elif selected_sector == 'HEALTH' %} සෞඛ්‍ය අංශය
+                        {% elif selected_sector == 'DEVELOPMENT' %} සංවර්ධන අංශය
+                        {% elif selected_sector == 'INCOME' %} ආදායම් අංශය
+                        {% elif selected_sector == 'ACCOUNTS' %} ගිණුම් අංශය
+                        {% else %} {{ selected_sector }} අංශය {% endif %}
+                    </h1>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                        ආයුබෝවන්, <span class="font-bold text-gray-800 dark:text-gray-100">{{ user.username }}</span>
+                    </p>
+                </div>
 
-            <div class="table-card">
-                <div class="table-header flex-wrap gap-3">
-                    <div><h5 class="mb-0 fw-bold">ලිපි ගනුදෙනු වාර්තාව</h5><small class="text-muted">ඉදිරිපත් කර ඇති නවතම ඉල්ලීම්</small></div>
-                    <div style="min-width: 350px;">
-                        <form method="GET" action="" class="d-flex gap-2">
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden sm:block glass-panel px-4 py-1.5 rounded-xl border-l-4" style="border-color: var(--accent);">
+                        <div id="liveTime" class="text-lg font-black font-mono tracking-widest text-gray-700 dark:text-gray-100">--:--:--</div>
+                        <div id="liveDate" class="text-[9px] font-bold uppercase tracking-widest opacity-60">-- --- ----</div>
+                    </div>
+
+                    <button id="themeToggle" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-yellow-400 hover:bg-white/50" title="Toggle Theme">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="glass-btn w-11 h-11 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-colors" title="ඉවත් වන්න">
+                            <i class="fas fa-power-off"></i>
+                        </button>
+                    </form>
+                </div>
+            </header>
+
+            <div class="flex-1 flex flex-col px-8 pb-6 overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-6 shrink-0">
+                    <div class="glass-panel rounded-2xl p-5 flex items-center gap-5 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
+                        <div class="absolute right-0 top-0 w-24 h-24 bg-blue-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <div class="relative">
+                            <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ total }}</div>
+                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">මුළු ලිපි ගොනු</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-5 flex items-center gap-5 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
+                        <div class="absolute right-0 top-0 w-24 h-24 bg-amber-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="relative">
+                            <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ pending }}</div>
+                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">විමර්ශනය වෙමින්</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-5 flex items-center gap-5 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
+                        <div class="absolute right-0 top-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="relative">
+                            <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ resolved }}</div>
+                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">පිළිතුරු යොමුකල</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-3xl flex-1 flex flex-col overflow-hidden relative border-t-2 border-t-[var(--accent)]">
+
+                    <div class="p-5 flex flex-wrap justify-between items-center gap-4 border-b border-gray-200/30 dark:border-gray-700/30 shrink-0 bg-white/30 dark:bg-black/20">
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-800 dark:text-white">ලිපි ගනුදෙනු වාර්තාව</h2>
+                            <p class="text-[10px] font-bold uppercase tracking-wider opacity-50">Recent Transactions</p>
+                        </div>
+
+                        <form method="GET" action="" class="flex gap-3 items-center">
                             {% if selected_sector != 'ALL' %}<input type="hidden" name="sector" value="{{ selected_sector }}">{% endif %}
-                            <div class="input-group">
-                                <select name="search_type" id="userSearchType" class="form-select bg-light border-end-0" style="max-width: 140px; font-size: 0.9rem;">
-                                    <option value="all" {% if search_type == 'all' %}selected{% endif %}>සියල්ල (All)</option>
-                                    <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>අංකය (Serial)</option>
-                                    <option value="date" {% if search_type == 'date' %}selected{% endif %}>දිනය (Date)</option>
+
+                            <div class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-[var(--accent)] transition-all">
+                                <select name="search_type" id="userSearchType" class="bg-transparent border-none text-xs font-bold text-gray-600 dark:text-gray-300 focus:ring-0 cursor-pointer py-2 pl-3 pr-8 outline-none appearance-none">
+                                    <option value="all" {% if search_type == 'all' %}selected{% endif %}>සියල්ල</option>
+                                    <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>අංකය</option>
+                                    <option value="date" {% if search_type == 'date' %}selected{% endif %}>දිනය</option>
                                 </select>
-                                <input type="text" name="q" id="userSearchInput" class="form-control border-start-0 bg-light" placeholder="සොයන්න..." value="{{ search_query }}">
+                                <div class="w-px h-5 bg-gray-400/30 mx-1"></div>
+                                <input type="text" name="q" id="userSearchInput" class="bg-transparent border-none text-sm font-medium text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:ring-0 py-1 px-2 w-40 outline-none" placeholder="සොයන්න..." value="{{ search_query }}">
                             </div>
-                            <button type="submit" class="btn btn-primary px-3">සොයන්න</button>
+
+                            <button type="submit" class="glass-btn w-10 h-10 rounded-xl text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </form>
                     </div>
-                </div>
 
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead>
-                            <tr>
-                                <th class="ps-4">ID අංකය</th>
-                                <th style="width: 25%;">විෂය (Subject)</th>
-                                <th>අංශය (Sector)</th>
-                                <th>දිනය (Date)</th>
-                                <th>තත්වය (Status)</th>
-                                <th class="text-end pe-4">ක්‍රියාමාර්ග</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for letter in letters %}
-                            <tr>
-                                <td class="ps-4"><span class="font-monospace fw-bold text-secondary">#{{ letter.serial_number }}</span></td>
-                                <td>
-                                    {% if letter.target_sector == user_sector or user_sector == 'ADMIN' %}
-                                        <a href="{% url 'letter_detail' letter.pk %}" class="fw-bold text-dark text-decoration-none">{{ letter.letter_type }}</a>
-                                    {% else %}
-                                        <span class="text-muted">{{ letter.letter_type }} <i class="fas fa-lock fa-xs ms-1"></i></span>
-                                    {% endif %}
-                                    <div class="text-muted small mt-1">{{ letter.sender_name }}</div>
-                                </td>
-                                <td><span class="badge bg-light text-dark border">{{ letter.get_target_sector_display }}</span></td>
-                                <td class="text-secondary small"><i class="far fa-calendar me-1"></i> {{ letter.date_received }}</td>
-                                <td>
-                                    {% if letter.is_replied %}
-                                        <span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="fas fa-check-circle me-1"></i> විසඳන ලදී</span>
-                                    {% else %}
-                                        <span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1"><i class="fas fa-spinner fa-spin me-1"></i> විමර්ශනය</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-end pe-4">
-                                    {% if letter.is_replied %}
-                                        <button class="btn btn-light btn-sm text-muted disabled border-0"><i class="fas fa-check-double text-success"></i> සම්පූර්ණයි</button>
-                                    {% elif letter.target_sector == user_sector %}
-                                        <button type="button" class="btn btn-primary btn-sm d-flex align-items-center gap-2 ms-auto" data-bs-toggle="modal" data-bs-target="#replyModal{{ letter.pk }}">
-                                            <i class="fas fa-reply"></i> පිළිතුරු / Upload
-                                        </button>
+                    <div class="overflow-y-auto flex-1 custom-scrollbar p-2">
+                        <table class="w-full text-left border-separate border-spacing-y-2 px-2">
+                            <thead class="sticky top-0 bg-white/80 dark:bg-gray-800/90 backdrop-blur-md z-10 text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider shadow-sm">
+                                <tr>
+                                    <th class="px-6 py-3 rounded-l-xl">ID අංකය</th>
+                                    <th class="px-6 py-3 w-1/4">විෂය (Subject)</th>
+                                    <th class="px-6 py-3">අංශය (Sector)</th>
+                                    <th class="px-6 py-3">දිනය (Date)</th>
+                                    <th class="px-6 py-3">තත්වය (Status)</th>
+                                    <th class="px-6 py-3 text-right rounded-r-xl">ක්‍රියාමාර්ග</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for letter in letters %}
+                                <tr class="group hover:bg-white/40 dark:hover:bg-white/5 transition-colors duration-200">
+                                    <td class="px-6 py-3 rounded-l-xl border-l border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
+                                        <span class="font-mono font-bold opacity-70 text-sm">#{{ letter.serial_number }}</span>
+                                    </td>
 
-                                        <div class="modal fade text-start" id="replyModal{{ letter.pk }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-                                            <div class="modal-dialog modal-lg modal-dialog-centered">
-                                                <div class="modal-content border-0 shadow">
-                                                    <div class="modal-header bg-primary text-white">
-                                                        <h5 class="modal-title fw-bold">ලිපි ගොනු යාවත්කාලීන කිරීම - #{{ letter.serial_number }}</h5>
-                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-
-                                                    <form method="POST" enctype="multipart/form-data" onsubmit="return validateUploadForm(event, this)">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="letter_id" value="{{ letter.pk }}">
-
-                                                        <div class="modal-body p-4">
-                                                            <div class="mb-4">
-                                                                <label class="form-label fw-bold">පිළිතුරු යොමු කරන දිනය (Reply Date)</label>
-                                                                <input type="date" name="reply_date" class="form-control" required>
-                                                            </div>
-
-                                                            <h6 class="fw-bold mb-3 border-bottom pb-2">ඇමුණුම් (Attachments)</h6>
-                                                            <div class="row g-3">
-
-                                                                {% for i in "123456" %}
-                                                                {% endfor %}
-
-                                                                <div class="col-4 col-md-4">
-                                                                    {% if letter.attachment_1 %}
-                                                                        <div class="upload-slot locked"><img src="{{ letter.attachment_1.url }}" class="slot-preview"></div>
-                                                                        <div class="text-center small text-muted mt-1"><i class="fas fa-lock"></i> Locked</div>
-                                                                    {% else %}
-                                                                        <label class="upload-slot position-relative">
-                                                                            <i class="fas fa-cloud-upload-alt fa-2x text-primary mb-2"></i>
-                                                                            <span class="slot-label">Upload Page 1</span>
-                                                                            <input type="file" name="attachment_1" class="d-none new-file-input" onchange="previewFile(this)">
-                                                                            <img src="" class="slot-preview d-none position-absolute top-0 start-0">
-                                                                            <button type="button" class="btn-clear d-none" onclick="clearPreview(event, this)"><i class="fas fa-times"></i></button>
-                                                                        </label>
-                                                                    {% endif %}
-                                                                </div>
-
-                                                                <div class="col-4 col-md-4">
-                                                                    {% if letter.attachment_2 %}
-                                                                        <div class="upload-slot locked"><img src="{{ letter.attachment_2.url }}" class="slot-preview"></div>
-                                                                        <div class="text-center small text-muted mt-1"><i class="fas fa-lock"></i> Locked</div>
-                                                                    {% else %}
-                                                                        <label class="upload-slot position-relative">
-                                                                            <i class="fas fa-cloud-upload-alt fa-2x text-secondary mb-2"></i>
-                                                                            <span class="slot-label">Upload Page 2</span>
-                                                                            <input type="file" name="attachment_2" class="d-none new-file-input" onchange="previewFile(this)">
-                                                                            <img src="" class="slot-preview d-none position-absolute top-0 start-0">
-                                                                            <button type="button" class="btn-clear d-none" onclick="clearPreview(event, this)"><i class="fas fa-times"></i></button>
-                                                                        </label>
-                                                                    {% endif %}
-                                                                </div>
-
-                                                                <div class="col-4 col-md-4">
-                                                                    {% if letter.attachment_3 %}
-                                                                        <div class="upload-slot locked"><img src="{{ letter.attachment_3.url }}" class="slot-preview"></div>
-                                                                        <div class="text-center small text-muted mt-1"><i class="fas fa-lock"></i> Locked</div>
-                                                                    {% else %}
-                                                                        <label class="upload-slot position-relative">
-                                                                            <i class="fas fa-cloud-upload-alt fa-2x text-secondary mb-2"></i>
-                                                                            <span class="slot-label">Upload Page 3</span>
-                                                                            <input type="file" name="attachment_3" class="d-none new-file-input" onchange="previewFile(this)">
-                                                                            <img src="" class="slot-preview d-none position-absolute top-0 start-0">
-                                                                            <button type="button" class="btn-clear d-none" onclick="clearPreview(event, this)"><i class="fas fa-times"></i></button>
-                                                                        </label>
-                                                                    {% endif %}
-                                                                </div>
-
-                                                                <div class="col-4 col-md-4">
-                                                                    {% if letter.attachment_4 %}
-                                                                        <div class="upload-slot locked"><img src="{{ letter.attachment_4.url }}" class="slot-preview"></div>
-                                                                        <div class="text-center small text-muted mt-1"><i class="fas fa-lock"></i> Locked</div>
-                                                                    {% else %}
-                                                                        <label class="upload-slot position-relative">
-                                                                            <i class="fas fa-cloud-upload-alt fa-2x text-secondary mb-2"></i>
-                                                                            <span class="slot-label">Upload Page 4</span>
-                                                                            <input type="file" name="attachment_4" class="d-none new-file-input" onchange="previewFile(this)">
-                                                                            <img src="" class="slot-preview d-none position-absolute top-0 start-0">
-                                                                            <button type="button" class="btn-clear d-none" onclick="clearPreview(event, this)"><i class="fas fa-times"></i></button>
-                                                                        </label>
-                                                                    {% endif %}
-                                                                </div>
-
-                                                                <div class="col-4 col-md-4">
-                                                                    {% if letter.attachment_5 %}
-                                                                        <div class="upload-slot locked"><img src="{{ letter.attachment_5.url }}" class="slot-preview"></div>
-                                                                        <div class="text-center small text-muted mt-1"><i class="fas fa-lock"></i> Locked</div>
-                                                                    {% else %}
-                                                                        <label class="upload-slot position-relative">
-                                                                            <i class="fas fa-cloud-upload-alt fa-2x text-secondary mb-2"></i>
-                                                                            <span class="slot-label">Upload Page 5</span>
-                                                                            <input type="file" name="attachment_5" class="d-none new-file-input" onchange="previewFile(this)">
-                                                                            <img src="" class="slot-preview d-none position-absolute top-0 start-0">
-                                                                            <button type="button" class="btn-clear d-none" onclick="clearPreview(event, this)"><i class="fas fa-times"></i></button>
-                                                                        </label>
-                                                                    {% endif %}
-                                                                </div>
-
-                                                                <div class="col-4 col-md-4">
-                                                                    {% if letter.attachment_6 %}
-                                                                        <div class="upload-slot locked"><img src="{{ letter.attachment_6.url }}" class="slot-preview"></div>
-                                                                        <div class="text-center small text-muted mt-1"><i class="fas fa-lock"></i> Locked</div>
-                                                                    {% else %}
-                                                                        <label class="upload-slot position-relative">
-                                                                            <i class="fas fa-cloud-upload-alt fa-2x text-secondary mb-2"></i>
-                                                                            <span class="slot-label">Upload Page 6</span>
-                                                                            <input type="file" name="attachment_6" class="d-none new-file-input" onchange="previewFile(this)">
-                                                                            <img src="" class="slot-preview d-none position-absolute top-0 start-0">
-                                                                            <button type="button" class="btn-clear d-none" onclick="clearPreview(event, this)"><i class="fas fa-times"></i></button>
-                                                                        </label>
-                                                                    {% endif %}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="mt-4 p-3 bg-warning bg-opacity-10 border border-warning rounded">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox" id="safetyCheck{{ letter.pk }}" required>
-                                                                    <label class="form-check-label fw-bold text-dark small" for="safetyCheck{{ letter.pk }}">
-                                                                        ඉහත විස්තර සහ ඇමුණුම් නිවැරදි බව මම තහවුරු කරමි. <span class="text-danger">*</span>
-                                                                        <br>(I confirm that the details and attachments above are correct)
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                        <div class="modal-footer bg-light">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary px-4"><i class="fas fa-save me-2"></i> Update & Save</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
+                                        {% if letter.target_sector == user_sector or user_sector == 'ADMIN' %}
+                                            <a href="{% url 'letter_detail' letter.pk %}" class="font-bold text-gray-800 dark:text-white hover:text-[var(--accent)] transition-colors text-sm line-clamp-1">
+                                                {{ letter.letter_type }}
+                                            </a>
                                         {% else %}
-                                        <span class="text-muted small fst-italic">Read Only</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" class="text-center py-5">
-                                    <div class="text-muted mb-2"><i class="fas fa-folder-open fa-3x opacity-25"></i></div>
-                                    <p class="text-muted mb-0">දත්ත හමු නොවීය (No records found)</p>
-                                    {% if search_query %}
-                                    <a href="?sector={{ selected_sector }}" class="btn btn-sm btn-link mt-2">යළි සැකසුම (Clear Search)</a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                            <div class="flex items-center gap-2 opacity-50">
+                                                <span class="text-sm font-medium">{{ letter.letter_type }}</span>
+                                                <i class="fas fa-lock text-[10px]"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="text-[11px] font-bold opacity-50 uppercase mt-0.5">{{ letter.sender_name }}</div>
+                                    </td>
+
+                                    <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wide badge-sector-{{ letter.target_sector }} shadow-md">
+                                            {{ letter.get_target_sector_display }}
+                                        </span>
+                                    </td>
+
+                                    <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
+                                        <div class="flex items-center gap-2 text-xs font-bold opacity-80">
+                                            <i class="far fa-calendar opacity-50"></i>
+                                            {{ letter.date_received }}
+                                        </div>
+                                    </td>
+
+                                    <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
+                                        {% if letter.is_replied %}
+                                            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-check-circle"></i> විසඳන ලදී
+                                            </span>
+                                        {% else %}
+                                            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded-lg">
+                                                <span class="relative flex h-2 w-2">
+                                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                                  <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                                                </span>
+                                                විමර්ශනය
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="px-6 py-3 rounded-r-xl text-right border-r border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
+                                        {% if letter.is_replied %}
+                                            <span class="text-[10px] font-bold uppercase opacity-40 select-none">Completed</span>
+                                        {% elif letter.target_sector == user_sector %}
+                                            <button onclick="openModal('replyModal{{ letter.pk }}')" class="glass-btn px-4 py-1.5 rounded-lg text-xs font-bold text-blue-500 hover:bg-blue-500 hover:text-white inline-flex">
+                                                <i class="fas fa-reply mr-2"></i> පිළිතුරු
+                                            </button>
+                                        {% else %}
+                                            <span class="text-[10px] font-bold uppercase opacity-40 select-none">Read Only</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="py-20 text-center">
+                                        <div class="w-24 h-24 rounded-full bg-gray-200/50 dark:bg-gray-700/50 flex items-center justify-center mx-auto mb-6 text-gray-400 text-4xl animate-float">
+                                            <i class="fas fa-folder-open"></i>
+                                        </div>
+                                        <h3 class="text-lg font-bold opacity-70">දත්ත හමු නොවීය</h3>
+                                        <p class="text-sm opacity-40 font-bold uppercase tracking-wider">No records found</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="p-4 border-t border-gray-200/30 dark:border-gray-700/30 flex justify-between items-center bg-white/30 dark:bg-black/20 shrink-0 text-xs font-bold">
+                        <span class="opacity-50 uppercase tracking-widest">Page {{ letters.number }} / {{ letters.paginator.num_pages }}</span>
+                        <div class="flex gap-2">
+                            {% if letters.has_previous %}
+                                <a href="?page={{ letters.previous_page_number }}&sector={{ selected_sector }}&q={{ search_query }}&search_type={{ search_type }}" class="glass-btn w-9 h-9 rounded-lg hover:bg-[var(--accent)] hover:text-white"><i class="fas fa-chevron-left"></i></a>
+                            {% else %}
+                                <button disabled class="glass-btn w-9 h-9 rounded-lg opacity-30 cursor-not-allowed"><i class="fas fa-chevron-left"></i></button>
+                            {% endif %}
+
+                            {% if letters.has_next %}
+                                <a href="?page={{ letters.next_page_number }}&sector={{ selected_sector }}&q={{ search_query }}&search_type={{ search_type }}" class="glass-btn w-9 h-9 rounded-lg hover:bg-[var(--accent)] hover:text-white"><i class="fas fa-chevron-right"></i></a>
+                            {% else %}
+                                <button disabled class="glass-btn w-9 h-9 rounded-lg opacity-30 cursor-not-allowed"><i class="fas fa-chevron-right"></i></button>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center p-3 border-top bg-light">
-                    <span class="text-muted small"> පිටුව {{ letters.number }} / {{ letters.paginator.num_pages }} </span>
-                    <nav>
-                        <ul class="pagination pagination-sm mb-0">
-                            {% if letters.has_previous %}
-                                <li class="page-item"><a class="page-link" href="?page={{ letters.previous_page_number }}&sector={{ selected_sector }}&q={{ search_query }}&search_type={{ search_type }}">Previous</a></li>
-                            {% else %}<li class="page-item disabled"><span class="page-link">Previous</span></li>{% endif %}
-                            {% if letters.has_next %}
-                                <li class="page-item"><a class="page-link" href="?page={{ letters.next_page_number }}&sector={{ selected_sector }}&q={{ search_query }}&search_type={{ search_type }}">Next</a></li>
-                            {% else %}<li class="page-item disabled"><span class="page-link">Next</span></li>{% endif %}
-                        </ul>
-                    </nav>
+            </div>
+        </main>
+    </div>
+
+    {% for letter in letters %}
+        {% if letter.target_sector == user_sector and not letter.is_replied %}
+        <div id="replyModal{{ letter.pk }}" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm transition-all duration-300 opacity-0 pointer-events-none modal-overlay">
+            <div class="glass w-full max-w-4xl rounded-3xl shadow-2xl transform scale-95 transition-all duration-300 max-h-[90vh] overflow-hidden flex flex-col border border-white/20">
+
+                <div class="px-8 py-5 flex justify-between items-center bg-white/50 dark:bg-black/40 border-b border-white/10 shrink-0">
+                    <div>
+                        <div class="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest mb-1">Update Letter</div>
+                        <h3 class="text-xl font-black text-gray-800 dark:text-white">ලිපි අංක <span class="font-mono ml-2 text-2xl">#{{ letter.serial_number }}</span></h3>
+                    </div>
+                    <button onclick="closeModal('replyModal{{ letter.pk }}')" class="glass-btn w-9 h-9 rounded-full text-red-500 hover:bg-red-500 hover:text-white"><i class="fas fa-times"></i></button>
+                </div>
+
+                <div class="p-8 overflow-y-auto custom-scrollbar flex-1 bg-white/30 dark:bg-gray-900/50">
+                    <form method="POST" enctype="multipart/form-data" onsubmit="return validateUploadForm(event, this)" id="form{{ letter.pk }}">
+                        {% csrf_token %}
+                        <input type="hidden" name="letter_id" value="{{ letter.pk }}">
+
+                        <div class="mb-8">
+                            <label class="block text-xs font-bold opacity-60 uppercase tracking-wider mb-2">පිළිතුරු යොමු කරන දිනය (Reply Date)</label>
+                            <input type="date" name="reply_date" class="w-full glass rounded-xl px-5 py-3 bg-transparent font-bold text-gray-700 dark:text-white focus:outline-none focus:border-[var(--accent)] transition-colors" required>
+                        </div>
+
+                        <h6 class="text-xs font-bold opacity-60 uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <i class="fas fa-paperclip"></i> ඇමුණුම් (Attachments)
+                        </h6>
+
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                            {% for i in "123456" %}
+                            <div class="col-span-1">
+                                {% with forloop.counter as slot %}
+                                    <label class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all relative overflow-hidden group border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[var(--accent)]">
+                                        <i class="fas fa-cloud-upload-alt text-3xl opacity-40 mb-3 group-hover:scale-110 group-hover:text-[var(--accent)] transition-all"></i>
+                                        <span class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Page {{ slot }}</span>
+
+                                        <input type="file" name="attachment_{{ slot }}" class="hidden new-file-input" onchange="previewFile(this)">
+                                        <img src="" class="absolute inset-0 w-full h-full object-cover hidden slot-preview z-10 bg-white dark:bg-gray-800">
+
+                                        <button type="button" class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden btn-clear z-20 hover:scale-110 transition-transform" onclick="clearPreview(event, this)">
+                                            <i class="fas fa-trash-alt text-xs"></i>
+                                        </button>
+                                    </label>
+                                {% endwith %}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mt-8 p-5 rounded-2xl glass flex items-start gap-4">
+                            <input type="checkbox" id="safetyCheck{{ letter.pk }}" required class="mt-1.5 w-5 h-5 accent-[var(--accent)] cursor-pointer">
+                            <label for="safetyCheck{{ letter.pk }}" class="text-xs font-bold cursor-pointer select-none leading-relaxed opacity-80">
+                                ඉහත විස්තර සහ ඇමුණුම් නිවැරදි බව මම තහවුරු කරමි. <span class="text-red-500 text-lg">*</span>
+                                <br><span class="font-normal opacity-60 text-[10px] uppercase tracking-wide">I confirm that the details and attachments above are correct</span>
+                            </label>
+                        </div>
+
+                        <div class="mt-8 flex justify-end gap-4">
+                            <button type="button" onclick="closeModal('replyModal{{ letter.pk }}')" class="glass-btn px-6 py-3 rounded-xl font-bold opacity-60 hover:opacity-100 text-xs uppercase tracking-wider">Cancel</button>
+                            <button type="submit" class="glass-btn px-8 py-3 rounded-xl bg-[var(--accent)] text-white shadow-lg hover:shadow-[var(--accent)]/50 hover:-translate-y-1 transition-all text-xs uppercase tracking-wider border-none">
+                                <i class="fas fa-save mr-2"></i> Update
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        {% endif %}
+    {% endfor %}
 
-<div class="modal fade" id="noImageWarningModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content text-center p-4">
-      <div class="modal-body">
-        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
-        <h4 class="fw-bold mb-2">තහවුරු කරන්න</h4>
-        <p class="text-muted mb-4">
-            ලිපියේ ඡායාරූපයක් ඇතුළත් නොකර මෙය යාවත්කාලීන කිරීමට ඔබට විශ්වාසද? <br>
-            <small>(Are you sure you want to update this without uploading an letter image?)</small>
-        </p>
-        <div class="d-flex justify-content-center gap-2">
-            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-warning px-4" onclick="confirmNoImageSubmit()">Yes, Update</button>
+    <div id="noImageWarningModal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/70 backdrop-blur-md transition-opacity opacity-0 pointer-events-none modal-overlay">
+        <div class="glass p-8 rounded-3xl shadow-2xl text-center max-w-sm transform scale-95 transition-transform duration-300 border-t border-white/20">
+            <div class="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-500 flex items-center justify-center text-3xl mx-auto mb-4 animate-bounce">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h4 class="text-xl font-black mb-2">තහවුරු කරන්න</h4>
+            <p class="opacity-70 text-xs font-bold leading-relaxed mb-6">
+                ලිපියේ ඡායාරූපයක් ඇතුළත් නොකර මෙය යාවත්කාලීන කිරීමට ඔබට විශ්වාසද?
+            </p>
+            <div class="flex justify-center gap-4">
+                <button onclick="closeModal('noImageWarningModal')" class="glass-btn px-6 py-2 rounded-xl font-bold opacity-60 text-xs uppercase hover:opacity-100">Cancel</button>
+                <button onclick="confirmNoImageSubmit()" class="glass-btn px-6 py-2 rounded-xl bg-amber-500 text-white hover:bg-amber-600 text-xs uppercase border-none">Yes, Update</button>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const typeSelect = document.getElementById('userSearchType');
-        const searchInput = document.getElementById('userSearchInput');
-        if(typeSelect && searchInput) {
-            function updateInput() {
-                if(typeSelect.value === 'date') { searchInput.type = 'date'; } else { searchInput.type = 'text'; }
-            }
-            typeSelect.addEventListener('change', updateInput);
-            updateInput();
+    <script>
+        // --- 1. Live Date & Time ---
+        function updateTime() {
+            const now = new Date();
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+            document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
+            document.getElementById('liveDate').textContent = now.toLocaleDateString('si-LK', dateOptions);
         }
-    });
+        setInterval(updateTime, 1000);
+        updateTime();
 
-    // --- 1. Preview Logic (With Clear Button) ---
-    function previewFile(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            const label = input.closest('label');
-            const img = label.querySelector('.slot-preview');
-            const icon = label.querySelector('.fa-cloud-upload-alt');
-            const text = label.querySelector('.slot-label');
-            const btn = label.querySelector('.btn-clear');
+        // --- 2. Dark/Light Mode Logic ---
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
 
-            reader.onload = function(e) {
-                img.src = e.target.result;
-                img.classList.remove('d-none');
-                btn.classList.remove('d-none'); // Show Clear Button
-
-                if(icon) icon.classList.add('d-none');
-                if(text) text.classList.add('d-none');
-
-                label.style.borderStyle = 'solid';
-                label.style.borderColor = '#198754';
-            }
-            reader.readAsDataURL(input.files[0]);
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
         }
-    }
 
-    // --- 2. Clear Logic ---
-    function clearPreview(event, btn) {
-        event.stopPropagation(); // Stop label click
-        event.preventDefault();
-
-        const label = btn.closest('label');
-        const input = label.querySelector('input[type="file"]');
-        const img = label.querySelector('.slot-preview');
-        const icon = label.querySelector('.fa-cloud-upload-alt');
-        const text = label.querySelector('.slot-label');
-
-        // Reset Input
-        input.value = "";
-
-        // Hide Image & Button
-        img.src = "";
-        img.classList.add('d-none');
-        btn.classList.add('d-none');
-
-        // Show Placeholder
-        if(icon) icon.classList.remove('d-none');
-        if(text) text.classList.remove('d-none');
-
-        // Reset Border
-        label.style.borderStyle = 'dashed';
-        label.style.borderColor = '#dee2e6';
-    }
-
-    // --- 3. Custom Warning Modal Logic ---
-    let pendingForm = null;
-
-    function validateUploadForm(event, form) {
-        // Check if any NEW file is uploaded
-        const newFiles = form.querySelectorAll('.new-file-input');
-        let hasNewFile = false;
-        newFiles.forEach(input => {
-            if (input.files.length > 0) hasNewFile = true;
+        themeToggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
         });
 
-        // If NO new file, stop submit and show custom modal
-        if (!hasNewFile) {
+        // --- 3. Modal Logic ---
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if(modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0', 'pointer-events-none');
+                    modal.querySelector('div').classList.remove('scale-95');
+                    modal.querySelector('div').classList.add('scale-100');
+                }, 10);
+            }
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if(modal) {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modal.querySelector('div').classList.remove('scale-100');
+                modal.querySelector('div').classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // --- 4. File Preview Logic ---
+        function previewFile(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                const label = input.closest('label');
+                const img = label.querySelector('.slot-preview');
+                const btn = label.querySelector('.btn-clear');
+                const icon = label.querySelector('.fa-cloud-upload-alt');
+                const text = label.querySelector('span');
+
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                    btn.classList.remove('hidden');
+                    btn.classList.add('flex');
+                    if(icon) icon.classList.add('hidden');
+                    if(text) text.classList.add('hidden');
+                    label.classList.add('border-[var(--accent)]');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function clearPreview(event, btn) {
             event.preventDefault();
-            pendingForm = form; // Save the form reference
-            const modal = new bootstrap.Modal(document.getElementById('noImageWarningModal'));
-            modal.show();
-            return false;
+            event.stopPropagation();
+            const label = btn.closest('label');
+            const input = label.querySelector('input[type="file"]');
+            const img = label.querySelector('.slot-preview');
+            const icon = label.querySelector('.fa-cloud-upload-alt');
+            const text = label.querySelector('span');
+
+            input.value = "";
+            img.src = "";
+            img.classList.add('hidden');
+            btn.classList.add('hidden');
+            btn.classList.remove('flex');
+            if(icon) icon.classList.remove('hidden');
+            if(text) text.classList.remove('hidden');
+            label.classList.remove('border-[var(--accent)]');
         }
 
-        return true; // Proceed with submit
-    }
-
-    function confirmNoImageSubmit() {
-        if(pendingForm) {
-            pendingForm.submit(); // Programmatically submit the saved form
+        // --- 5. Submit Logic ---
+        let pendingForm = null;
+        function validateUploadForm(event, form) {
+            const newFiles = form.querySelectorAll('.new-file-input');
+            let hasNewFile = false;
+            newFiles.forEach(input => {
+                if (input.files.length > 0) hasNewFile = true;
+            });
+            if (!hasNewFile) {
+                event.preventDefault();
+                pendingForm = form;
+                openModal('noImageWarningModal');
+                return false;
+            }
+            return true;
         }
-    }
-</script>
 
+        function confirmNoImageSubmit() {
+            if(pendingForm) pendingForm.submit();
+        }
+    </script>
 </body>
 </html>

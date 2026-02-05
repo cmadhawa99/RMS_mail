@@ -1,214 +1,269 @@
 <!DOCTYPE html>
-<html lang="si" dir="ltr">
+<html lang="si" dir="ltr" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ලිපියේ විස්තර (Letter Details)</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Sinhala"', 'sans-serif'],
+                    },
+                    colors: {
+                        sector: {
+                            governing: '#d99694',
+                            health: '#b3a2c7',
+                            development: '#e46c0a',
+                            income: '#ffff00',
+                            accounts: '#95b3d7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            /* --- Glassmorphism Utilities --- */
+            .glass {
+                @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl;
+            }
+            .glass-panel {
+                @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-lg transition-all duration-300;
+            }
+            .glass-btn {
+                @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-md backdrop-blur-sm hover:shadow-lg hover:border-white/40;
+            }
+        }
+
+        /* --- Global Background (Matches Dashboard) --- */
         body {
-            background-color: #f0f2f5;
-            font-family: 'Noto Sans Sinhala', sans-serif;
-            color: #333;
+            background:
+                radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(var(--accent-rgb), 0.10) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(var(--accent-rgb), 0.10) 0px, transparent 50%),
+                linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+            min-height: 100vh;
+        }
+        .dark body {
+            background:
+                radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(var(--accent-rgb), 0.2) 0px, transparent 50%),
+                linear-gradient(to bottom right, #111827, #1f2937);
         }
 
-        .main-container {
-            max-width: 900px;
-            margin: 40px auto;
-        }
-
-        .detail-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            overflow: hidden;
-            border: none;
-        }
-
-        .card-header-custom {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 25px 30px;
-            border-bottom: 5px solid #ffc107;
-        }
-
-        .status-badge {
-            font-size: 0.9rem;
-            padding: 8px 15px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .info-group {
-            margin-bottom: 25px;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #6c757d;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            font-size: 1.1rem;
-            color: #212529;
-            font-weight: 500;
-            line-height: 1.6;
-        }
-
-        /* --- CRITICAL FIX FOR LONG TEXT --- */
-        .text-break-fix {
-            word-wrap: break-word;      /* Old browsers */
-            overflow-wrap: break-word;  /* Modern browsers */
-            word-break: break-word;     /* Forces break on long words */
-        }
-
-        .btn-back {
-            transition: transform 0.2s;
-        }
-        .btn-back:hover {
-            transform: translateX(-5px);
-        }
+        /* Badge Colors */
+        .badge-sector-GOVERNING { background-color: #d99694; color: white; }
+        .badge-sector-HEALTH { background-color: #b3a2c7; color: white; }
+        .badge-sector-DEVELOPMENT { background-color: #e46c0a; color: white; }
+        .badge-sector-INCOME { background-color: #ffff00; color: #451a03; font-weight: 800; }
+        .badge-sector-ACCOUNTS { background-color: #95b3d7; color: white; }
     </style>
 </head>
-<body>
 
-<div class="container main-container">
+{% if letter.target_sector == 'GOVERNING' %}     <style>:root{ --accent: #d99694; --accent-rgb: 217, 150, 148; }</style>
+{% elif letter.target_sector == 'HEALTH' %}      <style>:root{ --accent: #b3a2c7; --accent-rgb: 179, 162, 199; }</style>
+{% elif letter.target_sector == 'DEVELOPMENT' %} <style>:root{ --accent: #e46c0a; --accent-rgb: 228, 108, 10; }</style>
+{% elif letter.target_sector == 'INCOME' %}      <style>:root{ --accent: #ffd700; --accent-rgb: 255, 215, 0; }</style>
+{% elif letter.target_sector == 'ACCOUNTS' %}    <style>:root{ --accent: #95b3d7; --accent-rgb: 149, 179, 215; }</style>
+{% else %}                                       <style>:root{ --accent: #3b82f6; --accent-rgb: 59, 130, 246; }</style>
+{% endif %}
 
-    <a href="{% url 'sector_dashboard' %}" class="btn btn-outline-secondary btn-back mb-4 shadow-sm rounded-pill px-4">
-        <i class="fas fa-arrow-left me-2"></i> ප්‍රධාන මෙනුවට (Dashboard)
-    </a>
+<body class="text-gray-700 dark:text-gray-200 py-10 px-4 selection:bg-[var(--accent)] selection:text-white">
 
-    <div class="detail-card">
-        <div class="card-header-custom d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <div>
-                <h6 class="mb-1 opacity-75 text-uppercase" style="letter-spacing: 1px;">ලිපි අංකය (Serial No)</h6>
-                <h1 class="mb-0 fw-bold display-6">#{{ letter.serial_number }}</h1>
-            </div>
-            <div class="text-end">
-                {% if letter.is_replied %}
-                    <span class="badge bg-success status-badge">
-                        <i class="fas fa-check-circle me-1"></i> විසඳන ලදී (Resolved)
-                    </span>
-                {% else %}
-                    <span class="badge bg-warning text-dark status-badge">
-                        <i class="fas fa-clock me-1"></i> විමර්ශනය වෙමින් පවතින (Pending)
-                    </span>
-                {% endif %}
-                <div class="mt-2">
-                    <span class="badge bg-light text-primary border border-primary">
-                        {{ letter.get_target_sector_display }} අංශය
-                    </span>
-                </div>
-            </div>
-        </div>
+    <button id="themeToggle" class="fixed top-6 right-6 z-50 glass-btn w-12 h-12 rounded-full text-gray-600 dark:text-yellow-400 bg-white/50 hover:bg-white" title="Toggle Theme">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
 
-        <div class="card-body p-4 p-lg-5">
+    <div class="max-w-5xl mx-auto">
 
-            <div class="row g-4 mb-4">
-                <div class="col-md-6">
-                    <div class="info-group p-3 rounded bg-light border-start border-4 border-primary">
-                        <div class="info-label"><i class="far fa-calendar-alt me-1"></i> ලැබුණු දිනය (Date Received)</div>
-                        <div class="info-value">{{ letter.date_received }}</div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="info-group p-3 rounded bg-light border-start border-4 border-info">
-                        <div class="info-label"><i class="fas fa-user-shield me-1"></i> පරිපාලනය කළේ (Admin By)</div>
-                        <div class="info-value">{{ letter.get_administrated_by_display }}</div>
-                    </div>
-                </div>
-            </div>
+        <a href="{% url 'sector_dashboard' %}" class="inline-flex items-center gap-2 glass-btn px-6 py-3 rounded-2xl mb-6 text-gray-600 dark:text-gray-300 font-bold hover:bg-[var(--accent)] hover:text-white group transition-colors">
+            <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+            <span class="text-sm uppercase tracking-wider">ප්‍රධාන මෙනුව (Dashboard)</span>
+        </a>
 
-            <hr class="my-4 text-muted opacity-25">
+        <div class="glass rounded-3xl overflow-hidden relative border-t-4 border-t-[var(--accent)]">
 
-            <div class="row g-4">
-                <div class="col-md-12">
-                    <div class="info-group">
-                        <div class="info-label text-primary">විෂය / වර්ගය (Subject / Type)</div>
-                        <div class="info-value fs-4 fw-bold text-break-fix">
-                            {{ letter.letter_type }}
-                        </div>
-                    </div>
-                </div>
+            <div class="p-8 md:p-10 border-b border-gray-200/30 dark:border-gray-700/30 bg-white/40 dark:bg-black/20 backdrop-blur-md relative">
+                <i class="fas fa-file-alt absolute -right-6 -top-6 text-9xl opacity-5 dark:opacity-[0.03] text-gray-500 transform rotate-12"></i>
 
-                <div class="col-md-6">
-                    <div class="info-group">
-                        <div class="info-label">ලිපිය එවූ අයගේ නම (Sender)</div>
-                        <div class="info-value text-break-fix">
-                            <i class="fas fa-user-tag text-muted me-2"></i>{{ letter.sender_name }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="info-group">
-                        <div class="info-label">භාරගත් නිලධාරී ID (Officer ID)</div>
-                        <div class="info-value text-break-fix">
-                            <i class="fas fa-id-badge text-muted me-2"></i>{{ letter.accepting_officer_id }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="info-group">
-                        <div class="info-label">ලිපිය එවූ අයගේ ලිපිනය (Address)</div>
-                        <div class="info-value p-3 bg-light rounded text-break-fix border">
-                            <i class="fas fa-map-marker-alt text-danger me-2"></i>{{ letter.sender_address }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-5">
-                <h5 class="mb-3 fw-bold border-bottom pb-2">
-                    <i class="fas fa-paperclip me-2 text-secondary"></i> ලිපියේ ඡායාරූප (Scanned Documents)
-                </h5>
-
-                <div class="p-4 bg-light rounded text-center border">
-                    <i class="fas fa-file-invoice fa-3x text-secondary mb-3"></i>
-                    <br>
-                    <p class="fw-bold text-secondary">මෙම ලිපියට අදාළ ලේඛන බැලීමට පහත බොත්තම භාවිතා කරන්න.</p>
-
-                    <a href="{% url 'view_letter_images' letter.pk %}" class="btn btn-primary btn-lg shadow-sm mt-2 px-4">
-                        <i class="fas fa-search-plus me-2"></i> ලිපි ලේඛන පරීක්ෂා කරන්න (Open Secure Viewer)
-                    </a>
-                </div>
-            </div>
-            {% if not letter.is_replied %}
-            <div class="mt-5 p-4 rounded bg-warning bg-opacity-10 border border-warning">
-                <div class="d-flex align-items-center text-warning">
-                    <i class="fas fa-check-circle fs-2 me-3"></i>
+                <div class="flex flex-col md:flex-row justify-between md:items-start gap-6 relative z-10">
                     <div>
-                        <div class="fw-bold text-uppercase small opacity-75">තත්වය (Status)</div>
-                        <h4 class="mb-1 fw-bold">පිළිතුරු යොමු කර නැත (Not Replied)</h4>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">ලිපි අංකය (Serial No)</span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide badge-sector-{{ letter.target_sector }} shadow-sm">
+                                {{ letter.get_target_sector_display }}
+                            </span>
+                        </div>
+                        <h1 class="text-5xl md:text-6xl font-black text-gray-800 dark:text-white tracking-tight font-mono">#{{ letter.serial_number }}</h1>
+                    </div>
+
+                    <div class="flex flex-col items-end gap-3">
+                        {% if letter.is_replied %}
+                            <div class="glass-panel px-6 py-3 rounded-2xl bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+                                <div class="text-right">
+                                    <div class="text-xs font-black uppercase tracking-wider">විසඳන ලදී</div>
+                                    <div class="text-[10px] font-bold opacity-60 uppercase">Resolved</div>
+                                </div>
+                                <i class="fas fa-check-circle text-2xl ml-1"></i>
+                            </div>
+                        {% else %}
+                            <div class="glass-panel px-6 py-3 rounded-2xl bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center gap-3">
+                                <span class="relative flex h-2 w-2">
+                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                  <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                                </span>
+                                <div class="text-right">
+                                    <div class="text-xs font-black uppercase tracking-wider">විමර්ශනය වෙමින්</div>
+                                    <div class="text-[10px] font-bold opacity-60 uppercase">Pending</div>
+                                </div>
+                                <i class="fas fa-clock text-2xl ml-1"></i>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
-            {% endif %}
 
-            {% if letter.is_replied %}
-            <div class="mt-5 p-4 rounded bg-success bg-opacity-10 border border-success">
-                <div class="d-flex align-items-center text-success">
-                    <i class="fas fa-check-circle fs-2 me-3"></i>
-                    <div>
-                        <div class="fw-bold text-uppercase small opacity-75">තත්වය (Status)</div>
-                        <h4 class="mb-1 fw-bold">පිළිතුරු යොමු කර ඇත (Replied)</h4>
-                        <div class="fw-bold">දිනය: {{ letter.replied_at }}</div>
+            <div class="p-8 md:p-10">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+
+                    <div class="lg:col-span-8 space-y-8">
+
+                        <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover:bg-white/50 dark:hover:bg-white/5">
+                            <div class="absolute left-0 top-0 w-1 h-full bg-[var(--accent)]"></div>
+                            <div class="text-xs font-bold text-[var(--accent)] uppercase tracking-widest mb-2 flex items-center gap-2">
+                                <i class="fas fa-heading"></i> විෂය / වර්ගය (Subject)
+                            </div>
+                            <div class="text-2xl font-bold text-gray-800 dark:text-white leading-relaxed break-words">
+                                {{ letter.letter_type }}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="glass-panel p-5 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors">
+                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">ලිපිය එවූ අය (Sender)</div>
+                                <div class="flex items-start gap-3 mt-2">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center shrink-0">
+                                        <i class="fas fa-user-tag text-xs"></i>
+                                    </div>
+                                    <div class="font-bold text-lg text-gray-700 dark:text-gray-200 break-words">{{ letter.sender_name }}</div>
+                                </div>
+                            </div>
+
+                            <div class="glass-panel p-5 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors">
+                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">ලිපිනය (Address)</div>
+                                <div class="flex items-start gap-3 mt-2">
+                                    <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-500 flex items-center justify-center shrink-0">
+                                        <i class="fas fa-map-marker-alt text-xs"></i>
+                                    </div>
+                                    <div class="font-bold text-sm text-gray-600 dark:text-gray-300 break-words leading-relaxed">{{ letter.sender_address }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if letter.is_replied %}
+                        <div class="glass-panel p-6 rounded-2xl border-l-4 border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/10">
+                            <h3 class="text-emerald-600 dark:text-emerald-400 font-black text-lg mb-1 flex items-center gap-2">
+                                <i class="fas fa-check-double"></i> පිළිතුරු යොමු කර ඇත
+                            </h3>
+                            <p class="text-emerald-600/60 dark:text-emerald-400/60 text-xs font-bold uppercase tracking-wider mb-4">Replied Status</p>
+
+                            <div class="flex items-center gap-4 text-sm font-bold text-gray-600 dark:text-gray-300">
+                                <div class="glass px-4 py-2 rounded-lg flex items-center gap-2">
+                                    <i class="far fa-calendar-check text-[var(--accent)]"></i>
+                                    <span>{{ letter.replied_at }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
+
+                    <div class="lg:col-span-4 space-y-4">
+                        <div class="glass-panel p-5 rounded-2xl space-y-6">
+
+                            <div>
+                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">ලැබුණු දිනය (Date Received)</div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-500 flex items-center justify-center">
+                                        <i class="far fa-calendar-alt text-xs"></i>
+                                    </div>
+                                    <div class="font-bold text-gray-700 dark:text-gray-200">{{ letter.date_received }}</div>
+                                </div>
+                            </div>
+
+                            <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
+
+                            <div>
+                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">පරිපාලනය (Administered By)</div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-500 flex items-center justify-center">
+                                        <i class="fas fa-user-shield text-xs"></i>
+                                    </div>
+                                    <div class="font-bold text-gray-700 dark:text-gray-200">{{ letter.get_administrated_by_display }}</div>
+                                </div>
+                            </div>
+
+                            <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
+
+                            <div>
+                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">නිලධාරී ID (Officer ID)</div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700/50 text-gray-500 flex items-center justify-center">
+                                        <i class="fas fa-id-badge text-xs"></i>
+                                    </div>
+                                    <div class="font-mono font-bold text-gray-700 dark:text-gray-200">{{ letter.accepting_officer_id }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-5 rounded-2xl text-center">
+                            <div class="w-12 h-12 mx-auto rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center text-xl mb-3">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800 dark:text-white mb-1">ලිපියේ ඡායාරූප</h4>
+                            <p class="text-[10px] opacity-60 font-bold uppercase tracking-wider mb-4">Scanned Documents</p>
+
+                            <a href="{% url 'view_letter_images' letter.pk %}" class="glass-btn w-full py-3 rounded-xl bg-blue-500 text-white hover:bg-blue-600 shadow-lg hover:shadow-blue-500/30 border-none group">
+                                <i class="fas fa-search-plus mr-2 group-hover:scale-110 transition-transform"></i>
+                                <span class="text-xs font-bold uppercase tracking-wider">Open Viewer</span>
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            {% endif %}
-
         </div>
     </div>
-</div>
 
+    <script>
+        // Theme Logic
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+        });
+    </script>
 </body>
 </html>
