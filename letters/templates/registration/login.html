@@ -1,152 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si" dir="ltr" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Login | Council Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>පිවිසෙන්න - System Login</title>
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Sinhala"', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3b82f6', // Default System Blue
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            /* --- Glassmorphism Utilities --- */
+            .glass {
+                @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-2xl border border-white/40 dark:border-white/10 shadow-2xl;
+            }
+
+            .glass-panel {
+                @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-inner transition-all duration-300;
+            }
+
+            .glass-btn {
+                @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-lg backdrop-blur-sm hover:shadow-xl hover:border-white/40;
+            }
+        }
+
+        /* --- Global Background (Same as Dashboard) --- */
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1f2937 0%, #111827 100%); /* Professional Dark Theme */
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            /* Neutral Blue/Gray Mesh for Login */
+            background:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(147, 51, 234, 0.10) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(147, 51, 234, 0.10) 0px, transparent 50%),
+                linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+        }
+        .dark body {
+            background:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(147, 51, 234, 0.2) 0px, transparent 50%),
+                linear-gradient(to bottom right, #111827, #1f2937);
         }
 
-        .login-card {
-            width: 100%;
-            max-width: 420px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            overflow: hidden;
-            border: none;
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
         }
-
-        .card-header {
-            background: #3b82f6; /* Accent Blue */
-            padding: 25px;
-            text-align: center;
-            border: none;
-        }
-
-        .card-body {
-            padding: 40px 30px;
-        }
-
-        .form-control {
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #d1d5db;
-        }
-
-        .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-            border-color: #3b82f6;
-        }
-
-        .btn-login {
-            background: #1f2937;
-            color: white;
-            padding: 12px;
-            font-weight: 600;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-
-        .btn-login:hover {
-            background: #111827;
-            transform: translateY(-1px);
-        }
-
-        .input-group-text {
-            background: white;
-            border-right: none;
-            color: #6b7280;
-        }
-
-        .form-control-icon {
-            border-left: none;
-        }
+        .animate-float-slow { animation: float 8s ease-in-out infinite; }
+        .animate-float-medium { animation: float 6s ease-in-out infinite; }
+        .animate-float-fast { animation: float 4s ease-in-out infinite; }
     </style>
 </head>
-<body>
 
-<div class="container px-4">
-    <div class="login-card mx-auto">
-        <div class="card-header">
-            <h4 class="text-white fw-bold mb-0"><i class="fas fa-building me-2"></i>COUNCIL PORTAL</h4>
-            <small class="text-white-50">Authorized Personnel Only</small>
+<body class="h-screen w-screen overflow-hidden flex items-center justify-center text-gray-700 dark:text-gray-200 transition-colors duration-500 relative">
+
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <i class="fas fa-gavel absolute top-[10%] left-[10%] text-6xl text-red-600 opacity-20 dark:text-red-500 dark:opacity-10 animate-float-slow"></i>
+        <i class="fas fa-heartbeat absolute bottom-[20%] left-[20%] text-8xl text-purple-600 opacity-20 dark:text-purple-500 dark:opacity-10 animate-float-medium" style="animation-delay: 1s;"></i>
+        <i class="fas fa-hard-hat absolute top-[15%] right-[15%] text-7xl text-orange-600 opacity-20 dark:text-orange-500 dark:opacity-10 animate-float-fast" style="animation-delay: 2s;"></i>
+        <i class="fas fa-coins absolute bottom-[10%] right-[10%] text-9xl text-yellow-600 opacity-20 dark:text-yellow-500 dark:opacity-10 animate-float-slow" style="animation-delay: 0.5s;"></i>
+        <i class="fas fa-file-invoice-dollar absolute top-[50%] left-[5%] text-5xl text-blue-600 opacity-20 dark:text-blue-500 dark:opacity-10 animate-float-medium" style="animation-delay: 3s;"></i>
+    </div>
+
+    <div class="absolute top-6 right-6 z-50">
+        <button id="themeToggle" class="glass-btn w-12 h-12 rounded-full text-gray-600 dark:text-yellow-400 hover:bg-white/50" title="Toggle Theme">
+            <i class="fas fa-moon dark:hidden text-lg"></i>
+            <i class="fas fa-sun hidden dark:block text-lg"></i>
+        </button>
+    </div>
+
+    <div class="glass w-full max-w-md p-8 md:p-10 rounded-3xl relative z-10 flex flex-col mx-4 transform transition-all hover:scale-[1.01] duration-500 border-t border-white/60 dark:border-white/20">
+
+        <div class="text-center mb-10">
+            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-3xl shadow-xl mx-auto mb-6 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <i class="fas fa-university"></i>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 dark:text-white mb-1">සාදරයෙන් පිළිගනිමු</h2>
+            <p class="text-xs font-bold uppercase tracking-[0.2em] opacity-50">Council Management Portal</p>
         </div>
 
-        <div class="card-body">
+        <form method="post" action="{% url 'login' %}" class="space-y-6">
+            {% csrf_token %}
 
             {% if form.errors %}
-                <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
-                    <i class="fas fa-exclamation-circle me-2 fs-5"></i>
-                    <div>
-                        <strong>Access Denied</strong>
-                        <div class="small">Incorrect username or password.</div>
-                    </div>
+                <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm font-bold text-center animate-pulse">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    වලංගු නොවන පරිශීලක නාමයක් හෝ මුරපදයකි.
+                    <br><span class="text-[10px] opacity-70 font-normal uppercase">Invalid Credentials</span>
                 </div>
             {% endif %}
 
-            <form method="post">
-                {% csrf_token %}
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold text-muted small">USERNAME</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        <input type="text" name="username" class="form-control form-control-icon" placeholder="Enter ID" required autofocus>
+            <div class="space-y-2 group">
+                <label for="id_username" class="text-xs font-bold uppercase tracking-wider opacity-60 ml-1 group-focus-within:text-blue-500 transition-colors">පරිශීලක නාමය (Username)</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                        <i class="fas fa-user"></i>
                     </div>
+                    <input type="text" name="username" id="id_username" required autofocus
+                        class="glass-panel w-full pl-11 pr-4 py-3.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/60 dark:focus:bg-black/30 transition-all font-bold text-gray-700 dark:text-white placeholder-gray-400/50"
+                        placeholder="Enter your ID">
                 </div>
+            </div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-bold text-muted small">PASSWORD</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input type="password" name="password" id="id_password" class="form-control border-start-0 border-end-0" placeholder="••••••••" required>
-                        <button class="btn btn-outline-secondary border-start-0" type="button" id="togglePassword">
-                            <i class="fas fa-eye text-muted" id="eyeIcon"></i>
-                        </button>
+            <div class="space-y-2 group">
+                <label for="id_password" class="text-xs font-bold uppercase tracking-wider opacity-60 ml-1 group-focus-within:text-blue-500 transition-colors">මුරපදය (Password)</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                        <i class="fas fa-lock"></i>
                     </div>
-                </div>
+                    <input type="password" name="password" id="id_password" required
+                        class="glass-panel w-full pl-11 pr-12 py-3.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/60 dark:focus:bg-black/30 transition-all font-bold text-gray-700 dark:text-white placeholder-gray-400/50"
+                        placeholder="••••••••">
 
-                <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-login btn-lg">
-                        Sign In <i class="fas fa-arrow-right ms-2 small"></i>
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-500 transition-colors cursor-pointer outline-none">
+                        <i class="fas fa-eye" id="eyeIcon"></i>
                     </button>
                 </div>
-            </form>
-        </div>
+            </div>
 
-        <div class="text-center py-3 bg-light border-top">
-            <small class="text-muted">© 2026 Council Management System</small>
+            <button type="submit" class="w-full glass-btn bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-4 rounded-xl text-sm uppercase tracking-widest shadow-lg shadow-blue-500/30 mt-4 border-none relative overflow-hidden group">
+                <span class="relative z-10 flex items-center gap-2">
+                    පිවිසෙන්න <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </span>
+                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            </button>
+        </form>
+
+        <div class="mt-8 pt-6 border-t border-gray-200/20 text-center">
+            <p class="text-[10px] font-bold uppercase tracking-widest opacity-40">
+                &copy; 2026 Council Management System
+            </p>
         </div>
     </div>
-</div>
 
-<script>
-    // Password Toggle Logic
-    const toggleBtn = document.querySelector('#togglePassword');
-    const passwordBox = document.querySelector('#id_password');
-    const eyeIcon = document.querySelector('#eyeIcon');
+    <script>
+        // --- 1. Password Toggle Logic ---
+        const toggleBtn = document.querySelector('#togglePassword');
+        const passwordBox = document.querySelector('#id_password');
+        const eyeIcon = document.querySelector('#eyeIcon');
 
-    if(toggleBtn && passwordBox) {
-        toggleBtn.addEventListener('click', function () {
-            const type = passwordBox.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordBox.setAttribute('type', type);
-            eyeIcon.classList.toggle('fa-eye');
-            eyeIcon.classList.toggle('fa-eye-slash');
+        if(toggleBtn && passwordBox) {
+            toggleBtn.addEventListener('click', function () {
+                const type = passwordBox.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordBox.setAttribute('type', type);
+
+                // Toggle Icon
+                if (type === 'text') {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
+
+        // --- 2. Dark/Light Mode Logic ---
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
         });
-    }
-</script>
-
+    </script>
 </body>
 </html>

@@ -149,7 +149,7 @@
 
                         <i class="fas {% if sec == 'GOVERNING' %}fa-gavel{% elif sec == 'HEALTH' %}fa-heartbeat{% elif sec == 'DEVELOPMENT' %}fa-hard-hat{% elif sec == 'INCOME' %}fa-coins{% else %}fa-file-invoice-dollar{% endif %} w-6 text-center"></i>
                         <span class="font-bold ml-3 text-sm">
-                            {% if sec == 'GOVERNING' %}පාලන{% elif sec == 'HEALTH' %}සෞඛ්‍ය{% elif sec == 'DEVELOPMENT' %}සංවර්ධන{% elif sec == 'INCOME' %}ආදායම්{% else %}ගිණුම්{% endif %}
+                            {% if sec == 'GOVERNING' %}පාලන අංශය{% elif sec == 'HEALTH' %}සෞඛ්‍ය අංශය{% elif sec == 'DEVELOPMENT' %}සංවර්ධන අංශය{% elif sec == 'INCOME' %}ආදායම් අංශය{% else %}ගිණුම් අංශය{% endif %}
                         </span>
 
                         {% if user_sector == sec %}
@@ -238,7 +238,7 @@
                         </div>
                         <div class="relative">
                             <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ pending }}</div>
-                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">විමර්ශනය වෙමින්</div>
+                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">විමර්ශනය වෙමින් පවතින ලිපි</div>
                         </div>
                     </div>
 
@@ -249,7 +249,7 @@
                         </div>
                         <div class="relative">
                             <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ resolved }}</div>
-                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">පිළිතුරු යොමුකල</div>
+                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">පිළිතුරු යොමුකල ලිපි</div>
                         </div>
                     </div>
                 </div>
