@@ -1,41 +1,44 @@
 {% extends 'letters/admin/shared/admin_base.html' %}
 
 {% block admin_content %}
-<div class="row mb-4">
-    <div class="col-12">
-        <h2 class="fw-bold text-dark">Dashboard Overview</h2>
-        <p class="text-muted">Welcome back, {{ user.first_name|default:user.username }}. Here is what's happening.</p>
-    </div>
+<div class="mb-8 animate-float" style="animation-duration: 3s;">
+    <h2 class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">Dashboard Overview</h2>
+    <p class="text-gray-500 dark:text-gray-400 font-medium mt-1">
+        Welcome back, <span class="text-indigo-600 dark:text-indigo-400">{{ user.first_name|default:user.username }}</span>. Here is what's happening.
+    </p>
 </div>
 
-<div class="row g-4">
-    <div class="col-md-4">
-        <div class="card h-100 border-start border-4 border-primary">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <h6 class="text-muted text-uppercase mb-1">System Status</h6>
-                        <h4 class="fw-bold text-dark mb-0">Operational</h4>
-                    </div>
-                    <div class="text-primary fs-1"><i class="fas fa-server"></i></div>
-                </div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60 transition-all">
+        <div class="absolute right-0 top-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
+
+        <div class="flex justify-between items-start relative z-10">
+            <div>
+                <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-1">System Status</h6>
+                <h4 class="text-2xl font-black text-emerald-600 dark:text-emerald-400">Operational</h4>
             </div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xl shadow-lg shadow-emerald-500/30">
+                <i class="fas fa-server"></i>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center gap-2 text-xs font-bold text-gray-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Running v2.4
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card h-100 border-start border-4 border-success">
-            <div class="card-body">
-                <h6 class="text-muted text-uppercase mb-3">Quick Actions</h6>
-                <div class="d-grid gap-2">
-                    <a href="{% url 'add_letter' %}" class="btn btn-sm btn-outline-success">
-                        <i class="fas fa-plus me-1"></i> Add New Letter
-                    </a>
-                    <a href="{% url 'create_user' %}" class="btn btn-sm btn-outline-primary">
-                        <i class="fas fa-user-plus me-1"></i> Create Officer
-                    </a>
-                </div>
-            </div>
+    <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60 transition-all md:col-span-2">
+        <div class="absolute right-0 top-0 w-24 h-24 bg-indigo-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
+
+        <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-4 relative z-10">Quick Actions</h6>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
+            <a href="{% url 'add_letter' %}" class="glass-btn h-12 rounded-xl text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500 hover:text-white font-bold text-sm gap-2">
+                <i class="fas fa-plus"></i> Add New Letter
+            </a>
+            <a href="{% url 'create_user' %}" class="glass-btn h-12 rounded-xl text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500 hover:text-white font-bold text-sm gap-2">
+                <i class="fas fa-user-plus"></i> Create Officer
+            </a>
         </div>
     </div>
 </div>

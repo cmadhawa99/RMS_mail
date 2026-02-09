@@ -1,65 +1,105 @@
 {% extends 'letters/admin/shared/admin_base.html' %}
-
 {% block admin_content %}
-<div class="container" style="max-width: 700px;">
-    <div class="card shadow border-0">
-        <div class="card-header bg-white py-3">
-            <h4 class="mb-0 text-primary fw-bold"><i class="fas fa-user-cog me-2"></i>{{ title }}</h4>
-        </div>
-        <div class="card-body p-4">
-            <form method="post">
-                {% csrf_token %}
+<div class="max-w-xl mx-auto">
+    <div class="glass-panel rounded-3xl p-8">
 
-                <h6 class="text-uppercase text-muted small fw-bold mb-3">Account Credentials</h6>
+        <h4 class="text-xl font-black text-indigo-600 dark:text-indigo-400 mb-6 flex items-center gap-3">
+            <i class="fas fa-user-cog"></i> {{ title }}
+        </h4>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Username</label>
-                    {{ form.username }}
-                    <div class="form-text">{{ form.username.help_text }}</div>
+        <form method="post">
+            {% csrf_token %}
+
+            <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3">Account Credentials</h6>
+
+            <div class="mb-4">
+                <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Username</label>
+                {{ form.username }}
+                <div class="text-[10px] font-bold opacity-40 mt-1">{{ form.username.help_text }}</div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Password</label>
+                <div class="relative">
+                    {{ form.new_password }}
+                    <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-500">
+                        <i class="fas fa-eye" id="eyeIcon"></i>
+                    </button>
                 </div>
+                <div class="text-[10px] font-bold opacity-40 mt-1">{{ form.new_password.help_text }}</div>
+                <div class="text-red-500 text-xs font-bold mt-1">{{ form.new_password.errors }}</div>
+            </div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-bold">Password</label>
-                    <div class="input-group">
-                        {{ form.new_password }}
-                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                            <i class="fas fa-eye" id="eyeIcon"></i>
-                        </button>
-                    </div>
-                    {% if form.new_password.help_text %}
-                        <div class="form-text text-muted">{{ form.new_password.help_text }}</div>
-                    {% endif %}
-                    <div class="text-danger small">{{ form.new_password.errors }}</div>
+            <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 mt-8">Personal Details</h6>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">First Name</label>
+                    {{ form.first_name }}
                 </div>
-
-                <h6 class="text-uppercase text-muted small fw-bold mb-3 mt-4">Personal Details</h6>
-
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">First Name</label>
-                        {{ form.first_name }}
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Last Name</label>
-                        {{ form.last_name }}
-                    </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Last Name</label>
+                    {{ form.last_name }}
                 </div>
+            </div>
 
-                <div class="mb-4 mt-3">
-                    <label class="form-label fw-bold">Assigned Sector</label>
-                    {{ form.sector }}
-                </div>
+            <div class="mb-8 mt-4">
+                <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Assigned Sector</label>
+                {{ form.sector }}
+            </div>
 
-                <hr class="my-4">
-
-                <div class="d-flex justify-content-end gap-2">
-                    <a href="{% url 'custom_admin_users' %}" class="btn btn-light">Cancel</a>
-                    <button type="submit" class="btn btn-primary px-4">Save Changes</button>
-                </div>
-            </form>
-        </div>
+            <div class="flex justify-end gap-4">
+                <a href="{% url 'custom_admin_users' %}" class="glass-btn px-6 py-3 rounded-xl font-bold opacity-60 hover:opacity-100 text-xs uppercase tracking-wider">Cancel</a>
+                <button type="submit" class="glass-btn px-8 py-3 rounded-xl bg-indigo-500 !text-white shadow-lg hover:shadow-indigo-500/50 hover:-translate-y-1 transition-all text-xs uppercase tracking-wider border-none">
+                    Save Changes
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+
+<style>
+    /* --- Styles for Form Inputs --- */
+    input[type="text"], input[type="password"], select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        background-color: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255,255,255, 0.2);
+        font-weight: 600;
+        font-size: 0.875rem;
+        outline: none;
+        transition: all 0.2s;
+    }
+
+    /* Focus State (Light Mode) */
+    input:focus, select:focus {
+        background-color: white;
+        border-color: #6366f1;
+        ring: 2px solid #6366f1;
+        color: black;
+    }
+
+    /* --- Dark Mode Styles --- */
+    .dark input[type="text"], .dark input[type="password"], .dark select {
+        background-color: rgba(30, 41, 59, 0.8); /* Darker background */
+        color: white;
+        border-color: rgba(255,255,255,0.1);
+    }
+
+    .dark input:focus, .dark select:focus {
+        background-color: rgba(15, 23, 42, 1); /* Even darker on focus */
+        color: white;
+        border-color: #818cf8;
+    }
+
+    /* --- THE FIX: Dropdown Options in Dark Mode --- */
+    /* Forces the dropdown list itself to be dark */
+    .dark select option {
+        background-color: #1f2937; /* Dark Gray Background */
+        color: white; /* White Text */
+    }
+</style>
 
 <script>
     const toggleBtn = document.querySelector('#togglePassword');
@@ -74,25 +114,4 @@
         });
     }
 </script>
-
-<style>
-    /* Styling for standard form inputs */
-    input[type="text"], input[type="password"], select, input[type="date"], input[type="datetime-local"] {
-        display: block;
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        font-size: 1rem;
-        line-height: 1.5;
-        color: #495057;
-        background-color: #fff;
-        border: 1px solid #ced4da;
-        border-radius: 0.375rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
-    input:focus, select:focus {
-        border-color: #86b7fe;
-        outline: 0;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    }
-</style>
 {% endblock %}

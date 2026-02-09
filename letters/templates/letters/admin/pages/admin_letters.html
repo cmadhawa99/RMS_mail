@@ -1,122 +1,120 @@
 {% extends 'letters/admin/shared/admin_base.html' %}
 
 {% block admin_content %}
-<div class="row align-items-center mb-4">
-    <div class="col-md-5">
-        <h3 class="fw-bold text-secondary mb-0">Letter Registry</h3>
-    </div>
-    <div class="col-md-7">
-        <div class="d-flex gap-2 justify-content-md-end">
-            <form method="get" class="d-flex flex-grow-1">
-                <div class="input-group shadow-sm">
-                    <select name="search_type" id="adminSearchType" class="form-select bg-light border-end-0" style="max-width: 130px;">
-                        <option value="all" {% if search_type == 'all' %}selected{% endif %}>All Fields</option>
-                        <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>Serial No.</option>
-                        <option value="date" {% if search_type == 'date' %}selected{% endif %}>Date</option>
-                    </select>
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+    <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">Letter Registry</h3>
 
-                    <input type="text" name="q" id="adminSearchInput" class="form-control border-start-0" placeholder="Search..." value="{{ search_query }}">
-                    <button type="submit" class="btn btn-outline-secondary">Go</button>
-                </div>
-            </form>
+    <div class="flex flex-wrap gap-3 w-full md:w-auto">
+        <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all flex-grow md:flex-grow-0">
+            <select name="search_type" id="adminSearchType" class="bg-transparent border-none text-xs font-bold text-gray-600 dark:text-gray-300 focus:ring-0 cursor-pointer py-2 pl-3 pr-2 outline-none appearance-none">
+                <option value="all" {% if search_type == 'all' %}selected{% endif %}>All</option>
+                <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>Serial</option>
+                <option value="date" {% if search_type == 'date' %}selected{% endif %}>Date</option>
+            </select>
+            <div class="w-px h-5 bg-gray-400/30 mx-1"></div>
+            <input type="text" name="q" id="adminSearchInput" class="bg-transparent border-none text-sm font-medium text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:ring-0 py-1 px-2 w-32 md:w-48 outline-none" placeholder="Search..." value="{{ search_query }}">
+            <button type="submit" class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 transition-colors">
+                <i class="fas fa-search text-xs"></i>
+            </button>
+        </form>
 
-            {% url 'export_letters_excel' as export_url %}
-            <a href="{{ export_url }}?q={{ search_query }}&search_type={{ search_type }}"
-               onclick="handleExport(event, this.href)"
-               class="btn btn-success d-flex align-items-center gap-2">
-                <i class="fas fa-file-excel"></i> Export
-            </a>
+        {% url 'export_letters_excel' as export_url %}
+        <a href="{{ export_url }}?q={{ search_query }}&search_type={{ search_type }}"
+           onclick="handleExport(event, this.href)"
+           class="glass-btn px-4 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white font-bold text-xs gap-2">
+            <i class="fas fa-file-excel"></i> Export
+        </a>
 
-            <a href="{% url 'add_letter' %}" class="btn btn-primary d-flex align-items-center gap-2">
-                <i class="fas fa-plus"></i> Add Letter
-            </a>
-        </div>
+        <a href="{% url 'add_letter' %}" class="glass-btn px-4 rounded-xl bg-indigo-500 !text-white hover:bg-indigo-600 shadow-lg shadow-indigo-500/30 font-bold text-xs gap-2 border-none">
+            <i class="fas fa-plus"></i> New
+        </a>
     </div>
 </div>
 
-<div class="card shadow-sm border-0">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="ps-4 py-3">Serial No</th>
-                        <th>Subject / Type</th>
-                        <th>Sender</th>
-                        <th>Received Date</th>
-                        <th>Target Sector</th>
-                        <th>Accepting Officer</th>
-                        <th>Status</th>
-                        <th class="text-end pe-4">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for letter in letters %}
-                    <tr>
-                        <td class="ps-4 fw-bold text-primary">#{{ letter.serial_number }}</td>
-                        <td>
-                            <div class="fw-bold text-dark">{{ letter.letter_type|truncatechars:30 }}</div>
-                        </td>
-                        <td>{{ letter.sender_name|truncatechars:20 }}</td>
-                        <td>{{ letter.date_received }}</td>
-                        <td><span class="badge bg-light text-dark border">{{ letter.get_target_sector_display }}</span></td>
+<div class="overflow-x-auto pb-4">
+    <table class="w-full text-left border-separate border-spacing-y-2 px-1">
+        <thead class="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider">
+            <tr>
+                <th class="px-4 py-2">Serial No</th>
+                <th class="px-4 py-2">Subject / Type</th>
+                <th class="px-4 py-2">Sender</th>
+                <th class="px-4 py-2">Received</th>
+                <th class="px-4 py-2">Sector</th>
+                <th class="px-4 py-2">Officer</th>
+                <th class="px-4 py-2">Status</th>
+                <th class="px-4 py-2 text-right">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for letter in letters %}
+            <tr class="group hover:bg-white/40 dark:hover:bg-white/5 transition-all duration-200">
+                <td class="px-4 py-3 rounded-l-xl bg-white/20 dark:bg-gray-800/20 group-hover:bg-transparent">
+                    <span class="font-mono font-bold text-indigo-600 dark:text-indigo-400 text-sm">#{{ letter.serial_number }}</span>
+                </td>
+                <td class="px-4 py-3 bg-white/20 dark:bg-gray-800/20 group-hover:bg-transparent font-bold text-gray-700 dark:text-gray-200 text-sm">
+                    {{ letter.letter_type|truncatechars:30 }}
+                </td>
+                <td class="px-4 py-3 bg-white/20 dark:bg-gray-800/20 group-hover:bg-transparent text-sm opacity-80">
+                    {{ letter.sender_name|truncatechars:20 }}
+                </td>
+                <td class="px-4 py-3 bg-white/20 dark:bg-gray-800/20 group-hover:bg-transparent text-xs font-bold opacity-60">
+                    {{ letter.date_received }}
+                </td>
+                <td class="px-4 py-3 bg-white/20 dark:bg-gray-800/20 group-hover:bg-transparent">
+                    <span class="px-2 py-1 rounded-lg text-[10px] font-extrabold uppercase bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                        {{ letter.get_target_sector_display }}
+                    </span>
+                </td>
+                <td class="px-4 py-3 bg-white/20 dark:bg-gray-800/20 group-hover:bg-transparent text-xs opacity-60">
+                    {{ letter.accepting_officer_id|default:"-" }}
+                </td>
+                <td class="px-4 py-3 bg-white/20 dark:bg-gray-800/20 group-hover:bg-transparent">
+                    {% if letter.is_replied %}
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg">
+                            <i class="fas fa-check-circle"></i> Replied
+                        </span>
+                    {% else %}
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded-lg">
+                            <i class="fas fa-clock"></i> Pending
+                        </span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3 rounded-r-xl bg-white/20 dark:bg-gray-800/20 group-hover:bg-transparent text-right">
+                    <a href="{% url 'admin_letter_detail' letter.pk %}" class="glass-btn inline-flex w-8 h-8 rounded-lg text-indigo-500 hover:bg-indigo-500 hover:text-white" title="View Details">
+                        <i class="fas fa-eye text-xs"></i>
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="py-12 text-center">
+                    <div class="w-16 h-16 rounded-full bg-gray-200/50 dark:bg-gray-700/50 flex items-center justify-center mx-auto mb-4 text-gray-400 text-2xl">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <p class="text-sm font-bold opacity-50">No letters found</p>
+                    {% if search_query %}
+                    <a href="{% url 'custom_admin_letters' %}" class="text-indigo-500 text-xs font-bold hover:underline mt-2 inline-block">Clear Search</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-                        <td>
-                            {% if letter.accepting_officer_id %}
-                                <span class="small text-muted">{{ letter.accepting_officer_id }}</span>
-                            {% else %}
-                                <span class="small text-muted">-</span>
-                            {% endif %}
-                        </td>
-
-                        <td>
-                            {% if letter.is_replied %}
-                                <span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="fas fa-check-circle me-1"></i>Replied</span>
-                            {% else %}
-                                <span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1"><i class="fas fa-clock me-1"></i>Pending</span>
-                            {% endif %}
-                        </td>
-                        <td class="text-end pe-4">
-                            <a href="{% url 'admin_letter_detail' letter.pk %}" class="btn btn-sm btn-outline-primary" title="View Details">
-                                <i class="fas fa-eye me-1"></i> View
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="8" class="text-center py-5">
-                            <div class="text-muted">
-                                <i class="fas fa-folder-open fa-2x mb-3 opacity-50"></i>
-                                <p>No letters found matching your criteria.</p>
-                                {% if search_query %}
-                                <a href="{% url 'custom_admin_letters' %}" class="btn btn-sm btn-link">Clear Search</a>
-                                {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="card-footer bg-white py-3">
-        <div class="d-flex justify-content-between align-items-center">
-            <small class="text-muted">Showing page {{ letters.number }} of {{ letters.paginator.num_pages }}</small>
-            <div>
-                {% if letters.has_previous %}
-                    <a href="?page={{ letters.previous_page_number }}{% if search_query %}&q={{ search_query }}&search_type={{ search_type }}{% endif %}" class="btn btn-sm btn-outline-secondary me-1">Previous</a>
-                {% endif %}
-                {% if letters.has_next %}
-                    <a href="?page={{ letters.next_page_number }}{% if search_query %}&q={{ search_query }}&search_type={{ search_type }}{% endif %}" class="btn btn-sm btn-outline-secondary">Next</a>
-                {% endif %}
-            </div>
-        </div>
+<div class="flex justify-between items-center mt-4 px-2">
+    <span class="text-[10px] font-bold uppercase tracking-wider opacity-50">Page {{ letters.number }} of {{ letters.paginator.num_pages }}</span>
+    <div class="flex gap-2">
+        {% if letters.has_previous %}
+            <a href="?page={{ letters.previous_page_number }}{% if search_query %}&q={{ search_query }}&search_type={{ search_type }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white"><i class="fas fa-chevron-left text-xs"></i></a>
+        {% endif %}
+        {% if letters.has_next %}
+            <a href="?page={{ letters.next_page_number }}{% if search_query %}&q={{ search_query }}&search_type={{ search_type }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white"><i class="fas fa-chevron-right text-xs"></i></a>
+        {% endif %}
     </div>
 </div>
 
 <script>
-    // 1. Search Bar Logic (Date Switcher)
     document.addEventListener('DOMContentLoaded', function() {
         const typeSelect = document.getElementById('adminSearchType');
         const searchInput = document.getElementById('adminSearchInput');
@@ -125,8 +123,12 @@
             function updateInput() {
                 if(typeSelect.value === 'date') {
                     searchInput.type = 'date';
+                    searchInput.classList.remove('w-32', 'md:w-48');
+                    searchInput.classList.add('w-auto');
                 } else {
                     searchInput.type = 'text';
+                    searchInput.classList.add('w-32', 'md:w-48');
+                    searchInput.classList.remove('w-auto');
                 }
             }
             typeSelect.addEventListener('change', updateInput);
@@ -135,60 +137,39 @@
     });
 
     function handleExport(e, url) {
-        // Check if we are inside the Python Wrapper (pywebview)
         if (window.pywebview) {
-            e.preventDefault(); // Stop standard download
-
-            // Give user visual feedback
-            const btn = e.currentTarget; // Ensure we get the button, not the icon
-            const originalText = btn.innerHTML;
+            e.preventDefault();
+            const btn = e.currentTarget;
+            const originalHTML = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-            btn.classList.add('disabled');
+            btn.classList.add('opacity-50', 'pointer-events-none');
 
-            fetch(url)
-                .then(response => {
-                    // --- NEW: EXTRACT FILENAME FROM HEADERS ---
-                    let filename = "Letters_Export.xlsx"; // Fallback default
-
-                    const disposition = response.headers.get('Content-Disposition');
-                    if (disposition && disposition.indexOf('attachment') !== -1) {
-                        // Regex to grab text between filename="KEYWORD"
-                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                        var matches = filenameRegex.exec(disposition);
-                        if (matches != null && matches[1]) {
-                            filename = matches[1].replace(/['"]/g, '');
-                        }
-                    }
-
-                    // Return both the data blob AND the extracted filename
-                    return response.blob().then(blob => ({ blob, filename }));
-                })
-                .then(({ blob, filename }) => {
-                    var reader = new FileReader();
-                    reader.readAsDataURL(blob);
-                    reader.onloadend = function() {
-                        var base64data = reader.result.split(',')[1];
-
-                        // Call Python function with the DYNAMIC filename
-                        window.pywebview.api.save_excel_file(filename, base64data)
-                            .then(resp => {
-                                if(resp.status === 'error') {
-                                    alert("Error saving file: " + resp.message);
-                                }
-                                // Reset button
-                                btn.innerHTML = originalText;
-                                btn.classList.remove('disabled');
-                            });
-                    }
-                })
-                .catch(err => {
-                    alert("Download failed: " + err);
-                    btn.innerHTML = originalText;
-                    btn.classList.remove('disabled');
-                });
+            fetch(url).then(response => {
+                let filename = "Letters_Export.xlsx";
+                const disposition = response.headers.get('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                }
+                return response.blob().then(blob => ({ blob, filename }));
+            }).then(({ blob, filename }) => {
+                var reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = function() {
+                    var base64data = reader.result.split(',')[1];
+                    window.pywebview.api.save_excel_file(filename, base64data).then(resp => {
+                        if(resp.status === 'error') alert("Error: " + resp.message);
+                        btn.innerHTML = originalHTML;
+                        btn.classList.remove('opacity-50', 'pointer-events-none');
+                    });
+                }
+            }).catch(err => {
+                alert("Download failed: " + err);
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('opacity-50', 'pointer-events-none');
+            });
         }
-        // If not in wrapper (normal browser), do nothing (let standard download happen)
     }
 </script>
-
 {% endblock %}

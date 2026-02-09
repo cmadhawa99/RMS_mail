@@ -2,219 +2,236 @@
 {% load static %}
 
 {% block admin_content %}
-<div class="container" style="max-width: 900px;">
-    <div class="card shadow border-0">
-        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-            <h4 class="mb-0 text-primary fw-bold">{{ title }}</h4>
-        </div>
-        <div class="card-body p-4">
+<div class="max-w-4xl mx-auto">
+    <div class="glass-panel rounded-3xl p-8 relative">
 
-            {% if form.errors %}
-                <div class="alert alert-danger">
-                    <strong>Please correct the errors below:</strong>
-                </div>
-            {% endif %}
+        <h4 class="text-xl font-black text-indigo-600 dark:text-indigo-400 mb-6 flex items-center gap-3">
+            <i class="fas fa-edit"></i> {{ title }}
+        </h4>
 
-            <form method="post" enctype="multipart/form-data" id="letterForm">
-                {% csrf_token %}
+        {% if form.errors %}
+            <div class="mb-6 p-4 rounded-xl bg-red-100/50 border border-red-200 text-red-800 text-sm font-bold">
+                Please correct the errors below.
+            </div>
+        {% endif %}
 
-                <div class="row g-3">
-                    {% for field in form %}
-                        {% if 'attachment_' not in field.name %}
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">{{ field.label }}</label>
-                                    {{ field }}
-                                    {% if field.help_text %}
-                                        <div class="form-text text-muted small">{{ field.help_text }}</div>
-                                    {% endif %}
-                                    {% if field.errors %}
-                                        <div class="text-danger small mt-1">
-                                            {% for error in field.errors %}
-                                                <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
+        <form method="post" enctype="multipart/form-data" id="letterForm">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for field in form %}
+                    {% if 'attachment_' not in field.name %}
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">{{ field.label }}</label>
+
+                            <div class="relative">
+                                {{ field }}
+                            </div>
+
+                            {% if field.help_text %}
+                                <div class="text-[10px] font-bold opacity-40 mt-1">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="text-red-500 text-xs font-bold mt-1">
+                                    {% for error in field.errors %}{{ error }}{% endfor %}
                                 </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                <hr class="my-5">
-
-                <h5 class="fw-bold mb-4 text-secondary">
-                    <i class="fas fa-images me-2"></i>Scanned Documents
-                    <small class="text-muted fw-normal ms-2 fs-6">(Click box to upload)</small>
-                </h5>
-
-                <div class="row g-4">
-                    {% for i in "123456" %}
-                        {% with field_name="attachment_"|add:i %}
-                        {% with field=form|dictsort:"name"|first %}
-
-                        <div class="col-6 col-md-4">
-                            <div class="upload-card-wrapper position-relative">
-                                <label for="id_{{ field_name }}" class="upload-card d-flex flex-column align-items-center justify-content-center">
-                                    <div class="placeholder-content text-center" id="placeholder_{{ field_name }}">
-                                        <div class="icon-circle mb-2">
-                                            <i class="fas fa-plus fa-lg text-secondary"></i>
-                                        </div>
-                                        <span class="small text-muted fw-bold">Page {{ i }}</span>
-                                    </div>
-                                    <img id="preview_{{ field_name }}" src="" class="preview-img" style="display: none;">
-                                </label>
-
-                                <button type="button" class="btn-clear" id="btn_clear_{{ field_name }}" onclick="requestClearImage('{{ field_name }}')" style="display: none;">
-                                    <i class="fas fa-times"></i>
-                                </button>
-
-                                <input type="file" name="{{ field_name }}" id="id_{{ field_name }}" class="d-none" accept="image/*" onchange="previewImage(this, '{{ field_name }}')">
-                                <input type="checkbox" name="{{ field_name }}-clear" id="id_{{ field_name }}-clear" class="d-none">
-
-                                {% if form.instance %}
-                                    <script>
-                                        window.addEventListener('DOMContentLoaded', () => {
-                                            var existUrl = "";
-                                            {% if i == "1" and form.instance.attachment_1 %} existUrl = "{{ form.instance.attachment_1.url }}"; {% endif %}
-                                            {% if i == "2" and form.instance.attachment_2 %} existUrl = "{{ form.instance.attachment_2.url }}"; {% endif %}
-                                            {% if i == "3" and form.instance.attachment_3 %} existUrl = "{{ form.instance.attachment_3.url }}"; {% endif %}
-                                            {% if i == "4" and form.instance.attachment_4 %} existUrl = "{{ form.instance.attachment_4.url }}"; {% endif %}
-                                            {% if i == "5" and form.instance.attachment_5 %} existUrl = "{{ form.instance.attachment_5.url }}"; {% endif %}
-                                            {% if i == "6" and form.instance.attachment_6 %} existUrl = "{{ form.instance.attachment_6.url }}"; {% endif %}
-
-                                            if(existUrl) { setImageState("{{ field_name }}", existUrl); }
-                                        });
-                                    </script>
-                                {% endif %}
-                            </div>
+                            {% endif %}
                         </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
 
-                        {% endwith %}
-                        {% endwith %}
-                    {% endfor %}
-                </div>
+            <hr class="my-8 border-gray-200/30 dark:border-gray-700/30">
 
-                <div class="mt-5 p-3 bg-warning bg-opacity-10 border border-warning rounded">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="safetyCheck" required>
-                        <label class="form-check-label fw-bold text-dark" for="safetyCheck">
-                            I confirm that the details and attachments above are correct.
-                            <span class="text-danger">*</span>
+            <h5 class="font-bold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
+                <i class="fas fa-images"></i> Scanned Documents
+                <span class="text-xs opacity-50 font-normal uppercase">(Click box to upload)</span>
+            </h5>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                {% for i in "123456" %}
+                    {% with field_name="attachment_"|add:i %}
+                    {% with field=form|dictsort:"name"|first %}
+
+                    <div class="relative group">
+                        <label for="id_{{ field_name }}" class="h-40 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all relative overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-indigo-500" id="label_{{ field_name }}">
+
+                            <div class="text-center" id="placeholder_{{ field_name }}">
+                                <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mx-auto mb-2 text-gray-400 group-hover:text-indigo-500 transition-colors">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <span class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Page {{ i }}</span>
+                            </div>
+
+                            <img id="preview_{{ field_name }}" src="" class="absolute inset-0 w-full h-full object-cover hidden z-10 bg-white dark:bg-gray-800">
                         </label>
-                    </div>
-                </div>
 
-                <div class="d-flex justify-content-end gap-2 mt-4">
-                    <a href="{% url 'custom_admin_letters' %}" class="btn btn-light">Cancel</a>
-                    <button type="submit" class="btn btn-success px-4">
-                        <i class="fas fa-save me-2"></i>Save Letter
-                    </button>
-                </div>
-            </form>
-        </div>
+                        <button type="button" class="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden z-20 hover:scale-110 transition-transform" id="btn_clear_{{ field_name }}" onclick="requestClearImage('{{ field_name }}')">
+                            <i class="fas fa-times text-xs"></i>
+                        </button>
+
+                        <input type="file" name="{{ field_name }}" id="id_{{ field_name }}" class="hidden" accept="image/*" onchange="previewImage(this, '{{ field_name }}')">
+                        <input type="checkbox" name="{{ field_name }}-clear" id="id_{{ field_name }}-clear" class="hidden">
+                    </div>
+
+                    {% if form.instance %}
+                    <script>
+                        window.addEventListener('DOMContentLoaded', () => {
+                            let existUrl = "";
+                            {% if i == "1" and form.instance.attachment_1 %} existUrl = "{{ form.instance.attachment_1.url }}"; {% endif %}
+                            {% if i == "2" and form.instance.attachment_2 %} existUrl = "{{ form.instance.attachment_2.url }}"; {% endif %}
+                            {% if i == "3" and form.instance.attachment_3 %} existUrl = "{{ form.instance.attachment_3.url }}"; {% endif %}
+                            {% if i == "4" and form.instance.attachment_4 %} existUrl = "{{ form.instance.attachment_4.url }}"; {% endif %}
+                            {% if i == "5" and form.instance.attachment_5 %} existUrl = "{{ form.instance.attachment_5.url }}"; {% endif %}
+                            {% if i == "6" and form.instance.attachment_6 %} existUrl = "{{ form.instance.attachment_6.url }}"; {% endif %}
+                            if(existUrl) setImageState("{{ field_name }}", existUrl);
+                        });
+                    </script>
+                    {% endif %}
+
+                    {% endwith %}
+                    {% endwith %}
+                {% endfor %}
+            </div>
+
+            <div class="mt-8 p-4 rounded-xl bg-amber-50/50 border border-amber-200 dark:bg-amber-900/20 dark:border-amber-800/30 flex items-start gap-3">
+                <input type="checkbox" id="safetyCheck" required class="mt-1 w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500">
+                <label for="safetyCheck" class="text-sm font-bold text-gray-700 dark:text-gray-300">
+                    I confirm that the details and attachments above are correct. <span class="text-red-500">*</span>
+                </label>
+            </div>
+
+            <div class="flex justify-end gap-4 mt-8">
+                <a href="{% url 'custom_admin_letters' %}" class="glass-btn px-6 py-3 rounded-xl font-bold opacity-60 hover:opacity-100 text-xs uppercase tracking-wider">Cancel</a>
+                <button type="submit" class="glass-btn px-8 py-3 rounded-xl bg-indigo-500 !text-white shadow-lg hover:shadow-indigo-500/50 hover:-translate-y-1 transition-all text-xs uppercase tracking-wider border-none">
+                    <i class="fas fa-save mr-2"></i> Save Letter
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center p-4">
-            <div class="modal-body">
-                <div class="mb-3">
-                    <i id="modalIcon" class="fas fa-exclamation-circle fa-3x text-warning"></i>
-                </div>
+<div id="confirmModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity opacity-0 pointer-events-none">
+    <div class="glass p-8 rounded-3xl shadow-2xl text-center max-w-sm transform scale-95 transition-transform duration-300 border-t border-white/20">
+        <div id="modalIconContainer" class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 bg-gray-100">
+            <i id="modalIcon" class="fas"></i>
+        </div>
+        <h4 id="modalTitle" class="text-xl font-black mb-2 text-gray-800 dark:text-white">Title</h4>
+        <p id="modalMessage" class="opacity-70 text-xs font-bold leading-relaxed mb-6">Message</p>
 
-                <h4 class="fw-bold mb-2" id="modalTitle">Are you sure?</h4>
-                <p class="text-muted mb-4" id="modalMessage">Do you want to proceed?</p>
-
-                <div class="d-flex justify-content-center gap-2">
-                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary px-4" id="modalConfirmBtn">Confirm</button>
-                </div>
-            </div>
+        <div class="flex justify-center gap-3">
+            <button type="button" onclick="hideModal()" class="glass-btn px-6 py-2 rounded-xl font-bold opacity-60 text-xs uppercase hover:opacity-100">Cancel</button>
+            <button type="button" id="modalConfirmBtn" class="glass-btn px-6 py-2 rounded-xl text-white text-xs uppercase border-none font-bold">Confirm</button>
         </div>
     </div>
 </div>
 
 <style>
-    /* Keeps your existing styles */
+    /* --- Styles for Form Inputs --- */
     input[type="text"], select, input[type="date"], input[type="datetime-local"], textarea {
-        display: block; width: 100%; padding: 0.5rem 0.75rem;
-        border: 1px solid #ced4da; border-radius: 0.375rem;
-        font-family: inherit; background-color: #fff;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        background-color: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255,255,255, 0.2);
+        font-weight: 600;
+        font-size: 0.875rem;
+        outline: none;
+        transition: all 0.2s;
     }
-    textarea { resize: none; }
+
+    /* Focus State (Light Mode) */
     input:focus, select:focus, textarea:focus {
-        border-color: #86b7fe; outline: 0; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        background-color: white;
+        border-color: #6366f1;
+        ring: 2px solid #6366f1;
+        color: black;
     }
-    input[type="checkbox"] { width: 1.2em; height: 1.2em; margin-top: 0.25em; cursor: pointer; }
 
-    .upload-card {
-        width: 100%; height: 180px; border: 2px dashed #dee2e6; border-radius: 12px;
-        background-color: #f8f9fa; cursor: pointer; transition: all 0.2s ease; overflow: hidden; position: relative;
+    /* --- Dark Mode Styles --- */
+    .dark input[type="text"], .dark select, .dark textarea, .dark input[type="date"] {
+        background-color: rgba(30, 41, 59, 0.8); /* Darker background for visibility */
+        color: white;
+        border-color: rgba(255,255,255,0.1);
     }
-    .upload-card:hover { border-color: #3b82f6; background-color: #eff6ff; }
-    .icon-circle {
-        width: 50px; height: 50px; border-radius: 50%; background: #e9ecef;
-        display: flex; align-items: center; justify-content: center; margin: 0 auto;
-    }
-    .preview-img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
 
-    .btn-clear {
-        position: absolute; top: -10px; right: -10px; width: 30px; height: 30px;
-        border-radius: 50%; background-color: #dc3545; border: 2px solid white; color: white;
-        display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.2s; font-size: 12px;
+    .dark input:focus, .dark select:focus, .dark textarea:focus {
+        background-color: rgba(15, 23, 42, 1); /* Even darker on focus */
+        color: white;
+        border-color: #818cf8;
     }
-    .btn-clear:hover { transform: scale(1.1); background-color: #bb2d3b; }
+
+    /* --- THE FIX: Dropdown Options in Dark Mode --- */
+    /* This ensures options are not white text on white background */
+    .dark select option {
+        background-color: #1f2937; /* Dark Gray Background */
+        color: white; /* White Text */
+    }
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     // --- 1. MODAL LOGIC ---
-    let pendingAction = null; // Store the function to run if confirmed
-    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    let pendingAction = null;
+    const modal = document.getElementById('confirmModal');
+    const modalContainer = modal.querySelector('div');
 
-    // Helper to open the modal with custom styles
     function showModal(title, message, theme, callback) {
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalMessage').innerText = message;
 
-        // Dynamic Styling (Icon & Button Color)
         const icon = document.getElementById('modalIcon');
+        const iconCont = document.getElementById('modalIconContainer');
         const btn = document.getElementById('modalConfirmBtn');
 
-        icon.className = `fas fa-3x mb-3 ${theme === 'danger' ? 'fa-trash-alt text-danger' : 'fa-check-circle text-success'}`;
-        btn.className = `btn px-4 ${theme === 'danger' ? 'btn-danger' : 'btn-success'}`;
+        if(theme === 'danger') {
+            icon.className = 'fas fa-trash-alt text-red-500';
+            iconCont.className = 'w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 bg-red-100 dark:bg-red-900/30';
+            btn.className = 'glass-btn px-6 py-2 rounded-xl bg-red-500 text-white text-xs uppercase border-none font-bold hover:bg-red-600';
+        } else {
+            icon.className = 'fas fa-check-circle text-emerald-500';
+            iconCont.className = 'w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 bg-emerald-100 dark:bg-emerald-900/30';
+            btn.className = 'glass-btn px-6 py-2 rounded-xl bg-emerald-500 text-white text-xs uppercase border-none font-bold hover:bg-emerald-600';
+        }
 
-        // Save the callback
         pendingAction = callback;
-        confirmModal.show();
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContainer.classList.remove('scale-95');
+            modalContainer.classList.add('scale-100');
+        }, 10);
     }
 
-    // When user clicks "Confirm" in the modal
+    function hideModal() {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modalContainer.classList.remove('scale-100');
+        modalContainer.classList.add('scale-95');
+        setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
     document.getElementById('modalConfirmBtn').addEventListener('click', function() {
-        if (pendingAction) pendingAction();
-        confirmModal.hide();
+        if(pendingAction) pendingAction();
+        hideModal();
     });
 
     // --- 2. IMAGE HANDLING ---
-
     function setImageState(fieldName, src) {
         document.getElementById('preview_' + fieldName).src = src;
-        document.getElementById('preview_' + fieldName).style.display = 'block';
-        document.getElementById('placeholder_' + fieldName).style.display = 'none';
-        document.getElementById('btn_clear_' + fieldName).style.display = 'flex';
-        document.querySelector(`label[for="id_${fieldName}"]`).style.borderStyle = 'solid';
+        document.getElementById('preview_' + fieldName).classList.remove('hidden');
+        document.getElementById('placeholder_' + fieldName).classList.add('hidden');
+        document.getElementById('btn_clear_' + fieldName).classList.remove('hidden');
+        document.getElementById('label_' + fieldName).classList.remove('border-dashed');
+        document.getElementById('label_' + fieldName).classList.add('border-indigo-500', 'border-solid');
     }
 
     function resetImageState(fieldName) {
         document.getElementById('preview_' + fieldName).src = "";
-        document.getElementById('preview_' + fieldName).style.display = 'none';
-        document.getElementById('placeholder_' + fieldName).style.display = 'block';
-        document.getElementById('btn_clear_' + fieldName).style.display = 'none';
-        document.querySelector(`label[for="id_${fieldName}"]`).style.borderStyle = 'dashed';
+        document.getElementById('preview_' + fieldName).classList.add('hidden');
+        document.getElementById('placeholder_' + fieldName).classList.remove('hidden');
+        document.getElementById('btn_clear_' + fieldName).classList.add('hidden');
+        document.getElementById('label_' + fieldName).classList.add('border-dashed');
+        document.getElementById('label_' + fieldName).classList.remove('border-indigo-500', 'border-solid');
     }
 
     function previewImage(input, fieldName) {
@@ -229,39 +246,21 @@
         }
     }
 
-    // --- 3. TRIGGER ALERTS ---
-
-    // Called when clicking Red X
     function requestClearImage(fieldName) {
-        showModal(
-            "Remove Page?",
-            "Are you sure you want to remove this scanned page from the letter?",
-            "danger",
-            function() {
-                // Actual Deletion Logic
-                const input = document.getElementById('id_' + fieldName);
-                input.value = "";
-                const clearBox = document.getElementById('id_' + fieldName + '-clear');
-                if(clearBox) clearBox.checked = true;
-                resetImageState(fieldName);
-            }
-        );
+        showModal("Remove Page?", "Are you sure you want to remove this scanned page?", "danger", function() {
+            const input = document.getElementById('id_' + fieldName);
+            input.value = "";
+            const clearBox = document.getElementById('id_' + fieldName + '-clear');
+            if(clearBox) clearBox.checked = true;
+            resetImageState(fieldName);
+        });
     }
 
-    // Called when submitting form
     document.getElementById('letterForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // STOP standard submit
-
-        showModal(
-            "Save Changes?",
-            "You are about to save this letter. Are you sure all details are correct?",
-            "success",
-            function() {
-                // Actual Save Logic
-                document.getElementById('letterForm').submit();
-            }
-        );
+        e.preventDefault();
+        showModal("Save Changes?", "You are about to save this letter. Are you sure?", "success", function() {
+            document.getElementById('letterForm').submit();
+        });
     });
-
 </script>
 {% endblock %}
