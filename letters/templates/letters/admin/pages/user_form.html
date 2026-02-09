@@ -64,40 +64,43 @@
         width: 100%;
         padding: 0.75rem 1rem;
         border-radius: 0.75rem;
-        background-color: rgba(255, 255, 255, 0.5);
-        border: 1px solid rgba(255,255,255, 0.2);
+
+        /* LIGHT MODE: Visible Gray Border & Background */
+        background-color: #f9fafb; /* Gray-50 */
+        border: 1px solid #d1d5db; /* Gray-300 */
+        color: #1f2937; /* Gray-800 */
+
         font-weight: 600;
         font-size: 0.875rem;
         outline: none;
         transition: all 0.2s;
     }
 
-    /* Focus State (Light Mode) */
+    /* Focus State */
     input:focus, select:focus {
         background-color: white;
         border-color: #6366f1;
         ring: 2px solid #6366f1;
-        color: black;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
     }
 
     /* --- Dark Mode Styles --- */
     .dark input[type="text"], .dark input[type="password"], .dark select {
-        background-color: rgba(30, 41, 59, 0.8); /* Darker background */
+        background-color: rgba(30, 41, 59, 0.8);
         color: white;
         border-color: rgba(255,255,255,0.1);
     }
 
     .dark input:focus, .dark select:focus {
-        background-color: rgba(15, 23, 42, 1); /* Even darker on focus */
+        background-color: rgba(15, 23, 42, 1);
         color: white;
         border-color: #818cf8;
+        box-shadow: none;
     }
 
-    /* --- THE FIX: Dropdown Options in Dark Mode --- */
-    /* Forces the dropdown list itself to be dark */
     .dark select option {
-        background-color: #1f2937; /* Dark Gray Background */
-        color: white; /* White Text */
+        background-color: #1f2937;
+        color: white;
     }
 </style>
 

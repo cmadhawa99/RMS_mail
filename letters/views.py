@@ -199,10 +199,12 @@ def custom_admin_users(request):
 @login_required
 def custom_admin_letters(request):
     if not request.user.is_superuser: return redirect('sector_dashboard')
+
     letters_list = Letter.objects.all().order_by('-date_received')
 
     search_query = request.GET.get('q', '')
     search_type = request.GET.get('search_type', 'all')
+
     if search_query:
         if search_type == 'serial':
             letters_list = letters_list.filter(serial_number__iexact=search_query)
@@ -216,10 +218,24 @@ def custom_admin_letters(request):
             Q(target_sector__icontains=search_query)
         )
 
+    total_letters = letters_list.count()
+    replied_letters = letters_list.filter(is_replied=True).count()
+    pending_letters = total_letters - replied_letters
+
     paginator = Paginator(letters_list, 20)
     page_number = request.GET.get('page')
     letters = paginator.get_page(page_number)
-    return render(request, 'letters/admin/pages/admin_letters.html', {'letters': letters, 'search_query': search_query})
+
+    context = {
+        'letters': letters,
+        'search_query': search_query,
+        'search_type': search_type,
+        'total_letters': total_letters,
+        'pending_letters': pending_letters,
+        'replied_letters': replied_letters
+    }
+
+    return render(request, 'letters/admin/pages/admin_letters.html', context)
 
 
 # --- ADMIN DETAILS (With Security) ---

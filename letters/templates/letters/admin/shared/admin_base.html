@@ -19,8 +19,8 @@
                     },
                     colors: {
                         admin: {
-                            primary: '#6366f1', /* Indigo */
-                            secondary: '#8b5cf6', /* Violet */
+                            primary: '#6366f1',
+                            secondary: '#8b5cf6',
                         }
                     }
                 }
@@ -30,17 +30,18 @@
 
     <style type="text/tailwindcss">
         @layer utilities {
+            /* FIXED: Uses gray borders in light mode for visibility */
             .glass {
-                @apply bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-lg;
+                @apply bg-white/80 dark:bg-gray-900/70 backdrop-blur-xl border border-gray-200 dark:border-white/10 shadow-lg;
             }
             .glass-panel {
-                @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-xl transition-all duration-300;
+                @apply bg-white/60 dark:bg-gray-800/40 backdrop-blur-md border border-gray-200 dark:border-white/5 shadow-xl transition-all duration-300;
             }
             .glass-btn {
-                @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-md backdrop-blur-sm hover:shadow-lg hover:border-white/40;
+                @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-gray-300 dark:border-white/20 shadow-sm backdrop-blur-sm hover:shadow-md hover:border-gray-400 dark:hover:border-white/40;
             }
             .glass-nav-item {
-                @apply flex items-center px-4 py-3 rounded-xl transition-all duration-200 hover:bg-white/40 dark:hover:bg-white/10 hover:translate-x-1 text-gray-600 dark:text-gray-300 font-bold text-sm;
+                @apply flex items-center px-4 py-3 rounded-xl transition-all duration-200 hover:bg-gray-100 dark:hover:bg-white/10 hover:translate-x-1 text-gray-600 dark:text-gray-300 font-bold text-sm;
             }
             .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
             .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
@@ -48,6 +49,7 @@
         }
 
         body {
+            /* Slightly darker background in light mode for contrast */
             background:
                 radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
@@ -59,12 +61,11 @@
                 radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.2) 0px, transparent 50%),
                 linear-gradient(to bottom right, #111827, #0f172a);
         }
-        /* Add this to your main CSS or style block */
+
         .dark option {
             background-color: #1f2937;
             color: white;
-}
-
+        }
     </style>
 </head>
 
@@ -73,7 +74,7 @@
     <div class="flex h-full w-full p-4 gap-4">
 
         <aside class="w-72 hidden md:flex flex-col glass rounded-3xl z-20 relative h-full transition-all duration-300">
-            <div class="p-6 flex items-center gap-4 border-b border-gray-200/30 dark:border-gray-700/30">
+            <div class="p-6 flex items-center gap-4 border-b border-gray-200 dark:border-gray-700/30">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xl shadow-lg">
                     <i class="fas fa-shield-alt"></i>
                 </div>
@@ -84,10 +85,9 @@
             </div>
 
             <nav class="flex-1 overflow-y-auto px-4 space-y-1 custom-scrollbar py-6">
-
                 <div class="px-2 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">Main Menu</div>
 
-                <a href="{% url 'custom_admin_dashboard' %}" class="glass-nav-item group {% if request.resolver_match.url_name == 'custom_admin_dashboard' %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30{% endif %}">
+                <a href="{% url 'custom_admin_dashboard' %}" class="glass-nav-item group {% if request.resolver_match.url_name == 'custom_admin_dashboard' %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">
                     <i class="fas fa-tachometer-alt w-6 text-center"></i>
                     <span class="ml-3">Dashboard</span>
                 </a>
@@ -95,21 +95,21 @@
                 <div class="px-2 mt-8 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">Management</div>
 
                 <div class="relative group">
-                    <a href="{% url 'custom_admin_users' %}" class="glass-nav-item {% if 'user' in request.resolver_match.url_name %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30{% endif %}">
+                    <a href="{% url 'custom_admin_users' %}" class="glass-nav-item {% if 'user' in request.resolver_match.url_name %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">
                         <i class="fas fa-users w-6 text-center"></i>
                         <span class="ml-3">Officers</span>
                     </a>
-                    <a href="{% url 'create_user' %}" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center bg-white/50 dark:bg-black/20 hover:bg-emerald-500 hover:text-white transition-colors shadow-sm" title="Create New Officer">
+                    <a href="{% url 'create_user' %}" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center bg-gray-200 dark:bg-black/20 hover:bg-emerald-500 hover:text-white transition-colors shadow-sm" title="Create New Officer">
                         <i class="fas fa-plus text-xs"></i>
                     </a>
                 </div>
 
                 <div class="relative group mt-1">
-                    <a href="{% url 'custom_admin_letters' %}" class="glass-nav-item {% if 'letter' in request.resolver_match.url_name %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30{% endif %}">
+                    <a href="{% url 'custom_admin_letters' %}" class="glass-nav-item {% if 'letter' in request.resolver_match.url_name %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">
                         <i class="fas fa-envelope w-6 text-center"></i>
                         <span class="ml-3">Letters</span>
                     </a>
-                    <a href="{% url 'add_letter' %}" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center bg-white/50 dark:bg-black/20 hover:bg-emerald-500 hover:text-white transition-colors shadow-sm" title="Add New Letter">
+                    <a href="{% url 'add_letter' %}" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center bg-gray-200 dark:bg-black/20 hover:bg-emerald-500 hover:text-white transition-colors shadow-sm" title="Add New Letter">
                         <i class="fas fa-plus text-xs"></i>
                     </a>
                 </div>
@@ -129,8 +129,7 @@
         </aside>
 
         <main class="flex-1 flex flex-col h-full relative z-10 glass rounded-3xl overflow-hidden">
-
-            <header class="h-20 px-8 flex justify-between items-center shrink-0 border-b border-gray-200/30 dark:border-gray-700/30 bg-white/20 dark:bg-black/10 backdrop-blur-md">
+            <header class="h-20 px-8 flex justify-between items-center shrink-0 border-b border-gray-200 dark:border-gray-700/30 bg-white/50 dark:bg-black/10 backdrop-blur-md">
                 <div>
                     <h1 class="text-2xl font-black text-gray-800 dark:text-white flex items-center gap-3">
                         {% block header_title %}Admin Control Panel{% endblock %}
@@ -143,7 +142,7 @@
                         <div class="text-[9px] font-bold uppercase tracking-widest opacity-60">System Active</div>
                     </div>
 
-                    <button id="themeToggle" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-yellow-400 hover:bg-white/50" title="Toggle Theme">
+                    <button id="themeToggle" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-yellow-400 hover:bg-white/80" title="Toggle Theme">
                         <i class="fas fa-moon dark:hidden"></i>
                         <i class="fas fa-sun hidden dark:block"></i>
                     </button>
@@ -158,15 +157,14 @@
             </header>
 
             <div class="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-8 relative">
-
                 {% if messages %}
                 <div class="mb-6 space-y-3">
                     {% for message in messages %}
                         <div class="glass-panel p-4 rounded-xl flex items-center justify-between animate-float
-                            {% if message.tags == 'success' %}border-l-4 border-emerald-500 bg-emerald-50/50 text-emerald-800 dark:text-emerald-100
-                            {% elif message.tags == 'error' %}border-l-4 border-red-500 bg-red-50/50 text-red-800 dark:text-red-100
-                            {% elif message.tags == 'warning' %}border-l-4 border-amber-500 bg-amber-50/50 text-amber-800 dark:text-amber-100
-                            {% else %}border-l-4 border-blue-500 bg-blue-50/50 text-blue-800 dark:text-blue-100{% endif %}">
+                            {% if message.tags == 'success' %}border-l-4 border-emerald-500 bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-100
+                            {% elif message.tags == 'error' %}border-l-4 border-red-500 bg-red-50 text-red-800 dark:bg-red-900/30 dark:text-red-100
+                            {% elif message.tags == 'warning' %}border-l-4 border-amber-500 bg-amber-50 text-amber-800 dark:bg-amber-900/30 dark:text-amber-100
+                            {% else %}border-l-4 border-blue-500 bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-100{% endif %}">
 
                             <div class="flex items-center gap-3">
                                 <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} text-lg"></i>
@@ -181,13 +179,11 @@
                 <div class="w-full">
                     {% block admin_content %}{% endblock %}
                 </div>
-
             </div>
         </main>
     </div>
 
     <script>
-        // --- 1. Live Time ---
         function updateTime() {
             const now = new Date();
             document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
@@ -195,7 +191,6 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // --- 2. Dark/Light Mode ---
         const themeToggleBtn = document.getElementById('themeToggle');
         const html = document.documentElement;
 

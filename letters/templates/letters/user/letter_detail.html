@@ -190,6 +190,63 @@
                             </div>
                         </div>
                         {% endif %}
+
+                        <div class="glass-panel p-5 rounded-2xl">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center">
+                                    <i class="fas fa-file-invoice"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 dark:text-white">ලිපියේ ඡායාරූප</h4>
+                                    <p class="text-[10px] opacity-60 font-bold uppercase tracking-wider">Scanned Documents</p>
+                                </div>
+                            </div>
+
+                            {% if letter.attachment_1 or letter.attachment_2 or letter.attachment_3 or letter.attachment_4 or letter.attachment_5 or letter.attachment_6 %}
+                                <div class="grid grid-cols-3 md:grid-cols-6 gap-3 mb-4">
+                                    {% if letter.attachment_1 %}
+                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
+                                            <img src="{{ letter.attachment_1.url }}" class="w-full h-full object-cover">
+                                        </div>
+                                    {% endif %}
+                                    {% if letter.attachment_2 %}
+                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
+                                            <img src="{{ letter.attachment_2.url }}" class="w-full h-full object-cover">
+                                        </div>
+                                    {% endif %}
+                                    {% if letter.attachment_3 %}
+                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
+                                            <img src="{{ letter.attachment_3.url }}" class="w-full h-full object-cover">
+                                        </div>
+                                    {% endif %}
+                                    {% if letter.attachment_4 %}
+                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
+                                            <img src="{{ letter.attachment_4.url }}" class="w-full h-full object-cover">
+                                        </div>
+                                    {% endif %}
+                                    {% if letter.attachment_5 %}
+                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
+                                            <img src="{{ letter.attachment_5.url }}" class="w-full h-full object-cover">
+                                        </div>
+                                    {% endif %}
+                                    {% if letter.attachment_6 %}
+                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
+                                            <img src="{{ letter.attachment_6.url }}" class="w-full h-full object-cover">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="mb-4 py-4 rounded-xl border border-dashed border-gray-400/30 text-xs font-bold opacity-50 text-center">
+                                    No Images Attached
+                                </div>
+                            {% endif %}
+
+                            <a href="{% url 'view_letter_images' letter.pk %}" class="glass-btn w-full py-3 rounded-xl bg-blue-500 text-white hover:bg-blue-600 shadow-lg hover:shadow-blue-500/30 border-none group">
+                                <i class="fas fa-search-plus mr-2 group-hover:scale-110 transition-transform"></i>
+                                <span class="text-xs font-bold uppercase tracking-wider">Open Viewer</span>
+                            </a>
+                        </div>
+
                     </div>
 
                     <div class="lg:col-span-4 space-y-4">
@@ -228,19 +285,6 @@
                                     <div class="font-mono font-bold text-gray-700 dark:text-gray-200">{{ letter.accepting_officer_id }}</div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="glass-panel p-5 rounded-2xl text-center">
-                            <div class="w-12 h-12 mx-auto rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center text-xl mb-3">
-                                <i class="fas fa-file-invoice"></i>
-                            </div>
-                            <h4 class="font-bold text-gray-800 dark:text-white mb-1">ලිපියේ ඡායාරූප</h4>
-                            <p class="text-[10px] opacity-60 font-bold uppercase tracking-wider mb-4">Scanned Documents</p>
-
-                            <a href="{% url 'view_letter_images' letter.pk %}" class="glass-btn w-full py-3 rounded-xl bg-blue-500 text-white hover:bg-blue-600 shadow-lg hover:shadow-blue-500/30 border-none group">
-                                <i class="fas fa-search-plus mr-2 group-hover:scale-110 transition-transform"></i>
-                                <span class="text-xs font-bold uppercase tracking-wider">Open Viewer</span>
-                            </a>
                         </div>
                     </div>
 
