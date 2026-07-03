@@ -1,8 +1,10 @@
 {% extends 'letters/admin/shared/admin_base.html' %}
 {% block admin_content %}
+{% load i18n %}
+
 <div class="max-w-2xl mx-auto mt-6">
     <a href="{% url 'custom_admin_users' %}" class="inline-flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-indigo-500 mb-4 transition-colors">
-        <i class="fas fa-arrow-left"></i> Back to Officers
+        <i class="fas fa-arrow-left"></i> {% trans "Back to Officers" %}
     </a>
 
     <div class="glass-panel rounded-3xl p-8 text-center relative overflow-hidden">
@@ -21,21 +23,21 @@
 
         <div class="grid grid-cols-2 gap-4 border-t border-b border-gray-200/30 dark:border-gray-700/30 py-6 mb-8">
             <div class="border-r border-gray-200/30 dark:border-gray-700/30">
-                <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Date Joined</div>
+                <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Date Joined" %}</div>
                 <div class="font-bold text-gray-700 dark:text-gray-200">{{ user_obj.date_joined|date:"M d, Y" }}</div>
             </div>
             <div>
-                <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Last Login</div>
+                <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Last Login" %}</div>
                 <div class="font-bold text-gray-700 dark:text-gray-200">{{ user_obj.last_login|default:"Never" }}</div>
             </div>
         </div>
 
         <div class="flex justify-center gap-4">
             <a href="{% url 'edit_user' user_obj.id %}" class="glass-btn px-6 py-2.5 rounded-xl bg-indigo-500 !text-white hover:bg-indigo-600 border-none font-bold text-sm shadow-lg shadow-indigo-500/30">
-                <i class="fas fa-edit mr-2"></i> Edit Profile
+                <i class="fas fa-edit mr-2"></i> {% trans "Edit Profile" %}
             </a>
             <button onclick="confirmDelete()" class="glass-btn px-6 py-2.5 rounded-xl text-red-500 hover:bg-red-500 hover:text-white font-bold text-sm">
-                <i class="fas fa-trash mr-2"></i> Delete User
+                <i class="fas fa-trash mr-2"></i> {% trans "Delete User" %}
             </button>
         </div>
     </div>

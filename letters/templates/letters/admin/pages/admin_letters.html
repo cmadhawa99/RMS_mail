@@ -1,6 +1,6 @@
 {% extends 'letters/admin/shared/admin_base.html' %}
-
 {% block admin_content %}
+{% load i18n %}
 
 <style>
     .badge-sector-GOVERNING { background-color: #d99694; color: white; }
@@ -18,7 +18,7 @@
         </div>
         <div class="relative">
             <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ total_letters|default:"0" }}</div>
-            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">මුළු ලිපි ගොනු</div>
+            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">{% trans "Total Letters" %}</div>
         </div>
     </div>
 
@@ -29,7 +29,7 @@
         </div>
         <div class="relative">
             <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ pending_letters|default:"0" }}</div>
-            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">විමර්ශනය වෙමින් පවතින ලිපි</div>
+            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">{% trans "Pending Letters" %}</div>
         </div>
     </div>
 
@@ -40,20 +40,20 @@
         </div>
         <div class="relative">
             <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ replied_letters|default:"0" }}</div>
-            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">පිළිතුරු යොමුකල ලිපි</div>
+            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">{% trans "Replied Letters" %}</div>
         </div>
     </div>
 </div>
 
 <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-    <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">Letter Registry</h3>
+    <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">{% trans "Letter Registry" %}</h3>
 
     <div class="flex flex-wrap gap-3 w-full md:w-auto">
         <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all flex-grow md:flex-grow-0 bg-white dark:bg-transparent border border-gray-300 dark:border-white/10">
             <select name="search_type" id="adminSearchType" class="bg-transparent border-none text-xs font-bold text-gray-600 dark:text-gray-300 focus:ring-0 cursor-pointer py-2 pl-3 pr-2 outline-none appearance-none">
-                <option value="all" {% if search_type == 'all' %}selected{% endif %}>All</option>
-                <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>Serial</option>
-                <option value="date" {% if search_type == 'date' %}selected{% endif %}>Date</option>
+                <option value="all" {% if search_type == 'all' %}selected{% endif %}>{% trans "All" %}</option>
+                <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>{% trans "Serial" %}</option>
+                <option value="date" {% if search_type == 'date' %}selected{% endif %}>{% trans "Date" %}</option>
             </select>
             <div class="w-px h-5 bg-gray-400/30 mx-1"></div>
             <input type="text" name="q" id="adminSearchInput" class="bg-transparent border-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 py-1 px-2 w-32 md:w-48 outline-none" placeholder="Search..." value="{{ search_query }}">
@@ -66,11 +66,11 @@
         <a href="{{ export_url }}?q={{ search_query }}&search_type={{ search_type }}"
            onclick="handleExport(event, this.href)"
            class="glass-btn px-4 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white font-bold text-xs gap-2">
-            <i class="fas fa-file-excel"></i> Export
+            <i class="fas fa-file-excel"></i> {% trans "Export" %}
         </a>
 
         <a href="{% url 'add_letter' %}" class="glass-btn px-4 rounded-xl bg-indigo-500 !text-white hover:bg-indigo-600 shadow-lg shadow-indigo-500/30 font-bold text-xs gap-2 border-none">
-            <i class="fas fa-plus"></i> New
+            <i class="fas fa-plus"></i> {% trans "New" %}
         </a>
     </div>
 </div>
@@ -79,14 +79,14 @@
     <table class="w-full text-left border-separate border-spacing-y-2 px-1">
         <thead class="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider">
             <tr>
-                <th class="px-4 py-2">Serial No</th>
-                <th class="px-4 py-2">Subject / Type</th>
-                <th class="px-4 py-2">Sender</th>
-                <th class="px-4 py-2">Received</th>
-                <th class="px-4 py-2">Sector</th>
-                <th class="px-4 py-2">Officer</th>
-                <th class="px-4 py-2">Status</th>
-                <th class="px-4 py-2 text-right">Action</th>
+                <th class="px-4 py-2">{% trans "Serial No" %}</th>
+                <th class="px-4 py-2">{% trans "Subject" %}</th>
+                <th class="px-4 py-2">{% trans "Sender" %}</th>
+                <th class="px-4 py-2">{% trans "Received" %}</th>
+                <th class="px-4 py-2">{% trans "Sector" %}</th>
+                <th class="px-4 py-2">{% trans "Officer" %}</th>
+                <th class="px-4 py-2">{% trans "Status" %}</th>
+                <th class="px-4 py-2 text-right">{% trans "Action" %}</th>
             </tr>
         </thead>
         <tbody>
@@ -137,7 +137,7 @@
                     <div class="w-16 h-16 rounded-full bg-gray-200/50 dark:bg-gray-700/50 flex items-center justify-center mx-auto mb-4 text-gray-400 text-2xl">
                         <i class="fas fa-folder-open"></i>
                     </div>
-                    <p class="text-sm font-bold opacity-50">No letters found</p>
+                    <p class="text-sm font-bold opacity-50">{% trans "No letters found" %}</p>
                     {% if search_query %}
                     <a href="{% url 'custom_admin_letters' %}" class="text-indigo-500 text-xs font-bold hover:underline mt-2 inline-block">Clear Search</a>
                     {% endif %}

@@ -1,5 +1,7 @@
 {% extends 'letters/admin/shared/admin_base.html' %}
 {% block admin_content %}
+{% load i18n %}
+
 <div class="max-w-xl mx-auto">
     <div class="glass-panel rounded-3xl p-8">
 
@@ -10,16 +12,16 @@
         <form method="post">
             {% csrf_token %}
 
-            <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3">Account Credentials</h6>
+            <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3">{% trans "Account Credentials" %}</h6>
 
             <div class="mb-4">
-                <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Username</label>
+                <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">{% trans "Username" %}</label>
                 {{ form.username }}
                 <div class="text-[10px] font-bold opacity-40 mt-1">{{ form.username.help_text }}</div>
             </div>
 
             <div class="mb-6">
-                <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Password</label>
+                <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">{% trans "Password" %}</label>
                 <div class="relative">
                     {{ form.new_password }}
                     <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-500">
@@ -30,28 +32,28 @@
                 <div class="text-red-500 text-xs font-bold mt-1">{{ form.new_password.errors }}</div>
             </div>
 
-            <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 mt-8">Personal Details</h6>
+            <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 mt-8">{% trans "Personal Details" %}</h6>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">First Name</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">{% trans "First Name" %}</label>
                     {{ form.first_name }}
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Last Name</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">{% trans "Last Name" %}</label>
                     {{ form.last_name }}
                 </div>
             </div>
 
             <div class="mb-8 mt-4">
-                <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Assigned Sector</label>
+                <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">{% trans "Assigned Sector" %}</label>
                 {{ form.sector }}
             </div>
 
             <div class="flex justify-end gap-4">
-                <a href="{% url 'custom_admin_users' %}" class="glass-btn px-6 py-3 rounded-xl font-bold opacity-60 hover:opacity-100 text-xs uppercase tracking-wider">Cancel</a>
+                <a href="{% url 'custom_admin_users' %}" class="glass-btn px-6 py-3 rounded-xl font-bold opacity-60 hover:opacity-100 text-xs uppercase tracking-wider">{% trans "Cancel" %}</a>
                 <button type="submit" class="glass-btn px-8 py-3 rounded-xl bg-indigo-500 !text-white shadow-lg hover:shadow-indigo-500/50 hover:-translate-y-1 transition-all text-xs uppercase tracking-wider border-none">
-                    Save Changes
+                    {% trans "Save Changes" %}
                 </button>
             </div>
         </form>

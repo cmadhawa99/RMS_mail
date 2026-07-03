@@ -1,0 +1,247 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-03 15:31+0530\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\council_project\settings.py:103
+msgid "English"
+msgstr ""
+
+#: .\council_project\settings.py:104
+msgid "Sinhala"
+msgstr ""
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:6
+msgid "Dashboard Overview"
+msgstr "පාලක පුවරුව"
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:8
+msgid "Welcome,"
+msgstr "ආයුබෝවන්"
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:18
+msgid "System Status"
+msgstr "පද්ධතියේ තත්ත්වය"
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:19
+msgid "Operational"
+msgstr "ක්‍රියාත්මකව ඇත"
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:34
+msgid "Quick Actions"
+msgstr "ක්ෂණික ක්‍රියාමාර්ග"
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:38
+msgid "Add New Letter"
+msgstr "නව ලිපියක් ඇතුලත් කරන්න"
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:41
+msgid "Create Officer"
+msgstr "නව නිළධාරියෙක් ඇතුලත් කරන්න"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:21
+#| msgid "Letters"
+msgid "Total Letters"
+msgstr "මුළු ලිපි ගොනු"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:32
+#| msgid "Letters"
+msgid "Pending Letters"
+msgstr "විමර්ශනය වෙමින් පවතින ලිපි"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:43
+#| msgid "Letters"
+msgid "Replied Letters"
+msgstr "පිළිතුරු යොමු කළ ලිපි"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:49
+#| msgid "Letters"
+msgid "Letter Registry"
+msgstr "ලිපි ගොනුව"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:54
+msgid "All"
+msgstr ""
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:55
+msgid "Serial"
+msgstr ""
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:56
+msgid "Date"
+msgstr ""
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:69
+msgid "Export"
+msgstr "වාර්තා ලබාගන්න"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:73
+msgid "New"
+msgstr "නව ඇතුළත් කිරීම්"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:82
+msgid "Serial No"
+msgstr "අනු අංකය"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:83
+msgid "Subject"
+msgstr "විෂයය"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:84
+msgid "Sender"
+msgstr "එවූ අයගේ නම/ලිපිනය"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:85
+msgid "Received"
+msgstr "ලැබුණු දිනය"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:86
+msgid "Sector"
+msgstr "අංශය"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:87
+#| msgid "Officers"
+msgid "Officer"
+msgstr "භාරගත් නිළධාරියා"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:88
+#| msgid "System Status"
+msgid "Status"
+msgstr "තත්ත්වය"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:89
+#| msgid "Actions"
+msgid "Action"
+msgstr "ක්‍රියාමාර්ග"
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:140
+#| msgid "No officers found"
+msgid "No letters found"
+msgstr "පද්ධතියේ කිසිදු ලිපියක් නොමැත"
+
+#: .\letters\templates\letters\admin\pages\admin_user_detail.html:7
+msgid "Back to Officers"
+msgstr "නැවත නිලධාරී ලැයිස්තුවට"
+
+#: .\letters\templates\letters\admin\pages\admin_user_detail.html:26
+msgid "Date Joined"
+msgstr "එක් වූ දිනය"
+
+#: .\letters\templates\letters\admin\pages\admin_user_detail.html:30
+msgid "Last Login"
+msgstr "අවසන් වරට පිවිසුණු වේලාව"
+
+#: .\letters\templates\letters\admin\pages\admin_user_detail.html:37
+msgid "Edit Profile"
+msgstr "පැතිකඩ සංස්කරණය කරන්න"
+
+#: .\letters\templates\letters\admin\pages\admin_user_detail.html:40
+msgid "Delete User"
+msgstr "පරිශීලක ඉවත් කරන්න"
+
+#: .\letters\templates\letters\admin\pages\admin_users.html:6
+msgid "Registered Officers"
+msgstr "ලියාපදිංචි නිළධාරීන්"
+
+#: .\letters\templates\letters\admin\pages\admin_users.html:16
+msgid "Add Officer"
+msgstr "නිළධාරියෙක් ඇතුළත් කරන්න"
+
+#: .\letters\templates\letters\admin\pages\admin_users.html:25
+msgid "Officer Name"
+msgstr "නිළධාරියාගේ නම"
+
+#: .\letters\templates\letters\admin\pages\admin_users.html:26
+#: .\letters\templates\letters\admin\pages\user_form.html:49
+msgid "Assigned Sector"
+msgstr "අනුයුක්ත අංශය"
+
+#: .\letters\templates\letters\admin\pages\admin_users.html:27
+msgid "Actions"
+msgstr "ක්‍රියාමාර්ග"
+
+#: .\letters\templates\letters\admin\pages\admin_users.html:58
+msgid "No officers found"
+msgstr "පද්ධතියේ කිසිදු නිලධාරියෙකු නොමැත"
+
+#: .\letters\templates\letters\admin\pages\user_form.html:15
+msgid "Account Credentials"
+msgstr "පිවිසුම් තොරතුරු"
+
+#: .\letters\templates\letters\admin\pages\user_form.html:18
+msgid "Username"
+msgstr "පරිශීලක නාමය"
+
+#: .\letters\templates\letters\admin\pages\user_form.html:24
+msgid "Password"
+msgstr "මුරපදය"
+
+#: .\letters\templates\letters\admin\pages\user_form.html:35
+msgid "Personal Details"
+msgstr "පුද්ගලික තොරතුරු"
+
+#: .\letters\templates\letters\admin\pages\user_form.html:39
+msgid "First Name"
+msgstr "මුල් නම"
+
+#: .\letters\templates\letters\admin\pages\user_form.html:43
+msgid "Last Name"
+msgstr "අවසන් නම"
+
+#: .\letters\templates\letters\admin\pages\user_form.html:54
+msgid "Cancel"
+msgstr "අවලංගු කරන්න"
+
+#: .\letters\templates\letters\admin\pages\user_form.html:56
+msgid "Save Changes"
+msgstr "වෙනස්කම් සුරකින්න"
+
+#: .\letters\templates\letters\admin\shared\admin_base.html:7
+msgid "Council Administration"
+msgstr ""
+
+#: .\letters\templates\letters\admin\shared\admin_base.html:91
+msgid "System Admin"
+msgstr "පද්ධති පරිපාලක"
+
+#: .\letters\templates\letters\admin\shared\admin_base.html:92
+msgid "Council Panel"
+msgstr "සභා පුවරුව"
+
+#: .\letters\templates\letters\admin\shared\admin_base.html:97
+msgid "Main Menu"
+msgstr "ප්‍රධාන මෙනුව"
+
+#: .\letters\templates\letters\admin\shared\admin_base.html:101
+msgid "Dashboard"
+msgstr "පාලක පුවරුව"
+
+#: .\letters\templates\letters\admin\shared\admin_base.html:104
+msgid "Management"
+msgstr "කළමණාකරණය"
+
+#: .\letters\templates\letters\admin\shared\admin_base.html:109
+msgid "Officers"
+msgstr "නිළධාරීන්"
+
+#: .\letters\templates\letters\admin\shared\admin_base.html:119
+msgid "Letters"
+msgstr "ලිපි"
+
+#: .\letters\templates\letters\admin\shared\admin_base.html:144
+msgid "Admin Control Panel"
+msgstr "පරිපාලක පාලක පුවරුව"
