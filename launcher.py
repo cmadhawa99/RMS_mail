@@ -6,7 +6,7 @@ import base64
 import os
 
 # REPLACE THIS with your actual Server IP
-SERVER_URL = "http://192.168.1.7:8000"
+SERVER_URL = "http://DESKTOP-NHOO4UE:8000"
 APP_TITLE = "City Council Management Portal"
 
 

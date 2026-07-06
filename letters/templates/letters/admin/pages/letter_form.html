@@ -1,5 +1,6 @@
 {% extends 'letters/admin/shared/admin_base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block admin_content %}
 <div class="max-w-5xl mx-auto">
@@ -12,7 +13,7 @@
             {{ title }}
         </h4>
         <a href="{% url 'custom_admin_letters' %}" class="glass-btn px-4 py-2 rounded-xl text-xs font-bold opacity-60 hover:opacity-100 uppercase tracking-wider">
-            <i class="fas fa-arrow-left mr-2"></i> Cancel
+            <i class="fas fa-arrow-left mr-2"></i> {% trans "Cancel" %}
         </a>
     </div>
 
@@ -31,40 +32,40 @@
 
         <div class="glass-panel rounded-3xl p-8">
             <h6 class="text-xs font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
-                <i class="fas fa-info-circle"></i> Basic Information
+                <i class="fas fa-info-circle"></i> {% trans "Basic Information" %}
             </h6>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 gap-y-8">
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Serial Number</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Serial Number" %}</label>
                     <div class="relative">{{ form.serial_number }}</div>
                     <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.serial_number.errors.0 }}</div>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Date Received</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Date Received" %}</label>
                     <div class="relative">{{ form.date_received }}</div>
                     <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.date_received.errors.0 }}</div>
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Sender Name</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Sender Name" %}</label>
                     <div class="relative">{{ form.sender_name }}</div>
                 </div>
                 <div class="md:col-span-2">
-                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Sender Address</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Sender Address" %}</label>
                     <div class="relative">{{ form.sender_address }}</div>
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Subject / Type</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Subject / Type" %}</label>
                     <div class="relative">{{ form.letter_type }}</div>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Assign Sector</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Assign Sector" %}</label>
                     <div class="relative">{{ form.target_sector }}</div>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Admin Officer</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Admin Officer" %}</label>
                     <div class="relative">{{ form.administrated_by }}</div>
                 </div>
             </div>
@@ -73,7 +74,7 @@
         <div class="glass-panel rounded-3xl p-1 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 border-indigo-100 dark:border-indigo-900/30">
             <div class="p-7">
                 <h6 class="text-xs font-black uppercase tracking-widest text-indigo-500 mb-6 flex items-center gap-2">
-                    <i class="fas fa-bolt"></i> Status & Actions
+                    <i class="fas fa-bolt"></i> {% trans "Status & Actions" %}
                 </h6>
 
                 <div class="flex flex-col md:flex-row gap-6 items-stretch">
@@ -84,8 +85,8 @@
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div>
-                                    <div class="font-black text-sm text-gray-800 dark:text-gray-100">Mark as Replied</div>
-                                    <div class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Close this ticket</div>
+                                    <div class="font-black text-sm text-gray-800 dark:text-gray-100">{% trans "Mark as Replied" %}</div>
+                                    <div class="text-[10px] font-bold opacity-50 uppercase tracking-wider">{% trans "Close this ticket" %}</div>
                                 </div>
                             </div>
 
@@ -103,7 +104,7 @@
                     </div>
 
                     <div class="flex-1">
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Reply Date (If applicable)</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Reply Date (If applicable)" %}</label>
                         <div class="relative h-full">
                             {{ form.replied_at }}
                         </div>
@@ -114,7 +115,7 @@
 
         <div class="glass-panel rounded-3xl p-8">
             <h6 class="text-xs font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
-                <i class="fas fa-paperclip"></i> Attachments
+                <i class="fas fa-paperclip"></i> {% trans "Attachments" %}
             </h6>
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -126,7 +127,7 @@
                         <label for="id_{{ field_name }}" class="absolute inset-0 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-indigo-50 dark:hover:bg-white/5 transition-all overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-indigo-500" id="label_{{ field_name }}">
                             <div class="text-center p-2" id="placeholder_{{ field_name }}">
                                 <i class="fas fa-plus text-2xl text-gray-300 mb-2 group-hover:text-indigo-400 transition-colors"></i>
-                                <div class="text-[9px] font-bold opacity-40 uppercase">Page {{ i }}</div>
+                                <div class="text-[9px] font-bold opacity-40 uppercase">{% trans "Page" %} {{ i }}</div>
                             </div>
                             <img id="preview_{{ field_name }}" src="" class="absolute inset-0 w-full h-full object-cover hidden z-10 bg-white dark:bg-gray-800">
                         </label>
@@ -164,13 +165,13 @@
             <div class="flex items-start gap-3 px-2">
                 <input type="checkbox" id="safetyCheck" required class="mt-1 w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300">
                 <label for="safetyCheck" class="text-xs font-bold text-gray-500 dark:text-gray-400 select-none cursor-pointer">
-                    I confirm that the details entered above are accurate.
+                    {% trans "I confirm that the details entered above are accurate." %}
                 </label>
             </div>
 
             <div class="flex gap-4 w-full sm:w-auto">
                 <button type="submit" class="glass-btn flex-1 sm:flex-none px-8 py-3.5 rounded-xl bg-indigo-600 !text-white shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-1 transition-all text-xs font-black uppercase tracking-widest border-none">
-                    <i class="fas fa-save mr-2"></i> Save Record
+                    <i class="fas fa-save mr-2"></i> {% trans "Save Record" %}
                 </button>
             </div>
         </div>
