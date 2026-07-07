@@ -24,7 +24,7 @@ SECTOR_CHOICES = [
 class Letter(models.Model):
     """The blueprint for every incoming letter"""
 
-    serial_number = models.CharField(max_length=10, unique=True, verbose_name="අනු අංකය", primary_key=True)
+    serial_number = models.IntegerField(unique=True, verbose_name="අනු අංකය")
     date_received = models.DateField()
     sender_name = models.CharField(max_length=255)
     sender_address = models.TextField(blank=True, null=True)
@@ -44,6 +44,9 @@ class Letter(models.Model):
     attachment_4 = models.FileField(upload_to='letters/', null=True, blank=True)
     attachment_5 = models.FileField(upload_to='letters/', null=True, blank=True)
     attachment_6 = models.FileField(upload_to='letters/', null=True, blank=True)
+
+    class Meta:
+        ordering = ['serial_number']
 
     def __str__(self):
         return f"{self.serial_number} ({self.get_target_sector_display()})"

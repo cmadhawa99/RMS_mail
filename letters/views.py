@@ -35,7 +35,7 @@ def sector_dashboard(request):
             user_sector = "NONE"
 
 
-    letters = Letter.objects.all().order_by('-date_received')
+    letters = Letter.objects.all().order_by('serial_number')
 
     selected_sector = request.GET.get('sector', 'ALL')
 
@@ -200,7 +200,7 @@ def custom_admin_users(request):
 def custom_admin_letters(request):
     if not request.user.is_superuser: return redirect('sector_dashboard')
 
-    letters_list = Letter.objects.all().order_by('-date_received')
+    letters_list = Letter.objects.all().order_by('serial_number')
 
     search_query = request.GET.get('q', '')
     search_type = request.GET.get('search_type', 'all')
@@ -369,7 +369,7 @@ def export_letters_excel(request):
     if not request.user.is_superuser: return redirect('sector_dashboard')
 
     #1) Get the data (Apply search filter if it exists)
-    letters = Letter.objects.all().order_by('-date_received')
+    letters = Letter.objects.all().order_by('serial_number')
     search_query = request.GET.get('q', '')
 
     if search_query:
