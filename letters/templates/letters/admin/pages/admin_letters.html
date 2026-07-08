@@ -6,7 +6,7 @@
     .badge-sector-GOVERNING { background-color: #d99694; color: white; }
     .badge-sector-HEALTH { background-color: #b3a2c7; color: white; }
     .badge-sector-DEVELOPMENT { background-color: #e46c0a; color: white; }
-    .badge-sector-INCOME { background-color: #ffff00; color: #451a03; font-weight: 800; } /* Dark text for yellow */
+    .badge-sector-INCOME { background-color: #ffff00; color: #451a03; font-weight: 800; }
     .badge-sector-ACCOUNTS { background-color: #95b3d7; color: white; }
 </style>
 
@@ -114,10 +114,19 @@
                 <td class="px-4 py-3 bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-gray-200 dark:border-transparent group-hover:border-transparent text-xs opacity-60">
                     {{ letter.accepting_officer_id|default:"-" }}
                 </td>
+
                 <td class="px-4 py-3 bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-gray-200 dark:border-transparent group-hover:border-transparent">
-                    {% if letter.is_replied %}
+                    {% if letter.status == 'REPLIED' %}
                         <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg">
                             <i class="fas fa-check-circle"></i> Replied
+                        </span>
+                    {% elif letter.status == 'NOT_REQUIRED' %}
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-gray-600 dark:text-gray-400 bg-gray-100/50 dark:bg-gray-800/50 px-2 py-1 rounded-lg">
+                            <i class="fas fa-minus-circle"></i> No Action
+                        </span>
+                    {% elif letter.status == 'OLD_RECORD' %}
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-900/30 px-2 py-1 rounded-lg">
+                            <i class="fas fa-archive"></i> Old Record
                         </span>
                     {% else %}
                         <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded-lg">
@@ -125,6 +134,7 @@
                         </span>
                     {% endif %}
                 </td>
+
                 <td class="px-4 py-3 rounded-r-xl bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-r border-gray-200 dark:border-transparent group-hover:border-transparent text-right">
                     <a href="{% url 'admin_letter_detail' letter.pk %}" class="glass-btn inline-flex w-8 h-8 rounded-lg text-indigo-500 hover:bg-indigo-500 hover:text-white" title="View Details">
                         <i class="fas fa-eye text-xs"></i>

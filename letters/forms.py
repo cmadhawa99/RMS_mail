@@ -55,7 +55,10 @@ class UserForm(forms.ModelForm):
 
 
 class LetterForm(forms.ModelForm):
-    date_received = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    date_received = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        required=False,
+    )
 
     replied_at = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date'}),
@@ -81,7 +84,7 @@ class LetterForm(forms.ModelForm):
         fields = [
             'serial_number', 'date_received', 'sender_name', 'sender_address',
             'letter_type', 'target_sector', 'administrated_by',
-            'accepting_officer_id', 'is_replied', 'replied_at',
+            'accepting_officer_id', 'status', 'replied_at',
             'attachment_1', 'attachment_2', 'attachment_3', 'attachment_4',
             'attachment_5', 'attachment_6'
         ]
@@ -93,7 +96,7 @@ class LetterForm(forms.ModelForm):
             'target_sector': 'Assign to Sector',
             'administrated_by': 'Administrated By',
             'accepting_officer_id': 'Accepting Officer ID',
-            'is_replied': 'Mark as Resolved/Replied',
+            'status': 'Letter Status',
             'attachment_1': 'Attachment 1',
             'attachment_2': 'Attachment 2',
             'attachment_3': 'Attachment 3',

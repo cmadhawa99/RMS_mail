@@ -7,7 +7,6 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
@@ -15,16 +14,11 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['"Noto Sans Sinhala"', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['"Noto Sans Sinhala"', 'sans-serif'], },
                     colors: {
                         sector: {
-                            governing: '#d99694',
-                            health: '#b3a2c7',
-                            development: '#e46c0a',
-                            income: '#ffff00',
-                            accounts: '#95b3d7',
+                            governing: '#d99694', health: '#b3a2c7', development: '#e46c0a',
+                            income: '#ffff00', accounts: '#95b3d7',
                         }
                     }
                 }
@@ -34,19 +28,11 @@
 
     <style type="text/tailwindcss">
         @layer utilities {
-            /* --- Glassmorphism Utilities --- */
-            .glass {
-                @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl;
-            }
-            .glass-panel {
-                @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-lg transition-all duration-300;
-            }
-            .glass-btn {
-                @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-md backdrop-blur-sm hover:shadow-lg hover:border-white/40;
-            }
+            .glass { @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl; }
+            .glass-panel { @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-lg transition-all duration-300; }
+            .glass-btn { @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-md backdrop-blur-sm hover:shadow-lg hover:border-white/40; }
         }
 
-        /* --- Global Background (Matches Dashboard) --- */
         body {
             background:
                 radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
@@ -63,7 +49,6 @@
                 linear-gradient(to bottom right, #111827, #1f2937);
         }
 
-        /* Badge Colors */
         .badge-sector-GOVERNING { background-color: #d99694; color: white; }
         .badge-sector-HEALTH { background-color: #b3a2c7; color: white; }
         .badge-sector-DEVELOPMENT { background-color: #e46c0a; color: white; }
@@ -111,7 +96,7 @@
                     </div>
 
                     <div class="flex flex-col items-end gap-3">
-                        {% if letter.is_replied %}
+                        {% if letter.status == 'REPLIED' %}
                             <div class="glass-panel px-6 py-3 rounded-2xl bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-3">
                                 <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
                                 <div class="text-right">
@@ -119,6 +104,24 @@
                                     <div class="text-[10px] font-bold opacity-60 uppercase">Resolved</div>
                                 </div>
                                 <i class="fas fa-check-circle text-2xl ml-1"></i>
+                            </div>
+                        {% elif letter.status == 'NOT_REQUIRED' %}
+                            <div class="glass-panel px-6 py-3 rounded-2xl bg-gray-500/10 border-gray-500/20 text-gray-600 dark:text-gray-400 flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-gray-500"></div>
+                                <div class="text-right">
+                                    <div class="text-xs font-black uppercase tracking-wider">අවශ්‍ය නොවේ</div>
+                                    <div class="text-[10px] font-bold opacity-60 uppercase">Not Required</div>
+                                </div>
+                                <i class="fas fa-minus-circle text-2xl ml-1"></i>
+                            </div>
+                        {% elif letter.status == 'OLD_RECORD' %}
+                            <div class="glass-panel px-6 py-3 rounded-2xl bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                <div class="text-right">
+                                    <div class="text-xs font-black uppercase tracking-wider">පැරණි වාර්තාවක්</div>
+                                    <div class="text-[10px] font-bold opacity-60 uppercase">Old Record</div>
+                                </div>
+                                <i class="fas fa-archive text-2xl ml-1"></i>
                             </div>
                         {% else %}
                             <div class="glass-panel px-6 py-3 rounded-2xl bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center gap-3">
@@ -138,11 +141,8 @@
             </div>
 
             <div class="p-8 md:p-10">
-
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
-
                     <div class="lg:col-span-8 space-y-8">
-
                         <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover:bg-white/50 dark:hover:bg-white/5">
                             <div class="absolute left-0 top-0 w-1 h-full bg-[var(--accent)]"></div>
                             <div class="text-xs font-bold text-[var(--accent)] uppercase tracking-widest mb-2 flex items-center gap-2">
@@ -175,20 +175,33 @@
                             </div>
                         </div>
 
-                        {% if letter.is_replied %}
-                        <div class="glass-panel p-6 rounded-2xl border-l-4 border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/10">
-                            <h3 class="text-emerald-600 dark:text-emerald-400 font-black text-lg mb-1 flex items-center gap-2">
-                                <i class="fas fa-check-double"></i> පිළිතුරු යොමු කර ඇත
-                            </h3>
-                            <p class="text-emerald-600/60 dark:text-emerald-400/60 text-xs font-bold uppercase tracking-wider mb-4">Replied Status</p>
-
-                            <div class="flex items-center gap-4 text-sm font-bold text-gray-600 dark:text-gray-300">
-                                <div class="glass px-4 py-2 rounded-lg flex items-center gap-2">
-                                    <i class="far fa-calendar-check text-[var(--accent)]"></i>
-                                    <span>{{ letter.replied_at }}</span>
+                        {% if letter.status == 'REPLIED' %}
+                            <div class="glass-panel p-6 rounded-2xl border-l-4 border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/10">
+                                <h3 class="text-emerald-600 dark:text-emerald-400 font-black text-lg mb-1 flex items-center gap-2">
+                                    <i class="fas fa-check-double"></i> පිළිතුරු යොමු කර ඇත
+                                </h3>
+                                <p class="text-emerald-600/60 dark:text-emerald-400/60 text-xs font-bold uppercase tracking-wider mb-4">Replied Status</p>
+                                <div class="flex items-center gap-4 text-sm font-bold text-gray-600 dark:text-gray-300">
+                                    <div class="glass px-4 py-2 rounded-lg flex items-center gap-2">
+                                        <i class="far fa-calendar-check text-[var(--accent)]"></i>
+                                        <span>{{ letter.replied_at }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% elif letter.status == 'NOT_REQUIRED' %}
+                            <div class="glass-panel p-6 rounded-2xl border-l-4 border-gray-500 bg-gray-50/50 dark:bg-gray-900/10">
+                                <h3 class="text-gray-600 dark:text-gray-400 font-black text-lg mb-1 flex items-center gap-2">
+                                    <i class="fas fa-minus-circle"></i> මෙම ලිපිය සඳහා ක්‍රියාමාර්ගයක් අවශ්‍ය නොවේ
+                                </h3>
+                                <p class="text-gray-500/60 dark:text-gray-400/60 text-xs font-bold uppercase tracking-wider mb-4">File Closed</p>
+                            </div>
+                        {% elif letter.status == 'OLD_RECORD' %}
+                            <div class="glass-panel p-6 rounded-2xl border-l-4 border-blue-500 bg-blue-50/50 dark:bg-blue-900/10">
+                                <h3 class="text-blue-600 dark:text-blue-400 font-black text-lg mb-1 flex items-center gap-2">
+                                    <i class="fas fa-archive"></i> මෙය පැරණි වාර්තාවකි
+                                </h3>
+                                <p class="text-blue-500/60 dark:text-blue-400/60 text-xs font-bold uppercase tracking-wider mb-4">Archived Record</p>
+                            </div>
                         {% endif %}
 
                         <div class="glass-panel p-5 rounded-2xl">
@@ -204,36 +217,12 @@
 
                             {% if letter.attachment_1 or letter.attachment_2 or letter.attachment_3 or letter.attachment_4 or letter.attachment_5 or letter.attachment_6 %}
                                 <div class="grid grid-cols-3 md:grid-cols-6 gap-3 mb-4">
-                                    {% if letter.attachment_1 %}
-                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
-                                            <img src="{{ letter.attachment_1.url }}" class="w-full h-full object-cover">
-                                        </div>
-                                    {% endif %}
-                                    {% if letter.attachment_2 %}
-                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
-                                            <img src="{{ letter.attachment_2.url }}" class="w-full h-full object-cover">
-                                        </div>
-                                    {% endif %}
-                                    {% if letter.attachment_3 %}
-                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
-                                            <img src="{{ letter.attachment_3.url }}" class="w-full h-full object-cover">
-                                        </div>
-                                    {% endif %}
-                                    {% if letter.attachment_4 %}
-                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
-                                            <img src="{{ letter.attachment_4.url }}" class="w-full h-full object-cover">
-                                        </div>
-                                    {% endif %}
-                                    {% if letter.attachment_5 %}
-                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
-                                            <img src="{{ letter.attachment_5.url }}" class="w-full h-full object-cover">
-                                        </div>
-                                    {% endif %}
-                                    {% if letter.attachment_6 %}
-                                        <div class="aspect-square rounded-lg overflow-hidden border border-white/20">
-                                            <img src="{{ letter.attachment_6.url }}" class="w-full h-full object-cover">
-                                        </div>
-                                    {% endif %}
+                                    {% if letter.attachment_1 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{{ letter.attachment_1.url }}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_2 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{{ letter.attachment_2.url }}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_3 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{{ letter.attachment_3.url }}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_4 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{{ letter.attachment_4.url }}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_5 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{{ letter.attachment_5.url }}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_6 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{{ letter.attachment_6.url }}" class="w-full h-full object-cover"> </div> {% endif %}
                                 </div>
                             {% else %}
                                 <div class="mb-4 py-4 rounded-xl border border-dashed border-gray-400/30 text-xs font-bold opacity-50 text-center">
@@ -246,12 +235,10 @@
                                 <span class="text-xs font-bold uppercase tracking-wider">Open Viewer</span>
                             </a>
                         </div>
-
                     </div>
 
                     <div class="lg:col-span-4 space-y-4">
                         <div class="glass-panel p-5 rounded-2xl space-y-6">
-
                             <div>
                                 <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">ලැබුණු දිනය (Date Received)</div>
                                 <div class="flex items-center gap-3">
@@ -261,9 +248,7 @@
                                     <div class="font-bold text-gray-700 dark:text-gray-200">{{ letter.date_received }}</div>
                                 </div>
                             </div>
-
                             <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
-
                             <div>
                                 <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">පරිපාලනය (Administered By)</div>
                                 <div class="flex items-center gap-3">
@@ -273,9 +258,7 @@
                                     <div class="font-bold text-gray-700 dark:text-gray-200">{{ letter.get_administrated_by_display }}</div>
                                 </div>
                             </div>
-
                             <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
-
                             <div>
                                 <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">නිලධාරී ID (Officer ID)</div>
                                 <div class="flex items-center gap-3">
@@ -294,7 +277,6 @@
     </div>
 
     <script>
-        // Theme Logic
         const themeToggleBtn = document.getElementById('themeToggle');
         const html = document.documentElement;
 

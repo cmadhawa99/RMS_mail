@@ -7,7 +7,6 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
@@ -34,33 +33,14 @@
 
     <style type="text/tailwindcss">
         @layer utilities {
-            /* --- Glassmorphism Utilities --- */
-            .glass {
-                @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-lg;
-            }
-
-            .glass-panel {
-                @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-xl transition-all duration-300;
-            }
-
-            .glass-btn {
-                @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-md backdrop-blur-sm hover:shadow-lg hover:border-white/40;
-            }
-
-            /* --- Custom Scrollbar --- */
-            .custom-scrollbar::-webkit-scrollbar {
-                width: 6px;
-                height: 6px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-track {
-                background: transparent;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb {
-                @apply bg-gray-400/50 dark:bg-gray-500/50 rounded-full hover:bg-[var(--accent)];
-            }
+            .glass { @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-lg; }
+            .glass-panel { @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-xl transition-all duration-300; }
+            .glass-btn { @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-md backdrop-blur-sm hover:shadow-lg hover:border-white/40; }
+            .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-gray-400/50 dark:bg-gray-500/50 rounded-full hover:bg-[var(--accent)]; }
         }
 
-        /* --- Global Background --- */
         body {
             background:
                 radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
@@ -76,33 +56,16 @@
                 linear-gradient(to bottom right, #111827, #1f2937);
         }
 
-        /* --- Income Yellow Contrast Fixes --- */
         .light .text-accent-adaptive { color: #b45309; }
         .dark .text-accent-adaptive { color: #ffff00; }
-
-        /* Badges */
         .badge-sector-GOVERNING { background-color: #d99694; color: white; }
         .badge-sector-HEALTH { background-color: #b3a2c7; color: white; }
         .badge-sector-DEVELOPMENT { background-color: #e46c0a; color: white; }
         .badge-sector-INCOME { background-color: #ffff00; color: #451a03; font-weight: 800; }
         .badge-sector-ACCOUNTS { background-color: #95b3d7; color: white; }
-
-        /* Animation */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0px); }
-        }
-        .animate-float {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        /* --- DROPDOWN FIX FOR DARK MODE --- */
-        /* This forces the popup menu options to be dark gray with white text */
-        .dark select option {
-            background-color: #1f2937 !important;
-            color: white !important;
-        }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .dark select option { background-color: #1f2937 !important; color: white !important; }
     </style>
 </head>
 
@@ -115,11 +78,9 @@
 {% endif %}
 
 <body class="h-screen w-screen overflow-hidden text-gray-700 dark:text-gray-200 transition-colors duration-500 selection:bg-[var(--accent)] selection:text-white">
-
     <div class="flex h-full w-full p-4 gap-4">
 
         <aside class="w-72 hidden md:flex flex-col glass rounded-3xl z-20 relative h-full transition-all duration-300">
-
             <div class="p-6 flex items-center gap-4 border-b border-gray-200/30 dark:border-gray-700/30">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-gray-400 flex items-center justify-center text-white text-xl shadow-lg">
                     <i class="fas fa-university"></i>
@@ -143,16 +104,9 @@
                 {% with 'GOVERNING HEALTH DEVELOPMENT INCOME ACCOUNTS' as sectors %}
                     {% for sec in sectors.split %}
                     <a href="?sector={{ sec }}" class="relative flex items-center px-4 py-3 rounded-xl transition-all duration-200 group mb-1
-                        {% if selected_sector == sec %}
-                            bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/40
-                            {% if sec == 'INCOME' %}!text-black{% endif %}
-                        {% else %}
-                            hover:bg-white/40 dark:hover:bg-white/10 hover:translate-x-1 text-gray-600 dark:text-gray-400
-                        {% endif %}
-                        {% if user_sector == sec and selected_sector != sec %}
-                            border-2 border-[var(--accent)] text-[var(--accent)]
-                        {% endif %}
-                        ">
+                        {% if selected_sector == sec %} bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/40 {% if sec == 'INCOME' %}!text-black{% endif %}
+                        {% else %} hover:bg-white/40 dark:hover:bg-white/10 hover:translate-x-1 text-gray-600 dark:text-gray-400 {% endif %}
+                        {% if user_sector == sec and selected_sector != sec %} border-2 border-[var(--accent)] text-[var(--accent)] {% endif %}">
 
                         <i class="fas {% if sec == 'GOVERNING' %}fa-gavel{% elif sec == 'HEALTH' %}fa-heartbeat{% elif sec == 'DEVELOPMENT' %}fa-hard-hat{% elif sec == 'INCOME' %}fa-coins{% else %}fa-file-invoice-dollar{% endif %} w-6 text-center"></i>
                         <span class="font-bold ml-3 text-sm">
@@ -161,11 +115,8 @@
 
                         {% if user_sector == sec %}
                             <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                                {% if selected_sector == sec %}
-                                    <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
-                                {% else %}
-                                    <span class="text-[8px] font-black uppercase bg-[var(--accent)] text-white px-1.5 py-0.5 rounded">MY</span>
-                                {% endif %}
+                                {% if selected_sector == sec %} <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                                {% else %} <span class="text-[8px] font-black uppercase bg-[var(--accent)] text-white px-1.5 py-0.5 rounded">MY</span> {% endif %}
                             </div>
                         {% endif %}
                     </a>
@@ -262,7 +213,6 @@
                 </div>
 
                 <div class="glass-panel rounded-3xl flex-1 flex flex-col overflow-hidden relative border-t-2 border-t-[var(--accent)]">
-
                     <div class="p-5 flex flex-wrap justify-between items-center gap-4 border-b border-gray-200/30 dark:border-gray-700/30 shrink-0 bg-white/30 dark:bg-black/20">
                         <div>
                             <h2 class="text-lg font-bold text-gray-800 dark:text-white">ලිපි ගනුදෙනු වාර්තාව</h2>
@@ -335,9 +285,17 @@
                                     </td>
 
                                     <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
-                                        {% if letter.is_replied %}
+                                        {% if letter.status == 'REPLIED' %}
                                             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg">
                                                 <i class="fas fa-check-circle"></i> විසඳන ලදී
+                                            </span>
+                                        {% elif letter.status == 'NOT_REQUIRED' %}
+                                            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-400 bg-gray-100/50 dark:bg-gray-800/50 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-minus-circle"></i> අවශ්‍ය නොවේ
+                                            </span>
+                                        {% elif letter.status == 'OLD_RECORD' %}
+                                            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-900/30 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-archive"></i> පැරණි වාර්තාවක්
                                             </span>
                                         {% else %}
                                             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded-lg">
@@ -351,7 +309,7 @@
                                     </td>
 
                                     <td class="px-6 py-3 rounded-r-xl text-right border-r border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
-                                        {% if letter.is_replied %}
+                                        {% if letter.status != 'PENDING' %}
                                             <span class="text-[10px] font-bold uppercase opacity-40 select-none">Completed</span>
                                         {% elif letter.target_sector == user_sector %}
                                             <button onclick="openModal('replyModal{{ letter.pk }}')" class="glass-btn px-4 py-1.5 rounded-lg text-xs font-bold text-blue-500 hover:bg-blue-500 hover:text-white inline-flex">
@@ -385,7 +343,6 @@
                             {% else %}
                                 <button disabled class="glass-btn w-9 h-9 rounded-lg opacity-30 cursor-not-allowed"><i class="fas fa-chevron-left"></i></button>
                             {% endif %}
-
                             {% if letters.has_next %}
                                 <a href="?page={{ letters.next_page_number }}&sector={{ selected_sector }}&q={{ search_query }}&search_type={{ search_type }}" class="glass-btn w-9 h-9 rounded-lg hover:bg-[var(--accent)] hover:text-white"><i class="fas fa-chevron-right"></i></a>
                             {% else %}
@@ -400,7 +357,7 @@
     </div>
 
     {% for letter in letters %}
-        {% if letter.target_sector == user_sector and not letter.is_replied %}
+        {% if letter.target_sector == user_sector and letter.status == 'PENDING' %}
         <div id="replyModal{{ letter.pk }}" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm transition-all duration-300 opacity-0 pointer-events-none modal-overlay">
             <div class="glass w-full max-w-4xl rounded-3xl shadow-2xl transform scale-95 transition-all duration-300 max-h-[90vh] overflow-hidden flex flex-col border border-white/20">
 
@@ -427,137 +384,28 @@
                         </h6>
 
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                            <div class="col-span-1">
-                                {% if letter.attachment_1 %}
-                                    <div class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center relative overflow-hidden border-2 border-solid border-[var(--accent)] opacity-80 cursor-not-allowed group">
-                                        <img src="{{ letter.attachment_1.url }}" class="absolute inset-0 w-full h-full object-cover z-10 blur-[1px] group-hover:blur-none transition-all">
-                                        <div class="absolute inset-0 bg-black/40 z-20 flex flex-col items-center justify-center">
-                                            <i class="fas fa-lock text-white text-2xl mb-2"></i>
-                                            <span class="text-white text-[10px] font-bold uppercase tracking-wider">Admin Locked</span>
+                            {% for i in "123456" %}
+                                <div class="col-span-1">
+                                    {% if forloop.counter == 1 and letter.attachment_1 or forloop.counter == 2 and letter.attachment_2 or forloop.counter == 3 and letter.attachment_3 or forloop.counter == 4 and letter.attachment_4 or forloop.counter == 5 and letter.attachment_5 or forloop.counter == 6 and letter.attachment_6 %}
+                                        <div class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center relative overflow-hidden border-2 border-solid border-[var(--accent)] opacity-80 cursor-not-allowed group">
+                                            <div class="absolute inset-0 bg-black/40 z-20 flex flex-col items-center justify-center">
+                                                <i class="fas fa-lock text-white text-2xl mb-2"></i>
+                                                <span class="text-white text-[10px] font-bold uppercase tracking-wider">Admin Locked</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% else %}
-                                    <label class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all relative overflow-hidden group border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[var(--accent)]">
-                                        <i class="fas fa-cloud-upload-alt text-3xl opacity-40 mb-3 group-hover:scale-110 group-hover:text-[var(--accent)] transition-all"></i>
-                                        <span class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Page 1</span>
-                                        <input type="file" name="attachment_1" class="hidden new-file-input" onchange="previewFile(this)">
-                                        <img src="" class="absolute inset-0 w-full h-full object-cover hidden slot-preview z-10 bg-white dark:bg-gray-800">
-                                        <button type="button" class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden btn-clear z-20 hover:scale-110 transition-transform" onclick="clearPreview(event, this)">
-                                            <i class="fas fa-trash-alt text-xs"></i>
-                                        </button>
-                                    </label>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-span-1">
-                                {% if letter.attachment_2 %}
-                                    <div class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center relative overflow-hidden border-2 border-solid border-[var(--accent)] opacity-80 cursor-not-allowed group">
-                                        <img src="{{ letter.attachment_2.url }}" class="absolute inset-0 w-full h-full object-cover z-10 blur-[1px] group-hover:blur-none transition-all">
-                                        <div class="absolute inset-0 bg-black/40 z-20 flex flex-col items-center justify-center">
-                                            <i class="fas fa-lock text-white text-2xl mb-2"></i>
-                                            <span class="text-white text-[10px] font-bold uppercase tracking-wider">Admin Locked</span>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <label class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all relative overflow-hidden group border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[var(--accent)]">
-                                        <i class="fas fa-cloud-upload-alt text-3xl opacity-40 mb-3 group-hover:scale-110 group-hover:text-[var(--accent)] transition-all"></i>
-                                        <span class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Page 2</span>
-                                        <input type="file" name="attachment_2" class="hidden new-file-input" onchange="previewFile(this)">
-                                        <img src="" class="absolute inset-0 w-full h-full object-cover hidden slot-preview z-10 bg-white dark:bg-gray-800">
-                                        <button type="button" class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden btn-clear z-20 hover:scale-110 transition-transform" onclick="clearPreview(event, this)">
-                                            <i class="fas fa-trash-alt text-xs"></i>
-                                        </button>
-                                    </label>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-span-1">
-                                {% if letter.attachment_3 %}
-                                    <div class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center relative overflow-hidden border-2 border-solid border-[var(--accent)] opacity-80 cursor-not-allowed group">
-                                        <img src="{{ letter.attachment_3.url }}" class="absolute inset-0 w-full h-full object-cover z-10 blur-[1px] group-hover:blur-none transition-all">
-                                        <div class="absolute inset-0 bg-black/40 z-20 flex flex-col items-center justify-center">
-                                            <i class="fas fa-lock text-white text-2xl mb-2"></i>
-                                            <span class="text-white text-[10px] font-bold uppercase tracking-wider">Admin Locked</span>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <label class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all relative overflow-hidden group border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[var(--accent)]">
-                                        <i class="fas fa-cloud-upload-alt text-3xl opacity-40 mb-3 group-hover:scale-110 group-hover:text-[var(--accent)] transition-all"></i>
-                                        <span class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Page 3</span>
-                                        <input type="file" name="attachment_3" class="hidden new-file-input" onchange="previewFile(this)">
-                                        <img src="" class="absolute inset-0 w-full h-full object-cover hidden slot-preview z-10 bg-white dark:bg-gray-800">
-                                        <button type="button" class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden btn-clear z-20 hover:scale-110 transition-transform" onclick="clearPreview(event, this)">
-                                            <i class="fas fa-trash-alt text-xs"></i>
-                                        </button>
-                                    </label>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-span-1">
-                                {% if letter.attachment_4 %}
-                                    <div class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center relative overflow-hidden border-2 border-solid border-[var(--accent)] opacity-80 cursor-not-allowed group">
-                                        <img src="{{ letter.attachment_4.url }}" class="absolute inset-0 w-full h-full object-cover z-10 blur-[1px] group-hover:blur-none transition-all">
-                                        <div class="absolute inset-0 bg-black/40 z-20 flex flex-col items-center justify-center">
-                                            <i class="fas fa-lock text-white text-2xl mb-2"></i>
-                                            <span class="text-white text-[10px] font-bold uppercase tracking-wider">Admin Locked</span>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <label class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all relative overflow-hidden group border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[var(--accent)]">
-                                        <i class="fas fa-cloud-upload-alt text-3xl opacity-40 mb-3 group-hover:scale-110 group-hover:text-[var(--accent)] transition-all"></i>
-                                        <span class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Page 4</span>
-                                        <input type="file" name="attachment_4" class="hidden new-file-input" onchange="previewFile(this)">
-                                        <img src="" class="absolute inset-0 w-full h-full object-cover hidden slot-preview z-10 bg-white dark:bg-gray-800">
-                                        <button type="button" class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden btn-clear z-20 hover:scale-110 transition-transform" onclick="clearPreview(event, this)">
-                                            <i class="fas fa-trash-alt text-xs"></i>
-                                        </button>
-                                    </label>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-span-1">
-                                {% if letter.attachment_5 %}
-                                    <div class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center relative overflow-hidden border-2 border-solid border-[var(--accent)] opacity-80 cursor-not-allowed group">
-                                        <img src="{{ letter.attachment_5.url }}" class="absolute inset-0 w-full h-full object-cover z-10 blur-[1px] group-hover:blur-none transition-all">
-                                        <div class="absolute inset-0 bg-black/40 z-20 flex flex-col items-center justify-center">
-                                            <i class="fas fa-lock text-white text-2xl mb-2"></i>
-                                            <span class="text-white text-[10px] font-bold uppercase tracking-wider">Admin Locked</span>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <label class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all relative overflow-hidden group border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[var(--accent)]">
-                                        <i class="fas fa-cloud-upload-alt text-3xl opacity-40 mb-3 group-hover:scale-110 group-hover:text-[var(--accent)] transition-all"></i>
-                                        <span class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Page 5</span>
-                                        <input type="file" name="attachment_5" class="hidden new-file-input" onchange="previewFile(this)">
-                                        <img src="" class="absolute inset-0 w-full h-full object-cover hidden slot-preview z-10 bg-white dark:bg-gray-800">
-                                        <button type="button" class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden btn-clear z-20 hover:scale-110 transition-transform" onclick="clearPreview(event, this)">
-                                            <i class="fas fa-trash-alt text-xs"></i>
-                                        </button>
-                                    </label>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-span-1">
-                                {% if letter.attachment_6 %}
-                                    <div class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center relative overflow-hidden border-2 border-solid border-[var(--accent)] opacity-80 cursor-not-allowed group">
-                                        <img src="{{ letter.attachment_6.url }}" class="absolute inset-0 w-full h-full object-cover z-10 blur-[1px] group-hover:blur-none transition-all">
-                                        <div class="absolute inset-0 bg-black/40 z-20 flex flex-col items-center justify-center">
-                                            <i class="fas fa-lock text-white text-2xl mb-2"></i>
-                                            <span class="text-white text-[10px] font-bold uppercase tracking-wider">Admin Locked</span>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <label class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all relative overflow-hidden group border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[var(--accent)]">
-                                        <i class="fas fa-cloud-upload-alt text-3xl opacity-40 mb-3 group-hover:scale-110 group-hover:text-[var(--accent)] transition-all"></i>
-                                        <span class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Page 6</span>
-                                        <input type="file" name="attachment_6" class="hidden new-file-input" onchange="previewFile(this)">
-                                        <img src="" class="absolute inset-0 w-full h-full object-cover hidden slot-preview z-10 bg-white dark:bg-gray-800">
-                                        <button type="button" class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden btn-clear z-20 hover:scale-110 transition-transform" onclick="clearPreview(event, this)">
-                                            <i class="fas fa-trash-alt text-xs"></i>
-                                        </button>
-                                    </label>
-                                {% endif %}
-                            </div>
+                                    {% else %}
+                                        <label class="h-36 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all relative overflow-hidden group border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[var(--accent)]">
+                                            <i class="fas fa-cloud-upload-alt text-3xl opacity-40 mb-3 group-hover:scale-110 group-hover:text-[var(--accent)] transition-all"></i>
+                                            <span class="text-[10px] font-bold opacity-50 uppercase tracking-wider">Page {{ i }}</span>
+                                            <input type="file" name="attachment_{{ i }}" class="hidden new-file-input" onchange="previewFile(this)">
+                                            <img src="" class="absolute inset-0 w-full h-full object-cover hidden slot-preview z-10 bg-white dark:bg-gray-800">
+                                            <button type="button" class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden btn-clear z-20 hover:scale-110 transition-transform" onclick="clearPreview(event, this)">
+                                                <i class="fas fa-trash-alt text-xs"></i>
+                                            </button>
+                                        </label>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
                         </div>
 
                         <div class="mt-8 p-5 rounded-2xl glass flex items-start gap-4">
@@ -598,59 +446,35 @@
     </div>
 
     <script>
-        // --- 1. Live Date & Time ---
         function updateTime() {
             const now = new Date();
             const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-
             document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
             document.getElementById('liveDate').textContent = now.toLocaleDateString('si-LK', dateOptions);
         }
-        setInterval(updateTime, 1000);
-        updateTime();
+        setInterval(updateTime, 1000); updateTime();
 
-        // --- 2. Dark/Light Mode Logic ---
         const themeToggleBtn = document.getElementById('themeToggle');
         const html = document.documentElement;
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { html.classList.add('dark'); } else { html.classList.remove('dark'); }
+        themeToggleBtn.addEventListener('click', () => { html.classList.toggle('dark'); localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light'; });
 
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-        } else {
-            html.classList.remove('dark');
-        }
-
-        themeToggleBtn.addEventListener('click', () => {
-            html.classList.toggle('dark');
-            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
-        });
-
-        // --- 3. Modal Logic ---
         function openModal(id) {
             const modal = document.getElementById(id);
             if(modal) {
                 modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0', 'pointer-events-none');
-                    modal.querySelector('div').classList.remove('scale-95');
-                    modal.querySelector('div').classList.add('scale-100');
-                }, 10);
+                setTimeout(() => { modal.classList.remove('opacity-0', 'pointer-events-none'); modal.querySelector('div').classList.remove('scale-95'); modal.querySelector('div').classList.add('scale-100'); }, 10);
             }
         }
-
         function closeModal(id) {
             const modal = document.getElementById(id);
             if(modal) {
-                modal.classList.add('opacity-0', 'pointer-events-none');
-                modal.querySelector('div').classList.remove('scale-100');
-                modal.querySelector('div').classList.add('scale-95');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
+                modal.classList.add('opacity-0', 'pointer-events-none'); modal.querySelector('div').classList.remove('scale-100'); modal.querySelector('div').classList.add('scale-95');
+                setTimeout(() => { modal.classList.add('hidden'); }, 300);
             }
         }
 
-        // --- 4. File Preview Logic ---
         function previewFile(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -659,76 +483,42 @@
                 const btn = label.querySelector('.btn-clear');
                 const icon = label.querySelector('.fa-cloud-upload-alt');
                 const text = label.querySelector('span');
-
                 reader.onload = function(e) {
-                    img.src = e.target.result;
-                    img.classList.remove('hidden');
-                    btn.classList.remove('hidden');
-                    btn.classList.add('flex');
-                    if(icon) icon.classList.add('hidden');
-                    if(text) text.classList.add('hidden');
-                    label.classList.add('border-[var(--accent)]');
+                    img.src = e.target.result; img.classList.remove('hidden'); btn.classList.remove('hidden'); btn.classList.add('flex');
+                    if(icon) icon.classList.add('hidden'); if(text) text.classList.add('hidden'); label.classList.add('border-[var(--accent)]');
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
         function clearPreview(event, btn) {
-            event.preventDefault();
-            event.stopPropagation();
+            event.preventDefault(); event.stopPropagation();
             const label = btn.closest('label');
             const input = label.querySelector('input[type="file"]');
             const img = label.querySelector('.slot-preview');
             const icon = label.querySelector('.fa-cloud-upload-alt');
             const text = label.querySelector('span');
-
-            input.value = "";
-            img.src = "";
-            img.classList.add('hidden');
-            btn.classList.add('hidden');
-            btn.classList.remove('flex');
-            if(icon) icon.classList.remove('hidden');
-            if(text) text.classList.remove('hidden');
-            label.classList.remove('border-[var(--accent)]');
+            input.value = ""; img.src = ""; img.classList.add('hidden'); btn.classList.add('hidden'); btn.classList.remove('flex');
+            if(icon) icon.classList.remove('hidden'); if(text) text.classList.remove('hidden'); label.classList.remove('border-[var(--accent)]');
         }
 
-        // --- 5. Submit Logic ---
         let pendingForm = null;
         function validateUploadForm(event, form) {
             const newFiles = form.querySelectorAll('.new-file-input');
             let hasNewFile = false;
-            newFiles.forEach(input => {
-                if (input.files.length > 0) hasNewFile = true;
-            });
-            if (!hasNewFile) {
-                event.preventDefault();
-                pendingForm = form;
-                openModal('noImageWarningModal');
-                return false;
-            }
+            newFiles.forEach(input => { if (input.files.length > 0) hasNewFile = true; });
+            if (!hasNewFile) { event.preventDefault(); pendingForm = form; openModal('noImageWarningModal'); return false; }
             return true;
         }
+        function confirmNoImageSubmit() { if(pendingForm) pendingForm.submit(); }
 
-        function confirmNoImageSubmit() {
-            if(pendingForm) pendingForm.submit();
-        }
-
-        // --- 6. Search Bar Type Toggle (NEW) ---
         document.addEventListener('DOMContentLoaded', function() {
             const searchType = document.getElementById('userSearchType');
             const searchInput = document.getElementById('userSearchInput');
-
             if(searchType && searchInput) {
                 searchType.addEventListener('change', function() {
-                    if(this.value === 'date') {
-                        searchInput.type = 'date';
-                        searchInput.classList.remove('w-40');
-                        searchInput.classList.add('w-auto');
-                    } else {
-                        searchInput.type = 'text';
-                        searchInput.classList.add('w-40');
-                        searchInput.classList.remove('w-auto');
-                    }
+                    if(this.value === 'date') { searchInput.type = 'date'; searchInput.classList.remove('w-40'); searchInput.classList.add('w-auto'); }
+                    else { searchInput.type = 'text'; searchInput.classList.add('w-40'); searchInput.classList.remove('w-auto'); }
                 });
             }
         });

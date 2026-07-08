@@ -59,7 +59,8 @@ def sector_dashboard(request):
         )
 
     total_count = letters.count()
-    resolved_count = letters.filter(is_replied=True).count()
+    # CHANGED: Use status='REPLIED' instead of is_replied=True
+    resolved_count = letters.filter(status='REPLIED').count()
     pending_count = total_count - resolved_count
 
     paginator = Paginator(letters, 20)
@@ -70,9 +71,8 @@ def sector_dashboard(request):
         letter_id = request.POST.get('letter_id')
         reply_date = request.POST.get('reply_date')
 
-        letter = get_object_or_404(Letter, pk=letter_id, target_sector=user_sector) #check for problems this line
+        letter = get_object_or_404(Letter, pk=letter_id, target_sector=user_sector)
 
-        #Updated part 2026-01-28 3.14PM
         #Security: Ensure user owns this sector
         if letter.target_sector != user_sector:
             messages.error(request, "Access Denied: You cannot update letters from other sectors.")
@@ -81,14 +81,13 @@ def sector_dashboard(request):
         # Update Text Fields
         if reply_date:
             letter.replied_at = reply_date
-            letter.is_replied = True
+            # CHANGED: Update status instead of is_replied
+            letter.status = 'REPLIED'
 
         # Handle File Uploads (Slots 1-6)
-        # Iterate through attachment_1 to attachment_6
         files_uploaded = False
         for i in range(1, 7):
             field_name = f'attachment_{i}'
-            #Check if a file was sent for this specific slot
             if request.FILES.get(field_name):
                 setattr(letter, field_name, request.FILES.get(field_name))
                 files_uploaded = True
@@ -219,7 +218,8 @@ def custom_admin_letters(request):
         )
 
     total_letters = letters_list.count()
-    replied_letters = letters_list.filter(is_replied=True).count()
+    # CHANGED: Use status='REPLIED' instead of is_replied=True
+    replied_letters = letters_list.filter(status='REPLIED').count()
     pending_letters = total_letters - replied_letters
 
     paginator = Paginator(letters_list, 20)
@@ -455,7 +455,6 @@ def export_letters_excel(request):
         'භාරගත් නිලධාරී (Accepting Officer)',
         'තත්වය (Status)',
         'පිළිතුරු දුන් දිනය (Replied Date)'
-
     ]
 
     for col_num, header_title in enumerate(headers, 1):
@@ -470,8 +469,15 @@ def export_letters_excel(request):
     for letter in letters:
         start_row += 1
 
-        #Translate status
-        status = "පිළිතුරු යොමු කර ඇත" if letter.is_replied else "විමර්ශනය වෙමින් පවතී "
+        # CHANGED: Excel export translation for all 4 statuses
+        if letter.status == 'REPLIED':
+            status = "පිළිතුරු යොමු කර ඇත"
+        elif letter.status == 'NOT_REQUIRED':
+            status = "අවශ්‍ය නොවේ"
+        elif letter.status == 'OLD_RECORD':
+            status = "පැරණි වාර්තාවක්"
+        else:
+            status = "විමර්ශනය වෙමින් පවතී"
 
         #Translate Sector
         sector_sinhala = sector_map.get(letter.target_sector, letter.target_sector)
@@ -535,4 +541,3 @@ def export_letters_excel(request):
 
     wb.save(response)
     return response
-#test
