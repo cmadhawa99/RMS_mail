@@ -82,7 +82,7 @@ class LetterForm(forms.ModelForm):
         model = Letter
         # ADDED 'is_replied' and 'replied_at' here
         fields = [
-            'serial_number', 'date_received', 'sender_name', 'sender_address',
+            'serial_number', 'date_received', 'sender_details',
             'letter_type', 'target_sector', 'administrated_by',
             'accepting_officer_id', 'status', 'replied_at',
             'attachment_1', 'attachment_2', 'attachment_3', 'attachment_4',
@@ -90,8 +90,7 @@ class LetterForm(forms.ModelForm):
         ]
         labels = {
             'serial_number': 'Serial Number',
-            'sender_name': 'Sender Name',
-            'sender_address': 'Sender Address',
+            'sender_details': 'Sender Details (Name, Org, Address)',
             'letter_type': 'Subject / Type',
             'target_sector': 'Assign to Sector',
             'administrated_by': 'Administrated By',
@@ -106,8 +105,7 @@ class LetterForm(forms.ModelForm):
         }
 
         widgets = {
-            'sender_name': forms.Textarea(attrs={'rows': 2, 'placeholder': 'Enter Name or Organization'}),
-            'sender_address': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter Full Address'}),
+            'sender_details': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter full sender name, organization, and address details...'}),
             'letter_type': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter Subject Description'}),
         }
 

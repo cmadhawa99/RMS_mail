@@ -53,7 +53,7 @@ def sector_dashboard(request):
         else:
             letters = letters.filter(
             Q(serial_number__icontains=search_query) |
-            Q(sender_name__icontains=search_query) |
+            Q(sender_details__icontains=search_query) |
             Q(letter_type__icontains=search_query)
 
         )
@@ -212,7 +212,7 @@ def custom_admin_letters(request):
         else:
             letters_list = letters_list.filter(
             Q(serial_number__icontains=search_query) |
-            Q(sender_name__icontains=search_query) |
+            Q(sender_details__icontains=search_query) |
             Q(letter_type__icontains=search_query) |
             Q(target_sector__icontains=search_query)
         )
@@ -375,7 +375,7 @@ def export_letters_excel(request):
     if search_query:
         letters = letters.filter(
             Q(serial_number__icontains=search_query) |
-            Q(sender_name__icontains=search_query) |
+            Q(sender_details__icontains=search_query) |
             Q(letter_type__icontains=search_query) |
             Q(target_sector__icontains=search_query)
         )
@@ -448,7 +448,7 @@ def export_letters_excel(request):
     headers = [
         'ලිපි අංකය (Serial)',
         'ලැබුණු දිනය (Date)',
-        'එවූ අයගේ නම (Sender)',
+        'එවූ අයගේ විස්තර (Sender Details)',
         'ලිපියේ වර්ගය (Type)',
         'අංශය (Sector)',
         'පරිපාලනය කළේ (Admin By)',
@@ -493,7 +493,7 @@ def export_letters_excel(request):
         row_data = [
             letter.serial_number,
             letter.date_received,
-            letter.sender_name,
+            letter.sender_details,
             letter.letter_type,
             sector_sinhala,
             admin_by,

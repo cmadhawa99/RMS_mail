@@ -79,8 +79,7 @@ class Letter(models.Model):
 
     serial_number = models.IntegerField(unique=True, verbose_name="අනු අංකය")
     date_received = models.DateField(blank=True, null=True)
-    sender_name = models.CharField(max_length=255, blank=True, null=True)
-    sender_address = models.TextField(blank=True, null=True)
+    sender_details = models.TextField(blank=True, null=True, verbose_name="Sender Details")
     letter_type = models.CharField(max_length=255, blank=True, null=True)
     accepting_officer_id = models.CharField(max_length=50, blank=True, null=True)
     target_sector = models.CharField(max_length=20, choices=SECTOR_CHOICES, blank=True, null=True)

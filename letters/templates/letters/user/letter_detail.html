@@ -154,25 +154,17 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="glass-panel p-5 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors">
-                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">ලිපිය එවූ අය (Sender)</div>
-                                <div class="flex items-start gap-3 mt-2">
-                                    <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center shrink-0">
-                                        <i class="fas fa-user-tag text-xs"></i>
-                                    </div>
-                                    <div class="font-bold text-lg text-gray-700 dark:text-gray-200 break-words">{{ letter.sender_name }}</div>
-                                </div>
-                            </div>
 
-                            <div class="glass-panel p-5 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors">
-                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">ලිපිනය (Address)</div>
-                                <div class="flex items-start gap-3 mt-2">
-                                    <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-500 flex items-center justify-center shrink-0">
-                                        <i class="fas fa-map-marker-alt text-xs"></i>
-                                    </div>
-                                    <div class="font-bold text-sm text-gray-600 dark:text-gray-300 break-words leading-relaxed">{{ letter.sender_address }}</div>
+                            <div class="glass-panel p-5 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors md:col-span-2">
+                            <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">ලිපිය එවූ අයගේ විස්තර (Sender Details)</div>
+                            <div class="flex items-start gap-3 mt-2">
+                                <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-address-card text-xs"></i>
                                 </div>
+                                <div class="font-bold text-sm text-gray-700 dark:text-gray-200 break-words leading-relaxed">{{ letter.sender_details|linebreaksbr }}</div>
                             </div>
+                        </div>
+
                         </div>
 
                         {% if letter.status == 'REPLIED' %}

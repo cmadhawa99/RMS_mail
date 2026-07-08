@@ -21,9 +21,9 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-4 mb-8">
-                <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Sender" %}</div>
-                    <div class="font-bold text-gray-800 dark:text-gray-100 text-lg">{{ letter.sender_name }}</div>
+                <div class="col-span-1 sm:col-span-2">
+                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Sender Details" %}</div>
+                    <div class="font-bold text-gray-800 dark:text-gray-100 text-lg leading-relaxed">{{ letter.sender_details|linebreaksbr }}</div>
                 </div>
                 <div>
                     <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Date Received" %}</div>
@@ -40,10 +40,6 @@
                 <div class="col-span-1 sm:col-span-2">
                     <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Subject / Type" %}</div>
                     <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.letter_type }}</div>
-                </div>
-                <div class="col-span-1 sm:col-span-2">
-                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Address" %}</div>
-                    <p class="font-medium text-gray-600 dark:text-gray-300 leading-relaxed">{{ letter.sender_address|linebreaksbr }}</p>
                 </div>
             </div>
 

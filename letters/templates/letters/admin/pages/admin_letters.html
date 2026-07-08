@@ -98,9 +98,11 @@
                 <td class="px-4 py-3 bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-gray-200 dark:border-transparent group-hover:border-transparent font-bold text-gray-700 dark:text-gray-200 text-sm">
                     {{ letter.letter_type|truncatechars:30 }}
                 </td>
+
                 <td class="px-4 py-3 bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-gray-200 dark:border-transparent group-hover:border-transparent text-sm opacity-80">
-                    {{ letter.sender_name|truncatechars:20 }}
+                    {{ letter.sender_details|truncatechars:30 }}
                 </td>
+
                 <td class="px-4 py-3 bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-gray-200 dark:border-transparent group-hover:border-transparent text-xs font-bold opacity-60">
                     {{ letter.date_received }}
                 </td>
