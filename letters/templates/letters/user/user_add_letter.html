@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="si" dir="ltr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Noto Sans Sinhala"', 'sans-serif'], },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glass { @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl; }
+            .glass-panel { @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-lg transition-all duration-300; }
+            .glass-btn { @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-md backdrop-blur-sm hover:shadow-lg hover:border-white/40; }
+        }
+
+        body {
+            background:
+                radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(var(--accent-rgb), 0.10) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(var(--accent-rgb), 0.10) 0px, transparent 50%),
+                linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+            min-height: 100vh;
+        }
+        .dark body {
+            background:
+                radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(var(--accent-rgb), 0.2) 0px, transparent 50%),
+                linear-gradient(to bottom right, #111827, #1f2937);
+        }
+
+        /* --- INPUT STYLES --- */
+        input[type="text"], input[type="number"], select, input[type="date"], input[type="datetime-local"], textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #111827;
+            font-weight: 600;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s;
+            resize: none;
+        }
+        input:focus, select:focus, textarea:focus {
+            background-color: white;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.1);
+        }
+        .dark input[type="text"], .dark input[type="number"], .dark select, .dark textarea, .dark input[type="date"] {
+            background-color: rgba(30, 41, 59, 0.6);
+            color: white;
+            border-color: rgba(255,255,255,0.1);
+        }
+        .dark input:focus, .dark select:focus, .dark textarea:focus {
+            background-color: rgba(15, 23, 42, 0.8);
+            border-color: var(--accent);
+            box-shadow: none;
+        }
+        .dark select option { background-color: #1f2937; color: white; }
+    </style>
+</head>
+
+{% if selected_sector == 'GOVERNING' %}     <style>:root{ --accent: #d99694; --accent-rgb: 217, 150, 148; }</style>
+{% elif selected_sector == 'HEALTH' %}      <style>:root{ --accent: #b3a2c7; --accent-rgb: 179, 162, 199; }</style>
+{% elif selected_sector == 'DEVELOPMENT' %} <style>:root{ --accent: #e46c0a; --accent-rgb: 228, 108, 10; }</style>
+{% elif selected_sector == 'INCOME' %}      <style>:root{ --accent: #ffd700; --accent-rgb: 255, 215, 0; }</style>
+{% elif selected_sector == 'ACCOUNTS' %}    <style>:root{ --accent: #95b3d7; --accent-rgb: 149, 179, 215; }</style>
+{% else %}                                  <style>:root{ --accent: #3b82f6; --accent-rgb: 59, 130, 246; }</style>
+{% endif %}
+
+<body class="text-gray-700 dark:text-gray-200 py-10 px-4 selection:bg-[var(--accent)] selection:text-white">
+
+    <button id="themeToggle" class="fixed top-6 right-6 z-50 glass-btn w-12 h-12 rounded-full text-gray-600 dark:text-yellow-400 bg-white/50 hover:bg-white" title="Toggle Theme">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+
+    <div class="max-w-5xl mx-auto">
+        <div class="flex items-center justify-between mb-6">
+            <h4 class="text-2xl font-black text-[var(--accent)] flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[var(--accent)] text-white flex items-center justify-center text-lg shadow-lg">
+                    <i class="fas fa-plus"></i>
+                </div>
+                {{ title }}
+            </h4>
+            <a href="{% url 'sector_dashboard' %}" class="glass-btn px-4 py-2 rounded-xl text-xs font-bold opacity-60 hover:opacity-100 uppercase tracking-wider">
+                <i class="fas fa-arrow-left mr-2"></i> Cancel
+            </a>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" id="letterForm" class="space-y-6">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm font-bold flex items-center gap-3">
+                    <i class="fas fa-exclamation-triangle text-xl"></i>
+                    <div>
+                        <div class="uppercase tracking-wider text-[10px] opacity-70">Error</div>
+                        Please correct the highlighted fields below.
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="glass-panel rounded-3xl p-8 border-t-4 border-t-[var(--accent)]">
+                <h6 class="text-xs font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i> Basic Information
+                </h6>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 gap-y-8">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Serial Number <span class="text-red-500">*</span></label>
+                        <div class="relative">{{ form.serial_number }}</div>
+                        <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.serial_number.errors.0 }}</div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Date Received</label>
+                        <div class="relative">{{ form.date_received }}</div>
+                        <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.date_received.errors.0 }}</div>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Sender Details (Name & Address)</label>
+                        <div class="relative">{{ form.sender_details }}</div>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Subject / Type</label>
+                        <div class="relative">{{ form.letter_type }}</div>
+                    </div>
+
+                  <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">
+                            Assign Sector <i class="fas fa-lock ml-1 text-[var(--accent)]"></i>
+                        </label>
+
+                        <div class="relative pointer-events-none opacity-70">
+                            {{ form.target_sector }}
+                        </div>
+
+                        <div class="text-[9px] font-bold text-[var(--accent)] mt-1.5 pl-1 uppercase tracking-wider">
+                            Locked to your sector
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Admin Officer</label>
+                        <div class="relative">{{ form.administrated_by }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-3xl p-8">
+                <h6 class="text-xs font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
+                    <i class="fas fa-paperclip"></i> Attachments
+                </h6>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    {% for i in "123456" %}
+                        {% with field_name="attachment_"|add:i %}
+
+                        <div class="relative group aspect-[3/4]">
+                            <label for="id_{{ field_name }}" class="absolute inset-0 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600" style="hover:border-color: var(--accent);" id="label_{{ field_name }}">
+                                <div class="text-center p-2" id="placeholder_{{ field_name }}">
+                                    <i class="fas fa-plus text-2xl text-gray-300 mb-2 transition-colors group-hover:text-[var(--accent)]"></i>
+                                    <div class="text-[9px] font-bold opacity-40 uppercase">Page {{ i }}</div>
+                                </div>
+                                <img id="preview_{{ field_name }}" src="" class="absolute inset-0 w-full h-full object-cover hidden z-10 bg-white dark:bg-gray-800">
+                            </label>
+
+                            <button type="button" class="absolute -top-2 -right-2 w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hidden z-20 hover:scale-110 transition-transform" id="btn_clear_{{ field_name }}" onclick="requestClearImage('{{ field_name }}')">
+                                <i class="fas fa-times text-[10px]"></i>
+                            </button>
+
+                            <input type="file" name="{{ field_name }}" id="id_{{ field_name }}" class="hidden" accept="image/*" onchange="previewImage(this, '{{ field_name }}')">
+                        </div>
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 pb-12">
+                <div class="flex items-start gap-3 px-2">
+                    <input type="checkbox" id="safetyCheck" required class="mt-1 w-4 h-4 text-[var(--accent)] rounded cursor-pointer">
+                    <label for="safetyCheck" class="text-xs font-bold text-gray-500 dark:text-gray-400 select-none cursor-pointer">
+                        I confirm that the details entered above are accurate.
+                    </label>
+                </div>
+
+                <div class="flex gap-4 w-full sm:w-auto">
+                    <button type="submit" class="glass-btn flex-1 sm:flex-none px-8 py-3.5 rounded-xl bg-[var(--accent)] !text-white shadow-xl hover:shadow-[var(--accent)]/50 hover:-translate-y-1 transition-all text-xs font-black uppercase tracking-widest border-none">
+                        <i class="fas fa-save mr-2"></i> Save Record
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hidden inputs to set default status values as users aren't meant to override them -->
+            <div class="hidden">
+                {{ form.status }}
+                {{ form.replied_at }}
+            </div>
+        </form>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity opacity-0 pointer-events-none">
+        <div class="glass p-8 rounded-3xl shadow-2xl text-center max-w-sm transform scale-95 transition-transform duration-300 border-t border-white/20">
+            <div id="modalIconContainer" class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 bg-gray-100">
+                <i id="modalIcon" class="fas"></i>
+            </div>
+            <h4 id="modalTitle" class="text-xl font-black mb-2 text-gray-800 dark:text-white">Title</h4>
+            <p id="modalMessage" class="opacity-70 text-xs font-bold leading-relaxed mb-6">Message</p>
+            <div class="flex justify-center gap-3">
+                <button type="button" onclick="hideModal()" class="glass-btn px-6 py-2 rounded-xl font-bold opacity-60 text-xs uppercase hover:opacity-100">Cancel</button>
+                <button type="button" id="modalConfirmBtn" class="glass-btn px-6 py-2 rounded-xl text-white text-xs uppercase border-none font-bold">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Logic
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+        themeToggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+        });
+
+        // Modal Logic
+        let pendingAction = null;
+        const modal = document.getElementById('confirmModal');
+        const modalContainer = modal.querySelector('div');
+
+        function showModal(title, message, theme, callback) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            const icon = document.getElementById('modalIcon');
+            const iconCont = document.getElementById('modalIconContainer');
+            const btn = document.getElementById('modalConfirmBtn');
+            if(theme === 'danger') {
+                icon.className = 'fas fa-trash-alt text-red-500';
+                iconCont.className = 'w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 bg-red-100 dark:bg-red-900/30';
+                btn.className = 'glass-btn px-6 py-2 rounded-xl bg-red-500 text-white text-xs uppercase border-none font-bold hover:bg-red-600';
+            } else {
+                icon.className = 'fas fa-check-circle text-emerald-500';
+                iconCont.className = 'w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 bg-emerald-100 dark:bg-emerald-900/30';
+                btn.className = 'glass-btn px-6 py-2 rounded-xl bg-[var(--accent)] text-white text-xs uppercase border-none font-bold';
+            }
+            pendingAction = callback;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContainer.classList.remove('scale-95');
+                modalContainer.classList.add('scale-100');
+            }, 10);
+        }
+        function hideModal() {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalContainer.classList.remove('scale-100');
+            modalContainer.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        document.getElementById('modalConfirmBtn').addEventListener('click', function() {
+            if(pendingAction) pendingAction();
+            hideModal();
+        });
+
+        // Image Handling Logic
+        function setImageState(fieldName, src) {
+            document.getElementById('preview_' + fieldName).src = src;
+            document.getElementById('preview_' + fieldName).classList.remove('hidden');
+            document.getElementById('placeholder_' + fieldName).classList.add('hidden');
+            document.getElementById('btn_clear_' + fieldName).classList.remove('hidden');
+            document.getElementById('label_' + fieldName).classList.remove('border-dashed');
+            document.getElementById('label_' + fieldName).style.borderColor = 'var(--accent)';
+            document.getElementById('label_' + fieldName).style.borderStyle = 'solid';
+        }
+        function resetImageState(fieldName) {
+            document.getElementById('preview_' + fieldName).src = "";
+            document.getElementById('preview_' + fieldName).classList.add('hidden');
+            document.getElementById('placeholder_' + fieldName).classList.remove('hidden');
+            document.getElementById('btn_clear_' + fieldName).classList.add('hidden');
+            document.getElementById('label_' + fieldName).classList.add('border-dashed');
+            document.getElementById('label_' + fieldName).style.borderColor = '';
+            document.getElementById('label_' + fieldName).style.borderStyle = '';
+        }
+        function previewImage(input, fieldName) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    setImageState(fieldName, e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function requestClearImage(fieldName) {
+            showModal("Remove Page?", "Are you sure you want to remove this scanned page?", "danger", function() {
+                const input = document.getElementById('id_' + fieldName);
+                input.value = "";
+                resetImageState(fieldName);
+            });
+        }
+
+        document.getElementById('letterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showModal("Save Changes?", "You are about to save this letter. You will not be able to edit these details once submitted.", "success", function() {
+                document.getElementById('letterForm').submit();
+            });
+        });
+    </script>
+</body>
+</html>

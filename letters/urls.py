@@ -15,7 +15,7 @@ urlpatterns = [
 
     # --- PUBLIC PORTAL ---
     path('', views.sector_dashboard, name='sector_dashboard'),
-    path('letter/<path:pk>/', views.letter_detail, name='letter_detail'),
+    path('dashboard/add/', views.user_add_letter, name='user_add_letter'),
     path('letter/<path:pk>/', views.letter_detail, name='letter_detail'),
 
     # --- CUSTOM ADMIN PANEL ---

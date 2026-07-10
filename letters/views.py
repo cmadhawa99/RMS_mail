@@ -118,6 +118,41 @@ def sector_dashboard(request):
 
 @never_cache
 @login_required
+def user_add_letter(request):
+    if request.user.is_superuser:
+        return redirect('add_letter')
+
+    try:
+        user_profile = request.user.sectorprofile
+        user_sector = user_profile.sector
+    except SectorProfile.DoesNotExist:
+        user_sector = "NONE"
+
+    if request.method == 'POST':
+
+        post_data = request.POST.copy()
+        post_data['target_sector'] = user_sector
+
+        form = LetterForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New letter added successfully.")
+            return redirect('sector_dashboard')
+    else:
+        form = LetterForm(initial={'target_sector': user_sector})
+
+    return render(request, 'letters/user/user_add_letter.html', {
+        'form': form,
+        'title': 'නව ලිපියක් ඇතුලත් කරන්න (Add New Letter)',
+        'selected_sector': user_sector,
+        'user_sector': user_sector
+
+    })
+
+
+
+@never_cache
+@login_required
 def letter_detail(request, pk):
     letter = get_object_or_404(Letter, pk=pk)
 
