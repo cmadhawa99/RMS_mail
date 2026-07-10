@@ -4,7 +4,7 @@ from django.db.models import Q
 from .models import Letter, SectorProfile
 from django.views.decorators.cache import never_cache  # <--- CRITICAL SECURITY TOOL
 from django.core.paginator import Paginator
-from .forms import UserForm, LetterForm
+from .forms import UserForm, LetterForm, UserLetterForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import logout  # <--- Needed for logout
@@ -67,41 +67,6 @@ def sector_dashboard(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    if request.method == 'POST':
-        letter_id = request.POST.get('letter_id')
-        reply_date = request.POST.get('reply_date')
-
-        letter = get_object_or_404(Letter, pk=letter_id, target_sector=user_sector)
-
-        #Security: Ensure user owns this sector
-        if letter.target_sector != user_sector:
-            messages.error(request, "Access Denied: You cannot update letters from other sectors.")
-            return redirect(f"{request.path}?sector={selected_sector}&page={page_obj.number}")
-
-        # Update Text Fields
-        if reply_date:
-            letter.replied_at = reply_date
-            # CHANGED: Update status instead of is_replied
-            letter.status = 'REPLIED'
-
-        # Handle File Uploads (Slots 1-6)
-        files_uploaded = False
-        for i in range(1, 7):
-            field_name = f'attachment_{i}'
-            if request.FILES.get(field_name):
-                setattr(letter, field_name, request.FILES.get(field_name))
-                files_uploaded = True
-        letter.save()
-
-        #Success Message
-        msg = f"letter #{letter.serial_number} updated successfully"
-        if files_uploaded:
-            msg += " (Documents uploaded)"
-
-        messages.success(request, msg)
-
-        return redirect(f"{request.path}?sector={selected_sector}&page={page_obj.number}")
-
     context = {
         'user_sector': user_sector,
         'selected_sector': selected_sector,
@@ -133,13 +98,13 @@ def user_add_letter(request):
         post_data = request.POST.copy()
         post_data['target_sector'] = user_sector
 
-        form = LetterForm(request.POST, request.FILES)
+        form = UserLetterForm(post_data, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "New letter added successfully.")
             return redirect('sector_dashboard')
     else:
-        form = LetterForm(initial={'target_sector': user_sector})
+        form = UserLetterForm(initial={'target_sector': user_sector})
 
     return render(request, 'letters/user/user_add_letter.html', {
         'form': form,
@@ -147,6 +112,46 @@ def user_add_letter(request):
         'selected_sector': user_sector,
         'user_sector': user_sector
 
+    })
+
+@never_cache
+@login_required
+def user_edit_letter(request, pk):
+    if request.user.is_superuser:
+        return redirect('edit_letter', pk=pk)
+
+    try:
+        user_profile = request.user.sectorprofile
+        user_sector = user_profile.sector
+    except SectorProfile.DoesNotExist:
+        user_sector = "NONE"
+
+    letter = get_object_or_404(Letter, pk=pk)
+
+
+    if letter.target_sector != user_sector:
+        messages.error(request, "Access Denied: You cannot edit letters from other sectors.")
+        return redirect('sector_dashboard')
+
+    if request.method == 'POST':
+        post_data = request.POST.copy()
+        post_data['target_sector'] = user_sector
+
+        form = UserLetterForm(post_data, request.FILES, instance=letter)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Letter #{letter.serial_number} updated successfully.")
+            return redirect('sector_dashboard')
+
+    else:
+        form = UserLetterForm(instance=letter)
+
+    return render(request, 'letters/user/user_edit_letter.html', {
+        'form': form,
+        'title': 'ලිපිය යාවත්කාලීන කරන්න (Edit Letter)',
+        'selected_sector': user_sector,
+        'user_sector': user_sector,
+        'letter': letter
     })
 
 

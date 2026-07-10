@@ -124,3 +124,71 @@ class LetterForm(forms.ModelForm):
                 raise forms.ValidationError(f"Serial Number '{serial_number}' is already in use.")
 
         return serial_number
+
+
+class UserLetterForm(forms.ModelForm):
+    class Meta:
+        model = Letter
+        fields = [
+            'serial_number', 'date_received', 'sender_details',
+            'letter_type', 'target_sector', 'administrated_by',
+            'status', 'replied_at',
+            'attachment_1', 'attachment_2', 'attachment_3', 'attachment_4',
+            'attachment_5', 'attachment_6'
+        ]
+
+        labels = {
+            'serial_number': 'Serial Number',
+            'sender_details': 'Sender Details',
+            'letter_type': 'Subject / Type',
+            'replied_at': 'Reply Date',
+            'status': 'Letter Status',
+        }
+        widgets = {
+            'sender_details': forms.Textarea(attrs={'rows': 3}),
+            'letter_type': forms.Textarea(attrs={'rows': 2}),
+            'date_received': forms.DateInput(attrs={'type': 'date'}),
+            'replied_at': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['status'].choices = [
+            ('PENDING', 'Pending'),
+            ('REPLIED', 'Replied'),
+            ('NOT_REQUIRED', 'Not Required'),
+        ]
+
+        compulsory_fields = ['serial_number', 'date_received', 'sender_details', 'letter_type']
+        for field in compulsory_fields:
+            self.fields[field].required = True
+
+        non_compulsory = ['replied_at', 'administrated_by', 'status']
+        for field in non_compulsory:
+            self.fields[field].required = False
+
+        if self.instance and self.instance.pk:
+            fields_to_lock = ['serial_number', 'date_received', 'sender_details', 'letter_type', 'administrated_by']
+            for field_name in fields_to_lock:
+                val = getattr(self.instance, field_name)
+                if val:
+                    self.fields[field_name].widget.attrs['readonly'] = True
+                    self.fields[field_name].widget.attrs[
+                        'style'] = 'pointer-events: none; opacity: 0.6; background-color: rgba(156, 163, 175, 0.2);'
+
+
+    def clean_serial_number(self):
+        serial_number = self.cleaned_data.get('serial_number')
+
+        if self.instance.pk:
+            if self.instance.serial_number != serial_number:
+                raise forms.ValidationError(
+                    "Security Alert: You cannot modify the serial number of an existing record.")
+
+            else:
+                if Letter.objects.filter(serial_number=serial_number).exists():
+                    raise forms.ValidationError(f"Serial Number '{serial_number}' already exists in the system.")
+
+
+        return serial_number
