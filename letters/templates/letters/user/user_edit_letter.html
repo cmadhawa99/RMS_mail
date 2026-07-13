@@ -81,6 +81,11 @@
 
 <body class="text-gray-700 dark:text-gray-200 py-10 px-4 selection:bg-[var(--accent)] selection:text-white">
 
+    <button id="themeToggle" class="fixed top-6 right-6 z-50 glass-btn w-12 h-12 rounded-full text-gray-600 dark:text-yellow-400 bg-white/50 hover:bg-white" title="Toggle Theme">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+
     <div class="max-w-5xl mx-auto">
         <div class="flex items-center justify-between mb-6">
             <h4 class="text-2xl font-black text-[var(--accent)] flex items-center gap-3">
@@ -98,12 +103,24 @@
             {% csrf_token %}
 
             {% if form.errors %}
-                <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm font-bold flex items-center gap-3">
-                    <i class="fas fa-exclamation-triangle text-xl"></i>
-                    <div>
-                        <div class="uppercase tracking-wider text-[10px] opacity-70">Error</div>
-                        Please correct the highlighted fields below.
+                <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm font-bold flex flex-col gap-3 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-exclamation-triangle text-xl"></i>
+                        <div>
+                            <div class="uppercase tracking-wider text-[10px] opacity-70">Error</div>
+                            Please correct the highlighted fields below:
+                        </div>
                     </div>
+                    <ul class="list-disc list-inside text-xs opacity-90 ml-8">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             {% endif %}
 
@@ -116,18 +133,30 @@
                     <div>
                         <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Serial Number <span class="text-red-500">*</span></label>
                         <div class="relative">{{ form.serial_number }}</div>
+                        {% if form.serial_number.errors %}
+                            <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.serial_number.errors.0 }}</div>
+                        {% endif %}
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Date Received</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Date Received <span class="text-red-500">*</span></label>
                         <div class="relative">{{ form.date_received }}</div>
+                        {% if form.date_received.errors %}
+                            <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.date_received.errors.0 }}</div>
+                        {% endif %}
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Sender Details</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Sender Details <span class="text-red-500">*</span></label>
                         <div class="relative">{{ form.sender_details }}</div>
+                        {% if form.sender_details.errors %}
+                            <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.sender_details.errors.0 }}</div>
+                        {% endif %}
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Subject / Type</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Subject / Type <span class="text-red-500">*</span></label>
                         <div class="relative">{{ form.letter_type }}</div>
+                        {% if form.letter_type.errors %}
+                            <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.letter_type.errors.0 }}</div>
+                        {% endif %}
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Assign Sector <i class="fas fa-lock ml-1 text-[var(--accent)]"></i></label>
@@ -136,26 +165,14 @@
                     <div>
                         <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Admin Officer</label>
                         <div class="relative">{{ form.administrated_by }}</div>
+                        {% if form.administrated_by.errors %}
+                            <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.administrated_by.errors.0 }}</div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
 
-            <div class="glass-panel rounded-3xl p-8 bg-[var(--accent)]/5 border-[var(--accent)]/20">
-                <h6 class="text-xs font-black uppercase tracking-widest text-[var(--accent)] mb-6 flex items-center gap-2">
-                    <i class="fas fa-bolt"></i> Update Status
-                </h6>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Letter Status</label>
-                        <div class="relative">{{ form.status }}</div>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Reply Date</label>
-                        <div class="relative">{{ form.replied_at }}</div>
-                    </div>
-                </div>
-            </div>
-
+            <!-- ATTACHMENTS PANEL -->
             <div class="glass-panel rounded-3xl p-8">
                 <h6 class="text-xs font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
                     <i class="fas fa-paperclip"></i> Attachments
@@ -166,6 +183,7 @@
                         {% with field_name="attachment_"|add:i %}
                         <div class="relative group aspect-[3/4]">
 
+                            <!-- Check if this specific slot already has an image from backend -->
                             {% if i == "1" and letter.attachment_1 or i == "2" and letter.attachment_2 or i == "3" and letter.attachment_3 or i == "4" and letter.attachment_4 or i == "5" and letter.attachment_5 or i == "6" and letter.attachment_6 %}
                                 <div class="absolute inset-0 glass-panel rounded-2xl flex flex-col items-center justify-center overflow-hidden border-2 border-solid border-gray-400 opacity-80 cursor-not-allowed">
                                     <div class="absolute inset-0 bg-black/40 z-20 flex flex-col items-center justify-center">
@@ -193,6 +211,31 @@
                 </div>
             </div>
 
+            <!-- STATUS & ACTION PANEL -->
+            <div class="glass-panel rounded-3xl p-8 bg-[var(--accent)]/5 border-[var(--accent)]/20">
+                <h6 class="text-xs font-black uppercase tracking-widest text-[var(--accent)] mb-6 flex items-center gap-2">
+                    <i class="fas fa-bolt"></i> Update Status
+                </h6>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Letter Status</label>
+                        <div class="relative">{{ form.status }}</div>
+                    </div>
+                    <div>
+                        <label id="replyDateLabel" class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">
+                            Reply Date <span id="replyDateAsterisk" class="text-red-500 hidden">*</span>
+                        </label>
+                        <div class="relative">{{ form.replied_at }}</div>
+                    </div>
+                </div>
+
+                <!-- WARNING MESSAGE -->
+                <div class="mt-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-bold flex items-center gap-3">
+                    <i class="fas fa-lock text-lg"></i>
+                    <span>When this letter is updated, it wil be completely locked</span>
+                </div>
+            </div>
+
             <div class="flex flex-col sm:flex-row items-center justify-end gap-6 pt-4 pb-12">
                 <div class="flex gap-4 w-full sm:w-auto">
                     <button type="submit" class="glass-btn flex-1 sm:flex-none px-8 py-3.5 rounded-xl bg-[var(--accent)] !text-white shadow-xl hover:shadow-[var(--accent)]/50 hover:-translate-y-1 transition-all text-xs font-black uppercase tracking-widest border-none">
@@ -203,24 +246,110 @@
         </form>
     </div>
 
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity opacity-0 pointer-events-none">
+        <div class="glass p-8 rounded-3xl shadow-2xl text-center max-w-sm transform scale-95 transition-transform duration-300 border-t border-white/20">
+            <div id="modalIconContainer" class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 bg-gray-100">
+                <i id="modalIcon" class="fas"></i>
+            </div>
+            <h4 id="modalTitle" class="text-xl font-black mb-2 text-gray-800 dark:text-white">Title</h4>
+            <p id="modalMessage" class="opacity-70 text-xs font-bold leading-relaxed mb-6">Message</p>
+            <div class="flex justify-center gap-3">
+                <button type="button" onclick="hideModal()" class="glass-btn px-6 py-2 rounded-xl font-bold opacity-60 text-xs uppercase hover:opacity-100">Cancel</button>
+                <button type="button" id="modalConfirmBtn" class="glass-btn px-6 py-2 rounded-xl text-white text-xs uppercase border-none font-bold">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // --- Lock "Reply Date" if "Not Required" is selected ---
+        // Theme Logic
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+        themeToggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+        });
+
+        // Modal Logic
+        let pendingAction = null;
+        const modal = document.getElementById('confirmModal');
+        const modalContainer = modal.querySelector('div');
+
+        function showModal(title, message, theme, callback) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            const icon = document.getElementById('modalIcon');
+            const iconCont = document.getElementById('modalIconContainer');
+            const btn = document.getElementById('modalConfirmBtn');
+
+            if(theme === 'danger' || theme === 'warning') {
+                icon.className = 'fas fa-exclamation-triangle text-red-500';
+                iconCont.className = 'w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 bg-red-100 dark:bg-red-900/30';
+                btn.className = 'glass-btn px-6 py-2 rounded-xl bg-red-500 text-white text-xs uppercase border-none font-bold hover:bg-red-600';
+            } else {
+                icon.className = 'fas fa-check-circle text-emerald-500';
+                iconCont.className = 'w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 bg-emerald-100 dark:bg-emerald-900/30';
+                btn.className = 'glass-btn px-6 py-2 rounded-xl bg-[var(--accent)] text-white text-xs uppercase border-none font-bold';
+            }
+
+            pendingAction = callback;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContainer.classList.remove('scale-95');
+                modalContainer.classList.add('scale-100');
+            }, 10);
+        }
+
+        function hideModal() {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalContainer.classList.remove('scale-100');
+            modalContainer.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        document.getElementById('modalConfirmBtn').addEventListener('click', function() {
+            if(pendingAction) pendingAction();
+            hideModal();
+        });
+
+        // --- Dynamic Form Logic (Status & Reply Date) ---
         document.addEventListener('DOMContentLoaded', function() {
             const statusSelect = document.getElementById('id_status');
             const replyDateInput = document.getElementById('id_replied_at');
+            const replyDateAsterisk = document.getElementById('replyDateAsterisk');
 
             function handleStatusChange() {
                 if (statusSelect.value === 'NOT_REQUIRED') {
+                    // Lock and empty
                     replyDateInput.value = '';
                     replyDateInput.readOnly = true;
+                    replyDateInput.required = false;
                     replyDateInput.style.pointerEvents = 'none';
                     replyDateInput.style.opacity = '0.6';
                     replyDateInput.style.backgroundColor = 'rgba(156, 163, 175, 0.2)';
-                } else {
+                    replyDateAsterisk.classList.add('hidden');
+                } else if (statusSelect.value === 'REPLIED') {
+                    // Make Compulsory
                     replyDateInput.readOnly = false;
+                    replyDateInput.required = true;
                     replyDateInput.style.pointerEvents = 'auto';
                     replyDateInput.style.opacity = '1';
                     replyDateInput.style.backgroundColor = '';
+                    replyDateAsterisk.classList.remove('hidden');
+                } else {
+                    // PENDING (Default)
+                    replyDateInput.readOnly = false;
+                    replyDateInput.required = false;
+                    replyDateInput.style.pointerEvents = 'auto';
+                    replyDateInput.style.opacity = '1';
+                    replyDateInput.style.backgroundColor = '';
+                    replyDateAsterisk.classList.add('hidden');
                 }
             }
 
@@ -240,6 +369,7 @@
             document.getElementById('label_' + fieldName).style.borderColor = 'var(--accent)';
             document.getElementById('label_' + fieldName).style.borderStyle = 'solid';
         }
+
         function resetImageState(fieldName) {
             document.getElementById('preview_' + fieldName).src = "";
             document.getElementById('preview_' + fieldName).classList.add('hidden');
@@ -249,6 +379,7 @@
             document.getElementById('label_' + fieldName).style.borderColor = '';
             document.getElementById('label_' + fieldName).style.borderStyle = '';
         }
+
         function previewImage(input, fieldName) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -256,10 +387,30 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
         function requestClearImage(fieldName) {
             document.getElementById('id_' + fieldName).value = "";
             resetImageState(fieldName);
         }
+
+        // --- Conditional Submission Popup ---
+        document.getElementById('letterForm').addEventListener('submit', function(e) {
+            const status = document.getElementById('id_status').value;
+
+            // Only show the warning popup if they are locking the record
+            if (status === 'REPLIED' || status === 'NOT_REQUIRED') {
+                e.preventDefault();
+                showModal(
+                    "Warning: Final Update",
+                    "When this letter is updated, it wil be completely locked",
+                    "warning",
+                    function() {
+                        document.getElementById('letterForm').submit();
+                    }
+                );
+            }
+            // If status is PENDING, it bypasses the popup and submits immediately.
+        });
     </script>
 </body>
 </html>

@@ -138,6 +138,7 @@ def user_edit_letter(request, pk):
         post_data['target_sector'] = user_sector
 
         form = UserLetterForm(post_data, request.FILES, instance=letter)
+
         if form.is_valid():
             form.save()
             messages.success(request, f"Letter #{letter.serial_number} updated successfully.")

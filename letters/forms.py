@@ -127,6 +127,14 @@ class LetterForm(forms.ModelForm):
 
 
 class UserLetterForm(forms.ModelForm):
+
+    replied_at = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        required=False,
+        label="Reply Date"
+    )
+
+
     class Meta:
         model = Letter
         fields = [
@@ -148,7 +156,6 @@ class UserLetterForm(forms.ModelForm):
             'sender_details': forms.Textarea(attrs={'rows': 3}),
             'letter_type': forms.Textarea(attrs={'rows': 2}),
             'date_received': forms.DateInput(attrs={'type': 'date'}),
-            'replied_at': forms.DateInput(attrs={'type': 'date'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -181,14 +188,29 @@ class UserLetterForm(forms.ModelForm):
     def clean_serial_number(self):
         serial_number = self.cleaned_data.get('serial_number')
 
-        if self.instance.pk:
-            if self.instance.serial_number != serial_number:
+        if self.instance and self.instance.pk:
+            if str(self.instance.serial_number) != str(serial_number):
                 raise forms.ValidationError(
                     "Security Alert: You cannot modify the serial number of an existing record.")
 
-            else:
-                if Letter.objects.filter(serial_number=serial_number).exists():
-                    raise forms.ValidationError(f"Serial Number '{serial_number}' already exists in the system.")
+
+        else:
+            if Letter.objects.filter(serial_number=serial_number).exists():
+                raise forms.ValidationError(f"Serial Number '{serial_number}' already exists in the system.")
 
 
         return serial_number
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get('status')
+        replied_at = cleaned_data.get('replied_at')
+
+        if status == 'REPLIED' and not replied_at:
+            self.add_error('replied_at', "Reply Date is compulsory when marking a letter as 'Replied'.")
+
+        if status == 'NOT_REQUIRED':
+            cleaned_data['replied_at'] = None
+
+        return cleaned_data
