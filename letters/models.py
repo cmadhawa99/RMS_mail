@@ -86,7 +86,6 @@ class Letter(models.Model):
     administrated_by = models.CharField(max_length=20, choices=OFFICER_CHOICES, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
     created_at = models.DateTimeField(auto_now_add=True)
-
     replied_at = models.DateTimeField(null=True, blank=True)
 
     attachment_1 = models.FileField(upload_to=letter_directory_path, null=True, blank=True)
@@ -95,6 +94,9 @@ class Letter(models.Model):
     attachment_4 = models.FileField(upload_to=letter_directory_path, null=True, blank=True)
     attachment_5 = models.FileField(upload_to=letter_directory_path, null=True, blank=True)
     attachment_6 = models.FileField(upload_to=letter_directory_path, null=True, blank=True)
+
+    created_by = models.CharField(max_length=150, blank=True, null=True)
+    updated_by = models.CharField(max_length=150, blank=True, null=True)
 
     class Meta:
         ordering = ['serial_number']

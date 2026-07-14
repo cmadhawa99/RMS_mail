@@ -134,13 +134,18 @@ class UserLetterForm(forms.ModelForm):
         label="Reply Date"
     )
 
+    accepting_officer_id = forms.CharField(
+        required=False,
+        label="Accepting Officer ID"
+    )
+
 
     class Meta:
         model = Letter
         fields = [
             'serial_number', 'date_received', 'sender_details',
             'letter_type', 'target_sector', 'administrated_by',
-            'status', 'replied_at',
+            'accepting_officer_id', 'status', 'replied_at',
             'attachment_1', 'attachment_2', 'attachment_3', 'attachment_4',
             'attachment_5', 'attachment_6'
         ]
@@ -167,7 +172,7 @@ class UserLetterForm(forms.ModelForm):
             ('NOT_REQUIRED', 'Not Required'),
         ]
 
-        compulsory_fields = ['serial_number', 'date_received', 'sender_details', 'letter_type']
+        compulsory_fields = ['serial_number', 'date_received', 'sender_details', 'letter_type', 'accepting_officer_id']
         for field in compulsory_fields:
             self.fields[field].required = True
 
@@ -176,7 +181,7 @@ class UserLetterForm(forms.ModelForm):
             self.fields[field].required = False
 
         if self.instance and self.instance.pk:
-            fields_to_lock = ['serial_number', 'date_received', 'sender_details', 'letter_type', 'administrated_by']
+            fields_to_lock = ['serial_number', 'date_received', 'sender_details', 'letter_type', 'administrated_by', 'accepting_officer_id']
             for field_name in fields_to_lock:
                 val = getattr(self.instance, field_name)
                 if val:

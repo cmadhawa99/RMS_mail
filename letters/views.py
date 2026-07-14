@@ -100,6 +100,11 @@ def user_add_letter(request):
 
         form = UserLetterForm(post_data, request.FILES)
         if form.is_valid():
+
+            letter = form.save(commit=False)
+            letter.created_by = request.user.username
+            letter.updated_by = request.user.username
+
             form.save()
             messages.success(request, "New letter added successfully.")
             return redirect('sector_dashboard')
@@ -140,6 +145,10 @@ def user_edit_letter(request, pk):
         form = UserLetterForm(post_data, request.FILES, instance=letter)
 
         if form.is_valid():
+
+            letter = form.save(commit=False)
+            letter.updated_by = request.user.username
+
             form.save()
             messages.success(request, f"Letter #{letter.serial_number} updated successfully.")
             return redirect('sector_dashboard')
@@ -356,6 +365,11 @@ def add_letter(request):
     if request.method == 'POST':
         form = LetterForm(request.POST, request.FILES)
         if form.is_valid():
+
+            letter = form.save(commit=False)
+            letter.created_by = request.user.username
+            letter.updated_by = request.user.username
+
             form.save()
 
             messages.success(request, "New letter and pages added successfully.")
@@ -375,6 +389,11 @@ def edit_letter(request, pk):
     if request.method == 'POST':
         form = LetterForm(request.POST, request.FILES, instance=letter)
         if form.is_valid():
+            
+            letter_obj = form.save(commit=False)
+            letter_obj.updated_by = request.user.username
+            letter_obj.save()
+
             form.save()
             messages.success(request, "Letter updated successfully.")
             return redirect('admin_letter_detail', pk=letter.pk)

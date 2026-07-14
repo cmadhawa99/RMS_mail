@@ -21,12 +21,24 @@
         {% csrf_token %}
 
         {% if form.errors %}
-            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm font-bold flex items-center gap-3">
-                <i class="fas fa-exclamation-triangle text-xl"></i>
-                <div>
-                    <div class="uppercase tracking-wider text-[10px] opacity-70">Error</div>
-                    Please correct the highlighted fields below.
+            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm font-bold flex flex-col gap-3 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-exclamation-triangle text-xl"></i>
+                    <div>
+                        <div class="uppercase tracking-wider text-[10px] opacity-70">Error</div>
+                        Please correct the highlighted fields below:
+                    </div>
                 </div>
+                <ul class="list-disc list-inside text-xs opacity-90 ml-8">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
             </div>
         {% endif %}
 
@@ -39,30 +51,50 @@
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Serial Number" %}</label>
                     <div class="relative">{{ form.serial_number }}</div>
-                    <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.serial_number.errors.0 }}</div>
+                    {% if form.serial_number.errors %}
+                        <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.serial_number.errors.0 }}</div>
+                    {% endif %}
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Date Received" %}</label>
                     <div class="relative">{{ form.date_received }}</div>
-                    <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.date_received.errors.0 }}</div>
+                    {% if form.date_received.errors %}
+                        <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.date_received.errors.0 }}</div>
+                    {% endif %}
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Sender Details (Name & Address)" %}</label>
                     <div class="relative">{{ form.sender_details }}</div>
+                    {% if form.sender_details.errors %}
+                        <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.sender_details.errors.0 }}</div>
+                    {% endif %}
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Subject / Type" %}</label>
                     <div class="relative">{{ form.letter_type }}</div>
+                    {% if form.letter_type.errors %}
+                        <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.letter_type.errors.0 }}</div>
+                    {% endif %}
                 </div>
+
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Assign Sector" %}</label>
                     <div class="relative">{{ form.target_sector }}</div>
                 </div>
+
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Admin Officer" %}</label>
                     <div class="relative">{{ form.administrated_by }}</div>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Accepting Officer ID" %}</label>
+                    <div class="relative">{{ form.accepting_officer_id }}</div>
+                    {% if form.accepting_officer_id.errors %}
+                        <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.accepting_officer_id.errors.0 }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -172,7 +204,6 @@
 
 <style>
     /* --- INPUT STYLES (Light Mode Visible Fix) --- */
-    /* ADDED input[type="number"] here to fix serial number styling */
     input[type="text"], input[type="number"], select, input[type="date"], input[type="datetime-local"], textarea {
         width: 100%;
         padding: 0.8rem 1rem;
@@ -187,7 +218,7 @@
         font-size: 0.9rem;
         outline: none;
         transition: all 0.2s;
-        resize: none; /* Disable resizing */
+        resize: none;
     }
 
     /* Focus States */
