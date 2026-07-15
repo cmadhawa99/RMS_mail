@@ -34,12 +34,45 @@
                     <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.get_target_sector_display }}</div>
                 </div>
                 <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Admin Officer" %}</div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Administered By" %}</div>
                     <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.get_administrated_by_display }}</div>
                 </div>
+
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Accepting Officer ID" %}</div>
+                    <div class="font-bold text-gray-800 dark:text-gray-100">
+                        {% if letter.accepting_officer_id %}
+                            {{ letter.accepting_officer_id }}
+                        {% else %}
+                            <span class="opacity-40 italic font-normal text-xs">{% trans "Not Provided" %}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
                 <div class="col-span-1 sm:col-span-2">
                     <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Subject / Type" %}</div>
                     <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.letter_type }}</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-200/30 dark:border-gray-700/30 bg-gray-50/50 dark:bg-gray-800/30 rounded-xl p-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center text-xs">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div>
+                        <div class="text-[9px] font-bold uppercase tracking-widest opacity-50">{% trans "Created By" %}</div>
+                        <div class="text-xs font-bold">{{ letter.created_by|default:"System Legacy" }}</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center text-xs">
+                        <i class="fas fa-pen"></i>
+                    </div>
+                    <div>
+                        <div class="text-[9px] font-bold uppercase tracking-widest opacity-50">{% trans "Last Updated By" %}</div>
+                        <div class="text-xs font-bold">{{ letter.updated_by|default:"N/A" }}</div>
+                    </div>
                 </div>
             </div>
 

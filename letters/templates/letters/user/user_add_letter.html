@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html lang="si" dir="ltr" class="light">
 <head>
     <meta charset="UTF-8">
@@ -81,10 +82,34 @@
 
 <body class="text-gray-700 dark:text-gray-200 py-10 px-4 selection:bg-[var(--accent)] selection:text-white">
 
-    <button id="themeToggle" class="fixed top-6 right-6 z-50 glass-btn w-12 h-12 rounded-full text-gray-600 dark:text-yellow-400 bg-white/50 hover:bg-white" title="Toggle Theme">
-        <i class="fas fa-moon dark:hidden"></i>
-        <i class="fas fa-sun hidden dark:block"></i>
-    </button>
+<div class="fixed top-6 right-6 z-50 flex items-center gap-3">
+
+        <!-- Language Toggle -->
+        <form id="language-form" action="{% url 'set_language' %}" method="post" class="m-0">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            {% get_current_language as LANGUAGE_CODE %}
+
+            {% if LANGUAGE_CODE == 'en' %}
+                <input name="language" type="hidden" value="si">
+                <button type="submit" class="glass-btn w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="සිංහලට මාරු වන්න">
+                    සිං
+                </button>
+            {% else %}
+                <input name="language" type="hidden" value="en">
+                <button type="submit" class="glass-btn w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="Switch to English">
+                    EN
+                </button>
+            {% endif %}
+        </form>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="glass-btn w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-yellow-400 hover:bg-white/80 font-bold transition-all" title="Toggle Theme">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+        </button>
+
+    </div>
 
     <div class="max-w-5xl mx-auto">
         <div class="flex items-center justify-between mb-6">
@@ -94,8 +119,8 @@
                 </div>
                 {{ title }}
             </h4>
-            <a href="{% url 'sector_dashboard' %}" class="glass-btn px-4 py-2 rounded-xl text-xs font-bold opacity-60 hover:opacity-100 uppercase tracking-wider">
-                <i class="fas fa-arrow-left mr-2"></i> Cancel
+            <a href="{% url 'sector_dashboard' %}" class="glass-btn px-4 py-2 rounded-xl text-base font-bold opacity-60 hover:opacity-100 uppercase tracking-wider">
+                <i class="fas fa-arrow-left mr-2"></i> {% trans "Cancel" %}
             </a>
         </div>
 
@@ -125,20 +150,20 @@
             {% endif %}
 
             <div class="glass-panel rounded-3xl p-8 border-t-4 border-t-[var(--accent)]">
-                <h6 class="text-xs font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
-                    <i class="fas fa-info-circle"></i> Basic Information
+                <h6 class="text-lg font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i> {% trans "Basic Information" %}
                 </h6>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 gap-y-8">
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Serial Number <span class="text-red-500">*</span></label>
+                        <label class="block text-[16px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Serial Number" %}<span class="text-red-500">*</span></label>
                         <div class="relative">{{ form.serial_number }}</div>
                         {% if form.serial_number.errors %}
                             <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.serial_number.errors.0 }}</div>
                         {% endif %}
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Date Received <span class="text-red-500">*</span></label>
+                        <label class="block text-[16px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Date Received" %}<span class="text-red-500">*</span></label>
                         <div class="relative">{{ form.date_received }}</div>
                         {% if form.date_received.errors %}
                             <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.date_received.errors.0 }}</div>
@@ -146,7 +171,7 @@
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Sender Details (Name & Address) <span class="text-red-500">*</span></label>
+                        <label class="block text-[16px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Sender Details (Name & Address)" %}<span class="text-red-500">*</span></label>
                         <div class="relative">{{ form.sender_details }}</div>
                         {% if form.sender_details.errors %}
                             <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.sender_details.errors.0 }}</div>
@@ -154,7 +179,7 @@
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Subject / Type <span class="text-red-500">*</span></label>
+                        <label class="block text-[16px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Subject" %}<span class="text-red-500">*</span></label>
                         <div class="relative">{{ form.letter_type }}</div>
                         {% if form.letter_type.errors %}
                             <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.letter_type.errors.0 }}</div>
@@ -162,19 +187,19 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">
-                            Assign Sector <i class="fas fa-lock ml-1 text-[var(--accent)]"></i>
+                        <label class="block text-[16px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">
+                            {% trans "Assign Sector" %} <i class="fas fa-lock ml-1 text-[var(--accent)]"></i>
                         </label>
                         <div class="relative pointer-events-none opacity-70">
                             {{ form.target_sector }}
                         </div>
-                        <div class="text-[9px] font-bold text-[var(--accent)] mt-1.5 pl-1 uppercase tracking-wider">
-                            Locked to your sector
+                        <div class="text-[14px] font-bold text-[var(--accent)] mt-1.5 pl-1 uppercase tracking-wider">
+                            {% trans "Your Section" %}
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Admin Officer</label>
+                        <label class="block text-[16px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Administered By" %}</label>
                         <div class="relative">{{ form.administrated_by }}</div>
                         {% if form.administrated_by.errors %}
                             <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.administrated_by.errors.0 }}</div>
@@ -182,7 +207,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Accepting Officer ID</label>
+                        <label class="block text-[16px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Accepting Officer ID" %}</label>
                         <div class="relative">{{ form.accepting_officer_id }}</div>
                         {% if form.accepting_officer_id.errors %}
                             <div class="text-red-500 text-[10px] font-bold mt-1 pl-1">{{ form.accepting_officer_id.errors.0 }}</div>
@@ -193,8 +218,8 @@
 
             <!-- ATTACHMENTS PANEL -->
             <div class="glass-panel rounded-3xl p-8">
-                <h6 class="text-xs font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
-                    <i class="fas fa-paperclip"></i> Attachments
+                <h6 class="text-lg font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
+                    <i class="fas fa-paperclip"></i> {% trans "Attachments" %}
                 </h6>
 
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -205,7 +230,7 @@
                             <label for="id_{{ field_name }}" class="absolute inset-0 glass-panel rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/50 dark:hover:bg-white/5 transition-all overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600" style="hover:border-color: var(--accent);" id="label_{{ field_name }}">
                                 <div class="text-center p-2" id="placeholder_{{ field_name }}">
                                     <i class="fas fa-plus text-2xl text-gray-300 mb-2 transition-colors group-hover:text-[var(--accent)]"></i>
-                                    <div class="text-[9px] font-bold opacity-40 uppercase">Page {{ i }}</div>
+                                    <div class="text-[14px] font-bold opacity-40 uppercase">{% trans "Page" %} {{ i }}</div>
                                 </div>
                                 <img id="preview_{{ field_name }}" src="" class="absolute inset-0 w-full h-full object-cover hidden z-10 bg-white dark:bg-gray-800">
                             </label>
@@ -223,39 +248,39 @@
 
             <!-- STATUS & ACTION PANEL -->
             <div class="glass-panel rounded-3xl p-8 bg-[var(--accent)]/5 border-[var(--accent)]/20">
-                <h6 class="text-xs font-black uppercase tracking-widest text-[var(--accent)] mb-6 flex items-center gap-2">
-                    <i class="fas fa-bolt"></i> Update Status
+                <h6 class="text-base font-black uppercase tracking-widest text-[var(--accent)] mb-6 flex items-center gap-2">
+                    <i class="fas fa-bolt"></i> {% trans "Status & Actions" %}
                 </h6>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">Letter Status</label>
+                        <label class="block text-[16px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">{% trans "Letter Status" %}</label>
                         <div class="relative">{{ form.status }}</div>
                     </div>
                     <div>
-                        <label id="replyDateLabel" class="block text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">
-                            Reply Date <span id="replyDateAsterisk" class="text-red-500 hidden">*</span>
+                        <label id="replyDateLabel" class="block text-[16px] font-bold uppercase tracking-wider opacity-60 mb-2 pl-1">
+                            {% trans "Reply Date (If applicable)" %} <span id="replyDateAsterisk" class="text-red-500 hidden">*</span>
                         </label>
                         <div class="relative">{{ form.replied_at }}</div>
                     </div>
                 </div>
 
                 <!-- WARNING MESSAGE -->
-                <div class="mt-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-bold flex items-center gap-3">
+                <div class="mt-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-base font-bold flex items-center gap-3">
                     <i class="fas fa-lock text-lg"></i>
-                    <span>When this letter is updated, it wil be completely locked</span>
+                    <span>{% trans "After this section is updated, the letter will be completely locked so it cannot be changed further." %}</span>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 pb-12">
                 <div class="flex items-start gap-3 px-2">
                     <input type="checkbox" id="safetyCheck" required class="mt-1 w-4 h-4 text-[var(--accent)] rounded cursor-pointer">
-                    <label for="safetyCheck" class="text-xs font-bold text-gray-500 dark:text-gray-400 select-none cursor-pointer">
-                        I confirm that the details entered above are accurate.
+                    <label for="safetyCheck" class="text-base font-bold text-gray-500 dark:text-gray-400 select-none cursor-pointer">
+                        {% trans "I confirm that the details entered above are accurate." %}
                     </label>
                 </div>
 
                 <div class="flex gap-4 w-full sm:w-auto">
-                    <button type="submit" class="glass-btn flex-1 sm:flex-none px-8 py-3.5 rounded-xl bg-[var(--accent)] !text-white shadow-xl hover:shadow-[var(--accent)]/50 hover:-translate-y-1 transition-all text-xs font-black uppercase tracking-widest border-none">
+                    <button type="submit" class="glass-btn flex-1 sm:flex-none px-8 py-3.5 rounded-xl bg-[var(--accent)] !text-white shadow-xl hover:shadow-[var(--accent)]/50 hover:-translate-y-1 transition-all text-base font-black uppercase tracking-widest border-none">
                         <i class="fas fa-save mr-2"></i> Save Record
                     </button>
                 </div>

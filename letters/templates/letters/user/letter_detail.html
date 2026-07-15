@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html lang="si" dir="ltr" class="light">
 <head>
     <meta charset="UTF-8">
@@ -67,16 +68,42 @@
 
 <body class="text-gray-700 dark:text-gray-200 py-10 px-4 selection:bg-[var(--accent)] selection:text-white">
 
-    <button id="themeToggle" class="fixed top-6 right-6 z-50 glass-btn w-12 h-12 rounded-full text-gray-600 dark:text-yellow-400 bg-white/50 hover:bg-white" title="Toggle Theme">
-        <i class="fas fa-moon dark:hidden"></i>
-        <i class="fas fa-sun hidden dark:block"></i>
-    </button>
+
+    <div class="fixed top-6 right-6 z-50 flex items-center gap-3">
+
+        <!-- Language Toggle -->
+        <form id="language-form" action="{% url 'set_language' %}" method="post" class="m-0">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            {% get_current_language as LANGUAGE_CODE %}
+
+            {% if LANGUAGE_CODE == 'en' %}
+                <input name="language" type="hidden" value="si">
+                <button type="submit" class="glass-btn w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="සිංහලට මාරු වන්න">
+                    සිං
+                </button>
+            {% else %}
+                <input name="language" type="hidden" value="en">
+                <button type="submit" class="glass-btn w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="Switch to English">
+                    EN
+                </button>
+            {% endif %}
+        </form>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="glass-btn w-12 h-12 rounded-full flex items-center justify-center text-gray-600 dark:text-yellow-400 hover:bg-white/80 font-bold transition-all" title="Toggle Theme">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+        </button>
+
+    </div>
+
 
     <div class="max-w-5xl mx-auto">
 
         <a href="{% url 'sector_dashboard' %}" class="inline-flex items-center gap-2 glass-btn px-6 py-3 rounded-2xl mb-6 text-gray-600 dark:text-gray-300 font-bold hover:bg-[var(--accent)] hover:text-white group transition-colors">
             <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-            <span class="text-sm uppercase tracking-wider">ප්‍රධාන මෙනුව (Dashboard)</span>
+            <span class="text-base uppercase tracking-wider">{% trans "Dashboard" %}</span>
         </a>
 
         <div class="glass rounded-3xl overflow-hidden relative border-t-4 border-t-[var(--accent)]">
@@ -87,8 +114,8 @@
                 <div class="flex flex-col md:flex-row justify-between md:items-start gap-6 relative z-10">
                     <div>
                         <div class="flex items-center gap-3 mb-2">
-                            <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">ලිපි අංකය (Serial No)</span>
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide badge-sector-{{ letter.target_sector }} shadow-sm">
+                            <span class="text-[16px] font-black uppercase tracking-[0.2em] opacity-60">{% trans "Serial No" %}</span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-[14px] font-extrabold uppercase tracking-wide badge-sector-{{ letter.target_sector }} shadow-sm">
                                 {{ letter.get_target_sector_display }}
                             </span>
                         </div>
@@ -100,8 +127,7 @@
                             <div class="glass-panel px-6 py-3 rounded-2xl bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-3">
                                 <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
                                 <div class="text-right">
-                                    <div class="text-xs font-black uppercase tracking-wider">විසඳන ලදී</div>
-                                    <div class="text-[10px] font-bold opacity-60 uppercase">Resolved</div>
+                                    <div class="text-base font-black uppercase tracking-wider">{% trans "Replied" %}</div>
                                 </div>
                                 <i class="fas fa-check-circle text-2xl ml-1"></i>
                             </div>
@@ -109,8 +135,7 @@
                             <div class="glass-panel px-6 py-3 rounded-2xl bg-gray-500/10 border-gray-500/20 text-gray-600 dark:text-gray-400 flex items-center gap-3">
                                 <div class="w-2 h-2 rounded-full bg-gray-500"></div>
                                 <div class="text-right">
-                                    <div class="text-xs font-black uppercase tracking-wider">අවශ්‍ය නොවේ</div>
-                                    <div class="text-[10px] font-bold opacity-60 uppercase">Not Required</div>
+                                    <div class="text-base font-black uppercase tracking-wider">{% trans "Not Required" %}</div>
                                 </div>
                                 <i class="fas fa-minus-circle text-2xl ml-1"></i>
                             </div>
@@ -118,8 +143,7 @@
                             <div class="glass-panel px-6 py-3 rounded-2xl bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center gap-3">
                                 <div class="w-2 h-2 rounded-full bg-blue-500"></div>
                                 <div class="text-right">
-                                    <div class="text-xs font-black uppercase tracking-wider">පැරණි වාර්තාවක්</div>
-                                    <div class="text-[10px] font-bold opacity-60 uppercase">Old Record</div>
+                                    <div class="text-base font-black uppercase tracking-wider">{% trans "Old Record" %}</div>
                                 </div>
                                 <i class="fas fa-archive text-2xl ml-1"></i>
                             </div>
@@ -130,8 +154,7 @@
                                   <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                                 </span>
                                 <div class="text-right">
-                                    <div class="text-xs font-black uppercase tracking-wider">විමර්ශනය වෙමින්</div>
-                                    <div class="text-[10px] font-bold opacity-60 uppercase">Pending</div>
+                                    <div class="text-base font-black uppercase tracking-wider">{% trans "Pending" %}</div>
                                 </div>
                                 <i class="fas fa-clock text-2xl ml-1"></i>
                             </div>
@@ -145,10 +168,10 @@
                     <div class="lg:col-span-8 space-y-8">
                         <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover:bg-white/50 dark:hover:bg-white/5">
                             <div class="absolute left-0 top-0 w-1 h-full bg-[var(--accent)]"></div>
-                            <div class="text-xs font-bold text-[var(--accent)] uppercase tracking-widest mb-2 flex items-center gap-2">
-                                <i class="fas fa-heading"></i> විෂය / වර්ගය (Subject)
+                            <div class="text-base font-bold text-[var(--accent)] uppercase tracking-widest mb-2 flex items-center gap-2">
+                                <i class="fas fa-pen"></i> {% trans "Subject" %}
                             </div>
-                            <div class="text-2xl font-bold text-gray-800 dark:text-white leading-relaxed break-words">
+                            <div class="text-base font-bold text-gray-800 dark:text-white leading-relaxed break-words">
                                 {{ letter.letter_type }}
                             </div>
                         </div>
@@ -156,12 +179,12 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                             <div class="glass-panel p-5 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors md:col-span-2">
-                            <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">ලිපිය එවූ අයගේ විස්තර (Sender Details)</div>
+                            <div class="text-[16px] font-bold opacity-50 uppercase tracking-widest mb-1">{% trans "Sender Details" %}</div>
                             <div class="flex items-start gap-3 mt-2">
                                 <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center shrink-0">
                                     <i class="fas fa-address-card text-xs"></i>
                                 </div>
-                                <div class="font-bold text-sm text-gray-700 dark:text-gray-200 break-words leading-relaxed">{{ letter.sender_details|linebreaksbr }}</div>
+                                <div class="font-bold text-base text-gray-700 dark:text-gray-200 break-words leading-relaxed">{{ letter.sender_details|linebreaksbr }}</div>
                             </div>
                         </div>
 
@@ -170,9 +193,8 @@
                         {% if letter.status == 'REPLIED' %}
                             <div class="glass-panel p-6 rounded-2xl border-l-4 border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/10">
                                 <h3 class="text-emerald-600 dark:text-emerald-400 font-black text-lg mb-1 flex items-center gap-2">
-                                    <i class="fas fa-check-double"></i> පිළිතුරු යොමු කර ඇත
+                                    <i class="fas fa-check-double"></i> {% trans "Replied" %}
                                 </h3>
-                                <p class="text-emerald-600/60 dark:text-emerald-400/60 text-xs font-bold uppercase tracking-wider mb-4">Replied Status</p>
                                 <div class="flex items-center gap-4 text-sm font-bold text-gray-600 dark:text-gray-300">
                                     <div class="glass px-4 py-2 rounded-lg flex items-center gap-2">
                                         <i class="far fa-calendar-check text-[var(--accent)]"></i>
@@ -182,15 +204,15 @@
                             </div>
                         {% elif letter.status == 'NOT_REQUIRED' %}
                             <div class="glass-panel p-6 rounded-2xl border-l-4 border-gray-500 bg-gray-50/50 dark:bg-gray-900/10">
-                                <h3 class="text-gray-600 dark:text-gray-400 font-black text-lg mb-1 flex items-center gap-2">
-                                    <i class="fas fa-minus-circle"></i> මෙම ලිපිය සඳහා ක්‍රියාමාර්ගයක් අවශ්‍ය නොවේ
+                                <h3 class="text-gray-600 dark:text-gray-400 font-black text-sm mb-1 flex items-center gap-2">
+                                    <i class="fas fa-minus-circle"></i> {% trans "Not Required" %}
                                 </h3>
                                 <p class="text-gray-500/60 dark:text-gray-400/60 text-xs font-bold uppercase tracking-wider mb-4">File Closed</p>
                             </div>
                         {% elif letter.status == 'OLD_RECORD' %}
                             <div class="glass-panel p-6 rounded-2xl border-l-4 border-blue-500 bg-blue-50/50 dark:bg-blue-900/10">
-                                <h3 class="text-blue-600 dark:text-blue-400 font-black text-lg mb-1 flex items-center gap-2">
-                                    <i class="fas fa-archive"></i> මෙය පැරණි වාර්තාවකි
+                                <h3 class="text-blue-600 dark:text-blue-400 font-black text-sm mb-1 flex items-center gap-2">
+                                    <i class="fas fa-archive"></i> {% trans "Old Record" %}
                                 </h3>
                                 <p class="text-blue-500/60 dark:text-blue-400/60 text-xs font-bold uppercase tracking-wider mb-4">Archived Record</p>
                             </div>
@@ -202,8 +224,7 @@
                                     <i class="fas fa-file-invoice"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-gray-800 dark:text-white">ලිපියේ ඡායාරූප</h4>
-                                    <p class="text-[10px] opacity-60 font-bold uppercase tracking-wider">Scanned Documents</p>
+                                    <h4 class="font-bold text-gray-800 dark:text-white">{% trans "Attachments" %}</h4>
                                 </div>
                             </div>
 
@@ -218,7 +239,7 @@
                                 </div>
                             {% else %}
                                 <div class="mb-4 py-4 rounded-xl border border-dashed border-gray-400/30 text-xs font-bold opacity-50 text-center">
-                                    No Images Attached
+                                    {% trans "No documents attached." %}
                                 </div>
                             {% endif %}
 
@@ -232,7 +253,7 @@
                     <div class="lg:col-span-4 space-y-4">
                         <div class="glass-panel p-5 rounded-2xl space-y-6">
                             <div>
-                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">ලැබුණු දිනය (Date Received)</div>
+                                <div class="text-[14px] font-bold opacity-50 uppercase tracking-widest mb-1">{% trans "Date Received" %}</div>
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-500 flex items-center justify-center">
                                         <i class="far fa-calendar-alt text-xs"></i>
@@ -242,7 +263,8 @@
                             </div>
                             <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
                             <div>
-                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">පරිපාලනය (Administered By)</div>
+                                <div class="text-[14px] font-bold opacity-50 uppercase tracking-widest mb-1">
+                                    {% trans "Administered By" %}</div>
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-500 flex items-center justify-center">
                                         <i class="fas fa-user-shield text-xs"></i>
@@ -252,7 +274,7 @@
                             </div>
                             <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
                             <div>
-                                <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest mb-1">නිලධාරී ID (Officer ID)</div>
+                                <div class="text-[14px] font-bold opacity-50 uppercase tracking-widest mb-1">{% trans "Accepting Officer ID" %}</div>
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700/50 text-gray-500 flex items-center justify-center">
                                         <i class="fas fa-id-badge text-xs"></i>

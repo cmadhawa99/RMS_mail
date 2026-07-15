@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="si" dir="ltr" class="light">
+{% load i18n %}
+<html lang="{{ LANGUAGE_CODE|default:'en' }}" dir="ltr" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,20 +87,20 @@
                     <i class="fas fa-university"></i>
                 </div>
                 <div>
-                    <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">ප්‍රාදේශීය සභාව</div>
-                    <div class="text-xl font-black tracking-tight dark:text-white">වැලිගෙපොල</div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">{% trans "Divisional Council" %}</div>
+                    <div class="text-xl font-black tracking-tight dark:text-white">{% trans "Weligepola" %}</div>
                 </div>
             </div>
 
             <nav class="flex-1 overflow-y-auto px-4 space-y-2 custom-scrollbar py-6">
-                <div class="px-2 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">ප්‍රධාන මෙනුව</div>
+                <div class="px-2 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">{% trans "Main Menu" %}</div>
 
                 <a href="?sector=ALL" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 group {% if selected_sector == 'ALL' %}bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/30{% else %}hover:bg-white/40 dark:hover:bg-white/10 hover:translate-x-1{% endif %}">
                     <i class="fas fa-th-large w-6 text-center"></i>
-                    <span class="font-bold ml-3 text-sm">සියළුම අංශ</span>
+                    <span class="font-bold ml-3 text-sm">{% trans "All Sections" %}</span>
                 </a>
 
-                <div class="px-2 mt-8 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">අංශ (Departments)</div>
+                <div class="px-2 mt-8 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">{% trans "Section By Section" %}</div>
 
                 {% with 'GOVERNING HEALTH DEVELOPMENT INCOME ACCOUNTS' as sectors %}
                     {% for sec in sectors.split %}
@@ -110,7 +111,13 @@
 
                         <i class="fas {% if sec == 'GOVERNING' %}fa-gavel{% elif sec == 'HEALTH' %}fa-heartbeat{% elif sec == 'DEVELOPMENT' %}fa-hard-hat{% elif sec == 'INCOME' %}fa-coins{% else %}fa-file-invoice-dollar{% endif %} w-6 text-center"></i>
                         <span class="font-bold ml-3 text-sm">
-                            {% if sec == 'GOVERNING' %}පාලන අංශය{% elif sec == 'HEALTH' %}සෞඛ්‍ය අංශය{% elif sec == 'DEVELOPMENT' %}සංවර්ධන අංශය{% elif sec == 'INCOME' %}ආදායම් අංශය{% else %}ගිණුම් අංශය{% endif %}
+                            {% if sec == 'GOVERNING' %}{% trans "Governing Section" %}
+                            {% elif sec == 'HEALTH' %}{% trans "Health Section" %}
+                            {% elif sec == 'DEVELOPMENT' %}{% trans "Development Section" %}
+                            {% elif sec == 'INCOME' %}{% trans "Income Section" %}
+                            {% elif sec == 'ACCOUNTS' %}{% trans "Accounts Section" %}
+
+                            {% endif %}
                         </span>
 
                         {% if user_sector == sec %}
@@ -132,7 +139,7 @@
                     </div>
                     <div>
                         <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400">System Online</div>
-                        <div class="text-[10px] opacity-60 uppercase tracking-wider">v2.5 Glass UI</div>
+                        <div class="text-[10px] opacity-60 uppercase tracking-wider">v1.0 Glass UI</div>
                     </div>
                 </div>
             </div>
@@ -144,16 +151,16 @@
                 <div>
                     <h1 class="text-2xl font-black dark:text-white flex items-center gap-3 drop-shadow-sm
                         {% if selected_sector == 'INCOME' %}text-accent-adaptive{% else %}text-[var(--accent)]{% endif %}">
-                        {% if selected_sector == 'ALL' %} සියළුම අංශ
-                        {% elif selected_sector == 'GOVERNING' %} පාලන අංශය
-                        {% elif selected_sector == 'HEALTH' %} සෞඛ්‍ය අංශය
-                        {% elif selected_sector == 'DEVELOPMENT' %} සංවර්ධන අංශය
-                        {% elif selected_sector == 'INCOME' %} ආදායම් අංශය
-                        {% elif selected_sector == 'ACCOUNTS' %} ගිණුම් අංශය
-                        {% else %} {{ selected_sector }} අංශය {% endif %}
+                        {% if selected_sector == 'ALL' %} {% trans "All Sections" %}
+                        {% elif selected_sector == 'GOVERNING' %} {% trans "Governing Section" %}
+                        {% elif selected_sector == 'HEALTH' %} {% trans "Health Section" %}
+                        {% elif selected_sector == 'DEVELOPMENT' %} {% trans "Development Section" %}
+                        {% elif selected_sector == 'INCOME' %} {% trans "Income Section" %}
+                        {% elif selected_sector == 'ACCOUNTS' %} {% trans "Accounts Section" %}
+                        {% else %} {{ selected_sector }} {% trans "Sector Not Defined" %} {% endif %}
                     </h1>
-                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400">
-                        ආයුබෝවන්, <span class="font-bold text-gray-800 dark:text-gray-100">{{ user.username }}</span>
+                    <p class="text-base font-medium text-gray-500 dark:text-gray-400">
+                        {%trans "Welcome" %}, <span class="font-bold text-gray-800 dark:text-gray-100">{{ user.username }}</span>
                     </p>
                 </div>
 
@@ -162,6 +169,24 @@
                         <div id="liveTime" class="text-lg font-black font-mono tracking-widest text-gray-700 dark:text-gray-100">--:--:--</div>
                         <div id="liveDate" class="text-[9px] font-bold uppercase tracking-widest opacity-60">-- --- ----</div>
                     </div>
+
+                    <form id="language-form" action="{% url 'set_language' %}" method="post" class="m-0 flex items-center">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        {% get_current_language as LANGUAGE_CODE %}
+
+                        {% if LANGUAGE_CODE == 'en' %}
+                            <input name="language" type="hidden" value="si">
+                            <button type="submit" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="සිංහලට මාරු වන්න">
+                                සිං
+                            </button>
+                        {% else %}
+                            <input name="language" type="hidden" value="en">
+                            <button type="submit" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="Switch to English">
+                                EN
+                            </button>
+                        {% endif %}
+                    </form>
 
                     <button id="themeToggle" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-yellow-400 hover:bg-white/50" title="Toggle Theme">
                         <i class="fas fa-moon dark:hidden"></i>
@@ -187,7 +212,7 @@
                         </div>
                         <div class="relative">
                             <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ total }}</div>
-                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">මුළු ලිපි ගොනු</div>
+                            <div class="text-[14px] font-bold uppercase tracking-wider opacity-60">{% trans "Total Letters" %}</div>
                         </div>
                     </div>
 
@@ -198,7 +223,7 @@
                         </div>
                         <div class="relative">
                             <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ pending }}</div>
-                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">විමර්ශනය වෙමින් පවතින ලිපි</div>
+                            <div class="text-[14px] font-bold uppercase tracking-wider opacity-60">{% trans "Pending Letters" %}</div>
                         </div>
                     </div>
 
@@ -209,7 +234,7 @@
                         </div>
                         <div class="relative">
                             <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ resolved }}</div>
-                            <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">පිළිතුරු යොමුකල ලිපි</div>
+                            <div class="text-[14px] font-bold uppercase tracking-wider opacity-60">{% trans "Replied Letters" %}</div>
                         </div>
                     </div>
                 </div>
@@ -217,8 +242,7 @@
                 <div class="glass-panel rounded-3xl flex-1 flex flex-col overflow-hidden relative border-t-2 border-t-[var(--accent)]">
                     <div class="p-5 flex flex-wrap justify-between items-center gap-4 border-b border-gray-200/30 dark:border-gray-700/30 shrink-0 bg-white/30 dark:bg-black/20">
                         <div>
-                            <h2 class="text-lg font-bold text-gray-800 dark:text-white">ලිපි ගනුදෙනු වාර්තාව</h2>
-                            <p class="text-[10px] font-bold uppercase tracking-wider opacity-50">Recent Transactions</p>
+                            <h2 class="text-lg font-bold text-gray-800 dark:text-white">{% trans "Letter Registry" %}</h2>
                         </div>
 
                         <form method="GET" action="" class="flex gap-3 items-center">
@@ -231,12 +255,12 @@
 
                             <div class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-[var(--accent)] transition-all">
                                 <select name="search_type" id="userSearchType" class="bg-transparent border-none text-xs font-bold text-gray-600 dark:text-gray-300 focus:ring-0 cursor-pointer py-2 pl-3 pr-8 outline-none appearance-none">
-                                    <option value="all" {% if search_type == 'all' %}selected{% endif %}>සියල්ල</option>
-                                    <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>අංකය</option>
-                                    <option value="date" {% if search_type == 'date' %}selected{% endif %}>දිනය</option>
+                                    <option value="all" {% if search_type == 'all' %}selected{% endif %}>{% trans "All" %}</option>
+                                    <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>{% trans "Serial" %}</option>
+                                    <option value="date" {% if search_type == 'date' %}selected{% endif %}>{% trans "Date" %}</option>
                                 </select>
                                 <div class="w-px h-5 bg-gray-400/30 mx-1"></div>
-                                <input type="text" name="q" id="userSearchInput" class="bg-transparent border-none text-sm font-bold text-black dark:text-white placeholder-gray-500 focus:ring-0 py-1 px-2 w-40 outline-none" placeholder="සොයන්න..." value="{{ search_query }}">
+                                <input type="text" name="q" id="userSearchInput" class="bg-transparent border-none text-sm font-bold text-black dark:text-white placeholder-gray-500 focus:ring-0 py-1 px-2 w-40 outline-none" placeholder="{% trans 'Search...' %}" value="{{ search_query }}">
                             </div>
 
                             <button type="submit" class="glass-btn w-10 h-10 rounded-xl text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white shadow-md">
@@ -247,14 +271,14 @@
 
                     <div class="overflow-y-auto flex-1 custom-scrollbar p-2">
                         <table class="w-full text-left border-separate border-spacing-y-2 px-2">
-                            <thead class="sticky top-0 bg-white/80 dark:bg-gray-800/90 backdrop-blur-md z-10 text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider shadow-sm">
+                            <thead class="sticky top-0 bg-white/80 dark:bg-gray-800/90 backdrop-blur-md z-10 text-[12px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider shadow-sm">
                                 <tr>
-                                    <th class="px-6 py-3 rounded-l-xl">ID අංකය</th>
-                                    <th class="px-6 py-3 w-1/4">විෂය (Subject)</th>
-                                    <th class="px-6 py-3">අංශය (Sector)</th>
-                                    <th class="px-6 py-3">දිනය (Date)</th>
-                                    <th class="px-6 py-3">තත්වය (Status)</th>
-                                    <th class="px-6 py-3 text-right rounded-r-xl">ක්‍රියාමාර්ග</th>
+                                    <th class="px-6 py-3 rounded-l-xl">{% trans "Serial No" %}</th>
+                                    <th class="px-6 py-3 w-1/4">{% trans "Subject" %}</th>
+                                    <th class="px-6 py-3">{% trans "Sector" %}</th>
+                                    <th class="px-6 py-3">{% trans "Date" %}</th>
+                                    <th class="px-6 py-3">{% trans "Status" %}</th>
+                                    <th class="px-6 py-3 text-right rounded-r-xl">{% trans "Action" %}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -294,15 +318,15 @@
                                     <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
                                         {% if letter.status == 'REPLIED' %}
                                             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg">
-                                                <i class="fas fa-check-circle"></i> විසඳන ලදී
+                                                <i class="fas fa-check-circle"></i> {% trans "Replied" %}
                                             </span>
                                         {% elif letter.status == 'NOT_REQUIRED' %}
                                             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-400 bg-gray-100/50 dark:bg-gray-800/50 px-2 py-1 rounded-lg">
-                                                <i class="fas fa-minus-circle"></i> අවශ්‍ය නොවේ
+                                                <i class="fas fa-minus-circle"></i> {% trans "Not Required" %}
                                             </span>
                                         {% elif letter.status == 'OLD_RECORD' %}
                                             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-900/30 px-2 py-1 rounded-lg">
-                                                <i class="fas fa-archive"></i> පැරණි වාර්තාවක්
+                                                <i class="fas fa-archive"></i> {% trans "Old Record" %}
                                             </span>
                                         {% else %}
                                             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded-lg">
@@ -310,20 +334,20 @@
                                                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                                                   <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                                                 </span>
-                                                විමර්ශනය
+                                                {% trans "Pending" %}
                                             </span>
                                         {% endif %}
                                     </td>
 
                                     <td class="px-6 py-3 rounded-r-xl text-right border-r border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
                                         {% if letter.status != 'PENDING' %}
-                                            <span class="text-[10px] font-bold uppercase opacity-40 select-none">Completed</span>
+                                            <span class="text-[10px] font-bold uppercase opacity-40 select-none">{% trans "Completed" %}</span>
                                         {% elif letter.target_sector == user_sector %}
                                             <a href="{% url 'user_edit_letter' letter.pk %}" class="glass-btn px-4 py-1.5 rounded-lg text-xs font-bold text-blue-500 hover:bg-blue-500 hover:text-white inline-flex transition-colors">
                                                 <i class="fas fa-edit mr-2"></i> Edit
                                             </a>
                                         {% else %}
-                                            <span class="text-[10px] font-bold uppercase opacity-40 select-none">Read Only</span>
+                                            <span class="text-[10px] font-bold uppercase opacity-40 select-none">{% trans "Read Only" %}</span>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -333,8 +357,7 @@
                                         <div class="w-24 h-24 rounded-full bg-gray-200/50 dark:bg-gray-700/50 flex items-center justify-center mx-auto mb-6 text-gray-400 text-4xl animate-float">
                                             <i class="fas fa-folder-open"></i>
                                         </div>
-                                        <h3 class="text-lg font-bold opacity-70">දත්ත හමු නොවීය</h3>
-                                        <p class="text-sm opacity-40 font-bold uppercase tracking-wider">No records found</p>
+                                        <h3 class="text-lg font-bold opacity-70">{% trans "No records found" %}</h3>
                                     </td>
                                 </tr>
                                 {% endfor %}
