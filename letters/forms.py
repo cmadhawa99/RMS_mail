@@ -67,12 +67,6 @@ class LetterForm(forms.ModelForm):
 
     )
 
-    administrated_by = forms.ChoiceField(
-        choices=OFFICER_CHOICES,
-        required=False,
-        label="Administrated By"
-    )
-
     accepting_officer_id = forms.CharField(
         required=False,
         label="Accepting Officer ID"

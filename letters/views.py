@@ -113,7 +113,6 @@ def user_add_letter(request):
 
     return render(request, 'letters/user/user_add_letter.html', {
         'form': form,
-        'title': 'නව ලිපියක් ඇතුලත් කරන්න (Add New Letter)',
         'selected_sector': user_sector,
         'user_sector': user_sector
 
@@ -158,7 +157,6 @@ def user_edit_letter(request, pk):
 
     return render(request, 'letters/user/user_edit_letter.html', {
         'form': form,
-        'title': 'ලිපිය යාවත්කාලීන කරන්න (Edit Letter)',
         'selected_sector': user_sector,
         'user_sector': user_sector,
         'letter': letter
@@ -400,7 +398,7 @@ def edit_letter(request, pk):
     else:
         form = LetterForm(instance=letter)
 
-    return render(request, 'letters/admin/pages/letter_form.html', {'form': form, 'title': 'Edit Letter'})
+    return render(request, 'letters/admin/pages/letter_form.html', {'form': form})
 
 
 @login_required

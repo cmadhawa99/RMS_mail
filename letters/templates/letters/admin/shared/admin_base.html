@@ -88,20 +88,20 @@
                     <i class="fas fa-shield-alt"></i>
                 </div>
                 <div>
-                    <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">{% trans "Divisional Council" %}</div>
+                    <div class="text-[12px] font-bold uppercase tracking-wider opacity-60">{% trans "Divisional Council" %}</div>
                     <div class="text-xl font-black tracking-tight dark:text-white">{% trans "Weligepola" %}</div>
                 </div>
             </div>
 
             <nav class="flex-1 overflow-y-auto px-4 space-y-1 custom-scrollbar py-6">
-                <div class="px-2 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">{% trans "Main Menu" %}</div>
+                <div class="px-2 mb-2 text-[12px] font-bold uppercase tracking-widest opacity-50">{% trans "Main Menu" %}</div>
 
                 <a href="{% url 'custom_admin_dashboard' %}" class="glass-nav-item group {% if request.resolver_match.url_name == 'custom_admin_dashboard' %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">
                     <i class="fas fa-tachometer-alt w-6 text-center"></i>
                     <span class="ml-3">{% trans "Dashboard" %}</span>
                 </a>
 
-                <div class="px-2 mt-8 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">{% trans "Management" %}</div>
+                <div class="px-2 mt-8 mb-2 text-[12px] font-bold uppercase tracking-widest opacity-50">{% trans "Management" %}</div>
 
                 <div class="relative group">
                     <a href="{% url 'custom_admin_users' %}" class="glass-nav-item {% if 'user' in request.resolver_match.url_name %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">

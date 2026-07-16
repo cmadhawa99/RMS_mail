@@ -20,7 +20,7 @@
 
 <div class="overflow-x-auto pb-4">
     <table class="w-full text-left border-separate border-spacing-y-2 px-1">
-        <thead class="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider">
+        <thead class="text-[12px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider">
             <tr>
                 <th class="px-6 py-2">{% trans "Officer Name" %}</th>
                 <th class="px-6 py-2">{% trans "Assigned Sector" %}</th>
@@ -43,11 +43,11 @@
                 </td>
                 <td class="px-6 py-3 bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-gray-200 dark:border-transparent group-hover:border-transparent">
                     <span class="px-3 py-1.5 rounded-full text-[10px] font-extrabold uppercase bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 tracking-wide">
-                        {{ u.sectorprofile.sector }}
+                        {{ u.sectorprofile.get_sector_display }}
                     </span>
                 </td>
                 <td class="px-6 py-3 rounded-r-xl bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-r border-gray-200 dark:border-transparent group-hover:border-transparent">
-                    <a href="{% url 'admin_user_detail' u.id %}" class="glass-btn inline-flex px-4 py-1.5 rounded-lg text-indigo-500 hover:bg-indigo-500 hover:text-white font-bold text-xs">
+                    <a href="{% url 'admin_user_detail' u.id %}" class="glass-btn inline-flex px-4 py-1.5 rounded-lg text-indigo-500 hover:bg-indigo-500 hover:text-white font-bold text-sm">
                         {% trans "View Profile" %}
                     </a>
                 </td>

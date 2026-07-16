@@ -4,6 +4,7 @@ from PIL import Image, ImageEnhance, ImageOps
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import UploadedFile, InMemoryUploadedFile
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -11,26 +12,25 @@ from django.db import models
 from django.contrib.auth.models import User
 
 OFFICER_CHOICES = [
-    ('-', '-'),
-    ('CHAIRMAN', 'සභාපති'),
-    ('SECRETARY', 'ලේකම්'),
-    ('CMO', 'ප්‍රධාන කළමණාකරන නිළධාරී'),
-    ('HOD', 'අංශ ප්‍රධානී'),
+    ('CHAIRMAN', _('Chairman')),
+    ('SECRETARY', _('Secretary')),
+    ('CHIEF MANAGEMENT OFFICER', _('Chief Management Officer')),
+    ('HEAD OF SECTION', _('Head Of Section')),
 ]
 
 SECTOR_CHOICES = [
-    ('GOVERNING', 'Governing'),
-    ('HEALTH', 'Health'),
-    ('DEVELOPMENT', 'Development'),
-    ('INCOME', 'Income'),
-    ('ACCOUNTS', 'Accounts'),
+    ('GOVERNING', _('Governing Section')),
+    ('HEALTH', _('Health Section')),
+    ('DEVELOPMENT', _('Development Section')),
+    ('INCOME', _('Income Section')),
+    ('ACCOUNTS', _('Accounts Section')),
 ]
 
 STATUS_CHOICES = [
-    ('PENDING', 'Pending'),
-    ('REPLIED', 'Replied'),
-    ('NOT_REQUIRED', 'Not Required'),
-    ('OLD_RECORD', 'Old Record'),
+    ('PENDING', _('Pending')),
+    ('REPLIED', _('Replied')),
+    ('NOT_REQUIRED', _('Not Required')),
+    ('OLD_RECORD', _('Old Record')),
 ]
 
 def letter_directory_path (instance, filename):
@@ -82,9 +82,9 @@ class Letter(models.Model):
     sender_details = models.TextField(blank=True, null=True, verbose_name="Sender Details")
     letter_type = models.CharField(max_length=255, blank=True, null=True)
     accepting_officer_id = models.CharField(max_length=50, blank=True, null=True)
-    target_sector = models.CharField(max_length=20, choices=SECTOR_CHOICES, blank=True, null=True)
-    administrated_by = models.CharField(max_length=20, choices=OFFICER_CHOICES, blank=True, null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    target_sector = models.CharField(max_length=40, choices=SECTOR_CHOICES, blank=True, null=True)
+    administrated_by = models.CharField(max_length=40, choices=OFFICER_CHOICES, blank=True, null=True)
+    status = models.CharField(max_length=40, choices=STATUS_CHOICES, default='PENDING')
     created_at = models.DateTimeField(auto_now_add=True)
     replied_at = models.DateTimeField(null=True, blank=True)
 

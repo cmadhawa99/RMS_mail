@@ -3,140 +3,226 @@
 
 {% block admin_content %}
 <div class="max-w-6xl mx-auto">
-    <a href="{% url 'custom_admin_letters' %}" class="inline-flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-indigo-500 mb-4 transition-colors">
+    <!-- Back Button -->
+    <a href="{% url 'custom_admin_letters' %}" class="inline-flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-indigo-500 mb-6 transition-colors">
         <i class="fas fa-arrow-left"></i> {% trans "Back to Letters" %}
     </a>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="glass-panel rounded-3xl overflow-hidden relative shadow-xl border-t-4 border-t-indigo-500">
 
-        <div class="lg:col-span-2 glass-panel rounded-3xl p-8 relative overflow-hidden">
-            <div class="flex justify-between items-start mb-6 border-b border-gray-200/30 dark:border-gray-700/30 pb-4">
+        <!-- Top Banner (Similar to User View) -->
+        <div class="p-8 border-b border-gray-200/30 dark:border-gray-700/30 bg-white/40 dark:bg-black/20 backdrop-blur-md relative">
+            <i class="fas fa-file-alt absolute -right-6 -top-6 text-9xl opacity-5 dark:opacity-[0.03] text-gray-500 transform rotate-12"></i>
+
+            <div class="flex flex-col md:flex-row justify-between md:items-start gap-6 relative z-10">
                 <div>
-                    <h5 class="text-xl font-black text-gray-800 dark:text-white">{% trans "Letter Details" %}</h5>
-                    <div class="text-[10px] font-bold uppercase tracking-wider opacity-60">{% trans "Full Information View" %}</div>
-                </div>
-                <span class="font-mono text-lg font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-3 py-1 rounded-lg">
-                    #{{ letter.serial_number }}
-                </span>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-4 mb-8">
-                <div class="col-span-1 sm:col-span-2">
-                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Sender Details" %}</div>
-                    <div class="font-bold text-gray-800 dark:text-gray-100 text-lg leading-relaxed">{{ letter.sender_details|linebreaksbr }}</div>
-                </div>
-                <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Date Received" %}</div>
-                    <div class="font-bold text-gray-800 dark:text-gray-100 text-lg">{{ letter.date_received|date:"F j, Y" }}</div>
-                </div>
-                <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Target Sector" %}</div>
-                    <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.get_target_sector_display }}</div>
-                </div>
-                <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Administered By" %}</div>
-                    <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.get_administrated_by_display }}</div>
-                </div>
-
-                <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Accepting Officer ID" %}</div>
-                    <div class="font-bold text-gray-800 dark:text-gray-100">
-                        {% if letter.accepting_officer_id %}
-                            {{ letter.accepting_officer_id }}
-                        {% else %}
-                            <span class="opacity-40 italic font-normal text-xs">{% trans "Not Provided" %}</span>
-                        {% endif %}
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-[12px] font-bold uppercase tracking-wider opacity-60">{% trans "Full Information View" %}</span>
                     </div>
+                    <h1 class="text-2xl font-black text-gray-800 dark:text-white tracking-tight">{% trans "Letter Details" %} <span class="font-mono text-lg text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20 px-2 rounded-lg ml-2">#{{ letter.serial_number }}</span></h1>
                 </div>
 
-                <div class="col-span-1 sm:col-span-2">
-                    <div class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">{% trans "Subject / Type" %}</div>
-                    <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.letter_type }}</div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-200/30 dark:border-gray-700/30 bg-gray-50/50 dark:bg-gray-800/30 rounded-xl p-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center text-xs">
-                        <i class="fas fa-plus"></i>
-                    </div>
-                    <div>
-                        <div class="text-[9px] font-bold uppercase tracking-widest opacity-50">{% trans "Created By" %}</div>
-                        <div class="text-xs font-bold">{{ letter.created_by|default:"System Legacy" }}</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center text-xs">
-                        <i class="fas fa-pen"></i>
-                    </div>
-                    <div>
-                        <div class="text-[9px] font-bold uppercase tracking-widest opacity-50">{% trans "Last Updated By" %}</div>
-                        <div class="text-xs font-bold">{{ letter.updated_by|default:"N/A" }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border-t border-gray-200/30 dark:border-gray-700/30 pt-6">
-                <h6 class="text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-2 opacity-70">
-                    <i class="fas fa-paperclip"></i> {% trans "Attachments" %}
-                </h6>
-
-                <div class="flex gap-3 flex-wrap">
-                    {% if letter.attachment_1 %} <img src="{{ letter.attachment_1.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
-                    {% if letter.attachment_2 %} <img src="{{ letter.attachment_2.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
-                    {% if letter.attachment_3 %} <img src="{{ letter.attachment_3.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
-                    {% if letter.attachment_4 %} <img src="{{ letter.attachment_4.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
-                    {% if letter.attachment_5 %} <img src="{{ letter.attachment_5.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
-                    {% if letter.attachment_6 %} <img src="{{ letter.attachment_6.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
-
-                    {% if not letter.attachment_1 and not letter.attachment_2 %}
-                        <span class="text-xs font-bold opacity-40 italic">{% trans "No documents attached." %}</span>
+                <div class="flex flex-col items-end gap-3">
+                    {% if letter.status == 'REPLIED' %}
+                        <div class="glass-panel px-6 py-3 rounded-2xl bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+                            <div class="text-right">
+                                <div class="text-base font-black uppercase tracking-wider">{% trans "Replied" %}</div>
+                            </div>
+                            <i class="fas fa-check-circle text-2xl ml-1"></i>
+                        </div>
+                    {% elif letter.status == 'NOT_REQUIRED' %}
+                        <div class="glass-panel px-6 py-3 rounded-2xl bg-gray-500/10 border-gray-500/20 text-gray-600 dark:text-gray-400 flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-gray-500"></div>
+                            <div class="text-right">
+                                <div class="text-base font-black uppercase tracking-wider">{% trans "Not Required" %}</div>
+                            </div>
+                            <i class="fas fa-minus-circle text-2xl ml-1"></i>
+                        </div>
+                    {% elif letter.status == 'OLD_RECORD' %}
+                        <div class="glass-panel px-6 py-3 rounded-2xl bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                            <div class="text-right">
+                                <div class="text-base font-black uppercase tracking-wider">{% trans "Old Record" %}</div>
+                            </div>
+                            <i class="fas fa-archive text-2xl ml-1"></i>
+                        </div>
+                    {% else %}
+                        <div class="glass-panel px-6 py-3 rounded-2xl bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center gap-3">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                            </span>
+                            <div class="text-right">
+                                <div class="text-base font-black uppercase tracking-wider">{% trans "Pending Action" %}</div>
+                            </div>
+                            <i class="fas fa-clock text-2xl ml-1"></i>
+                        </div>
                     {% endif %}
                 </div>
-
-                <a href="{% url 'view_letter_images' letter.pk %}" class="mt-6 glass-btn w-full py-3 rounded-xl bg-gray-800 text-white hover:bg-black font-bold text-sm gap-2 border-none shadow-lg">
-                    <i class="fas fa-search-plus"></i> {% trans "Open Secure Viewer" %}
-                </a>
             </div>
         </div>
 
-        <div class="space-y-6">
-            <div class="glass-panel p-6 rounded-2xl">
-                <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-3">{% trans "Status" %}</h6>
+        <!-- Details Grid Layout (8/4 Split) -->
+        <div class="p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                {% if letter.status == 'REPLIED' %}
-                    <div class="p-4 rounded-xl bg-emerald-100/50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-100">
-                        <div class="flex items-center gap-2 font-black mb-1"><i class="fas fa-check-circle"></i> {% trans "Replied" %}</div>
-                        {% if letter.replied_at %}
-                            <div class="text-xs opacity-80">on {{ letter.replied_at|date:"M d, Y" }}</div>
+                <!-- Main Content Column -->
+                <div class="lg:col-span-8 space-y-6">
+
+                    <!-- Subject -->
+                    <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover:bg-white/50 dark:hover:bg-white/5">
+                        <div class="absolute left-0 top-0 w-1 h-full bg-indigo-500"></div>
+                        <div class="text-[13px] font-bold text-indigo-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                            <i class="fas fa-pen"></i> {% trans "Subject / Type" %}
+                        </div>
+                        <div class="font-bold text-gray-800 dark:text-white leading-relaxed break-words">
+                            {{ letter.letter_type }}
+                        </div>
+                    </div>
+
+                    <!-- Sender Details -->
+                    <div class="glass-panel p-6 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors">
+                        <div class="text-[13px] font-bold opacity-60 uppercase tracking-widest mb-1">{% trans "Sender Details" %}</div>
+                        <div class="flex items-start gap-4 mt-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center shrink-0">
+                                <i class="fas fa-address-card text-lg"></i>
+                            </div>
+                            <div class="font-bold text-lg text-gray-800 dark:text-gray-100 break-words leading-relaxed">
+                                {{ letter.sender_details|linebreaksbr }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tracking details (Created By / Updated By) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="glass-panel p-4 rounded-2xl flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div>
+                                <div class="text-[12px] font-bold uppercase tracking-widest opacity-60">{% trans "Created By" %}</div>
+                                <div class="text-base font-bold text-gray-800 dark:text-gray-100">{{ letter.created_by|default:"System Legacy" }}</div>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 flex items-center justify-center">
+                                <i class="fas fa-pen"></i>
+                            </div>
+                            <div>
+                                <div class="text-[12px] font-bold uppercase tracking-widest opacity-50">{% trans "Last Updated By" %}</div>
+                                <div class="text-base font-bold text-gray-800 dark:text-gray-100">{{ letter.updated_by|default:"N/A" }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attachments -->
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <h6 class="text-base font-bold uppercase tracking-wider mb-4 flex items-center gap-2 opacity-70">
+                            <i class="fas fa-paperclip"></i> {% trans "Attachments" %}
+                        </h6>
+
+                        {% if letter.attachment_1 or letter.attachment_2 or letter.attachment_3 or letter.attachment_4 or letter.attachment_5 or letter.attachment_6 %}
+                            <div class="flex gap-3 flex-wrap mb-4">
+                                {% if letter.attachment_1 %} <img src="{{ letter.attachment_1.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
+                                {% if letter.attachment_2 %} <img src="{{ letter.attachment_2.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
+                                {% if letter.attachment_3 %} <img src="{{ letter.attachment_3.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
+                                {% if letter.attachment_4 %} <img src="{{ letter.attachment_4.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
+                                {% if letter.attachment_5 %} <img src="{{ letter.attachment_5.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
+                                {% if letter.attachment_6 %} <img src="{{ letter.attachment_6.url }}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/30 hover:scale-105 transition-transform shadow-sm"> {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="mb-4 py-4 rounded-xl border border-dashed border-gray-400/30 text-sm font-bold opacity-50 text-center italic">
+                                {% trans "No documents attached." %}
+                            </div>
+                        {% endif %}
+
+                        <a href="{% url 'view_letter_images' letter.pk %}" class="glass-btn w-full py-3 rounded-xl bg-gray-800 text-white hover:bg-black font-bold text-sm gap-2 border-none shadow-lg mt-2">
+                            <i class="fas fa-search-plus"></i> {% trans "Open Secure Viewer" %}
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Side Info Column -->
+                <div class="lg:col-span-4 space-y-6">
+
+                    <div class="glass-panel p-6 rounded-2xl space-y-6">
+                        <div>
+                            <div class="text-[13px] font-bold opacity-60 uppercase tracking-widest mb-1">{% trans "Date Received" %}</div>
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-500 flex items-center justify-center">
+                                    <i class="far fa-calendar-alt text-sm"></i>
+                                </div>
+                                <div class="font-bold text-lg text-gray-800 dark:text-gray-100">{{ letter.date_received|date:"F j, Y" }}</div>
+                            </div>
+                        </div>
+                        <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
+
+                        <div>
+                            <div class="text-[13px] font-bold opacity-60 uppercase tracking-widest mb-1">{% trans "Target Sector" %}</div>
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-500 flex items-center justify-center">
+                                    <i class="fas fa-bullseye text-sm"></i>
+                                </div>
+                                <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.get_target_sector_display }}</div>
+                            </div>
+                        </div>
+                        <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
+
+                        <div>
+                            <div class="text-[13px] font-bold opacity-60 uppercase tracking-widest mb-1">{% trans "Administered By" %}</div>
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-500 flex items-center justify-center">
+                                    <i class="fas fa-user-shield text-sm"></i>
+                                </div>
+                                <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.get_administrated_by_display }}</div>
+                            </div>
+                        </div>
+                        <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
+
+                        <div>
+                            <div class="text-[13px] font-bold opacity-60 uppercase tracking-widest mb-1">{% trans "Accepting Officer ID" %}</div>
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700/50 text-gray-500 flex items-center justify-center">
+                                    <i class="fas fa-id-badge text-sm"></i>
+                                </div>
+                                <div class="font-bold text-gray-800 dark:text-gray-100">
+                                    {% if letter.accepting_officer_id %}
+                                        {{ letter.accepting_officer_id }}
+                                    {% else %}
+                                        <span class="opacity-40 italic font-normal text-xs">{% trans "Not Provided" %}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if letter.status == 'REPLIED' and letter.replied_at %}
+                        <div class="h-px bg-gray-200/50 dark:bg-gray-700/50"></div>
+                        <div>
+                            <div class="text-[13px] font-bold opacity-60 uppercase tracking-widest mb-1">{% trans "Replied Date" %}</div>
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 flex items-center justify-center">
+                                    <i class="fas fa-calendar-check text-sm"></i>
+                                </div>
+                                <div class="font-bold text-gray-800 dark:text-gray-100">{{ letter.replied_at|date:"M d, Y" }}</div>
+                            </div>
+                        </div>
                         {% endif %}
                     </div>
-                {% elif letter.status == 'NOT_REQUIRED' %}
-                    <div class="p-4 rounded-xl bg-gray-100/50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-300">
-                        <div class="flex items-center gap-2 font-black mb-1"><i class="fas fa-minus-circle"></i> {% trans "Not Required" %}</div>
-                        <div class="text-[10px] font-bold opacity-60 uppercase">{% trans "Closed File" %}</div>
-                    </div>
-                {% elif letter.status == 'OLD_RECORD' %}
-                    <div class="p-4 rounded-xl bg-blue-100/50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-100">
-                        <div class="flex items-center gap-2 font-black mb-1"><i class="fas fa-archive"></i> {% trans "Old Record" %}</div>
-                        <div class="text-[10px] font-bold opacity-60 uppercase">{% trans "Archived" %}</div>
-                    </div>
-                {% else %}
-                    <div class="p-4 rounded-xl bg-amber-100/50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-100">
-                        <div class="flex items-center gap-2 font-black"><i class="fas fa-clock"></i>{% trans "Pending Action" %}</div>
-                    </div>
-                {% endif %}
-            </div>
 
-            <div class="glass-panel p-6 rounded-2xl">
-                <h6 class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-3">{% trans "Administrative Actions" %}</h6>
-                <div class="flex flex-col gap-3">
-                    <a href="{% url 'edit_letter' letter.pk %}" class="glass-btn py-3 rounded-xl text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500 hover:text-white font-bold text-sm gap-2">
-                        <i class="fas fa-edit"></i> {% trans "Edit Details" %}
-                    </a>
-                    <button onclick="confirmDelete()" class="glass-btn py-3 rounded-xl text-red-500 hover:bg-red-500 hover:text-white font-bold text-sm gap-2">
-                        <i class="fas fa-trash-alt"></i> {% trans "Delete Record" %}
-                    </button>
+                    <!-- Actions -->
+                    <div class="glass-panel p-6 rounded-2xl bg-indigo-50/30 dark:bg-indigo-900/10">
+                        <h6 class="text-[13px] font-bold uppercase tracking-widest opacity-60 mb-4">{% trans "Administrative Actions" %}</h6>
+                        <div class="flex flex-col gap-3">
+                            <a href="{% url 'edit_letter' letter.pk %}" class="glass-btn py-3 rounded-xl text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500 hover:text-white font-bold text-sm gap-2">
+                                <i class="fas fa-edit"></i> {% trans "Edit Details" %}
+                            </a>
+                            <button onclick="confirmDelete()" class="glass-btn py-3 rounded-xl text-red-500 hover:bg-red-500 hover:text-white font-bold text-sm gap-2">
+                                <i class="fas fa-trash-alt"></i> {% trans "Delete Record" %}
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
