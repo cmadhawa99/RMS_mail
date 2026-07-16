@@ -4,9 +4,12 @@ import sys
 import ctypes
 import base64
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # REPLACE THIS with your actual Server IP
-SERVER_URL = "http://DESKTOP-NHOO4UE:8000"
+SERVER_URL = os.environ.get("SERVER_URL", "http://localhost:8000")
 APP_TITLE = "City Council Management Portal"
 
 
