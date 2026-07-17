@@ -5,6 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import UploadedFile, InMemoryUploadedFile
 from django.utils.translation import gettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 # Create your models here.
 
@@ -97,6 +98,8 @@ class Letter(models.Model):
 
     created_by = models.CharField(max_length=150, blank=True, null=True)
     updated_by = models.CharField(max_length=150, blank=True, null=True)
+
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['serial_number']

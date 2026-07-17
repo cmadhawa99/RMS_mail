@@ -599,3 +599,102 @@ def export_letters_excel(request):
 
     wb.save(response)
     return response
+
+@never_cache
+@login_required
+def admin_letter_audit_log(request, pk):
+    letter = get_object_or_404(Letter, pk=pk)
+
+    history_records = letter.history.all()
+
+    audit_data = []
+
+    for i in range (len(history_records)):
+        new_record = history_records[i]
+
+        if i + 1 < len(history_records):
+            old_record = history_records[i + 1]
+            delta = new_record.diff_against(old_record)
+
+            changes = []
+            for change in delta.changes:
+                changes.append({
+                    'field': change.field.capitalize().replace('_', ' '),
+                    'old': change.old if change.old else "-",
+                    'new': change.new if change.new else "-"
+                })
+
+            if changes:
+                audit_data.append({
+                    'type': 'Update',
+                    'date': new_record.history_date,
+                    'user': new_record.history_user.username if new_record.history_user else new_record.updated_by,
+                    'changes': changes
+                })
+
+        else:
+            changes = []
+            for field in new_record._meta.fields:
+                if field.name not in ['history_id', 'history_date', 'history_change_reason', 'history_type',
+                                      'history_user', 'id']:
+                    val = getattr(new_record, field.name)
+                    if val:
+                        changes.append({
+                            'field': field.name.capitalize().replace('_', ' '),
+                            'old': "-",
+                            'new': val
+                        })
+            audit_data.append({
+                'type': 'Initial Entry',
+                'date': new_record.history_date,
+                'user': new_record.history_user.username if new_record.history_user else new_record.created_by,
+                'changes': changes
+            })
+
+    context = {
+        'letter': letter,
+        'audit_data': audit_data,
+    }
+    return render(request, 'letters/admin/pages/admin_letter_audit.html', context)
+
+
+@never_cache
+@login_required
+def admin_global_audit(request):
+    all_history = Letter.history.all().order_by('-history_date')
+
+    search_query = request.GET.get('q', '')
+    if search_query:
+        all_history = all_history.filter(serial_number__icontains=search_query)
+
+    paginator = Paginator(all_history, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'history_records': page_obj,
+        'search_query': search_query,
+    }
+    return render(request, 'letters/admin/pages/admin_global_audit.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

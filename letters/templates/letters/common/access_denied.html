@@ -15,12 +15,25 @@
     <div class="error-card">
         <div class="icon-box"><i class="fas fa-ban"></i></div>
         <h3 class="mb-3">Access Restricted</h3>
-        <p class="text-muted mb-4">
-            You do not have permission to view this letter because it belongs to a different sector.
-        </p>
-        <a href="{% url 'dashboard' %}" class="btn btn-outline-dark">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
+        
+        {% if cooloff_time %}
+            <p class="text-muted mb-4">
+                Account locked due to too many failed login attempts.
+                Please wait <strong>5 minutes</strong> before trying again.
+            </p>
+            <a href="{% url 'login' %}" class="btn btn-outline-dark">
+                <i class="fas fa-arrow-left"></i> Back to Login
+            </a>
+
+        {% else %}
+            <p class="text-muted mb-4">
+                You do not have permission to view this letter because it belongs to a different sector.
+            </p>
+            <a href="{% url 'sector_dashboard' %}" class="btn btn-outline-dark">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        {% endif %}
+
     </div>
 </body>
 </html>

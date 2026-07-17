@@ -36,4 +36,7 @@ urlpatterns = [
     path('custom-admin/letters/edit/<path:pk>/', views.edit_letter, name='edit_letter'),
     path('custom-admin/letters/delete/<path:pk>/', views.delete_letter, name='delete_letter'),
     path('custom-admin/letters/export/', views.export_letters_excel, name='export_letters_excel'),
+
+    path('custom-admin/letters/<int:pk>/audit/', views.admin_letter_audit_log, name='admin_letter_audit'),
+    path('custom-admin/audit-logs/', views.admin_global_audit, name='admin_global_audit'),
 ]

@@ -1,0 +1,81 @@
+{% extends 'letters/admin/shared/admin_base.html' %}
+{% load i18n %}
+
+{% block header_title %}{% trans "System Audit Logs" %}{% endblock %}
+
+{% block admin_content %}
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+    <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">{% trans "Global Action Ledger" %}</h3>
+
+    <!-- Search Form -->
+    <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all bg-white dark:bg-transparent border border-gray-300 dark:border-white/10">
+        <input type="text" name="q" class="bg-transparent border-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 py-1 px-3 w-48 outline-none" placeholder="Search Serial Number..." value="{{ search_query }}">
+        <button type="submit" class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 transition-colors">
+            <i class="fas fa-search text-xs"></i>
+        </button>
+    </form>
+</div>
+
+<div class="glass-panel rounded-2xl overflow-hidden p-1">
+    <table class="w-full text-left border-collapse">
+        <thead class="text-xs uppercase text-gray-500 dark:text-gray-400 font-bold bg-white/50 dark:bg-black/20">
+            <tr>
+                <th class="px-6 py-4">{% trans "Date & Time" %}</th>
+                <th class="px-6 py-4">{% trans "User" %}</th>
+                <th class="px-6 py-4">{% trans "Action Type" %}</th>
+                <th class="px-6 py-4">{% trans "Target Serial" %}</th>
+                <th class="px-6 py-4 text-right">{% trans "Details" %}</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200/50 dark:divide-gray-700/50">
+            {% for record in history_records %}
+            <tr class="hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
+                <td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200">
+                    {{ record.history_date|date:"Y-m-d H:i:s" }}
+                </td>
+                <td class="px-6 py-4 text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                    {{ record.history_user.username|default:"System" }}
+                </td>
+                <td class="px-6 py-4">
+                    {% if record.history_type == '+' %}
+                        <span class="px-2 py-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-md text-xs font-bold"><i class="fas fa-plus mr-1"></i> Created</span>
+                    {% elif record.history_type == '~' %}
+                        <span class="px-2 py-1 bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md text-xs font-bold"><i class="fas fa-pen mr-1"></i> Updated</span>
+                    {% elif record.history_type == '-' %}
+                        <span class="px-2 py-1 bg-red-100/50 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-md text-xs font-bold"><i class="fas fa-trash mr-1"></i> Deleted</span>
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 text-sm font-mono opacity-80">
+                    #{{ record.serial_number }}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <!-- Links to the detailed "Diff" view for this specific letter -->
+                    <a href="{% url 'admin_letter_audit' record.id %}" class="text-indigo-500 hover:text-indigo-700 font-bold text-sm underline">
+                        {% trans "View Diff" %}
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="px-6 py-12 text-center text-gray-500 opacity-60 font-bold">
+                    {% trans "No audit records found." %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination Controls -->
+<div class="flex justify-between items-center mt-4 px-2">
+    <span class="text-[10px] font-bold uppercase tracking-wider opacity-50">Page {{ history_records.number }} of {{ history_records.paginator.num_pages }}</span>
+    <div class="flex gap-2">
+        {% if history_records.has_previous %}
+            <a href="?page={{ history_records.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white"><i class="fas fa-chevron-left text-xs"></i></a>
+        {% endif %}
+        {% if history_records.has_next %}
+            <a href="?page={{ history_records.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white"><i class="fas fa-chevron-right text-xs"></i></a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
