@@ -225,7 +225,14 @@ def view_letter_images(request, pk):
 @login_required
 def custom_admin_dashboard(request):
     if not request.user.is_superuser: return redirect('sector_dashboard')
-    return render(request, 'letters/admin/pages/admin_dashboard.html')
+
+    backup_settings, created = BackupSettings.objects.get_or_create(id=1)
+
+    context = {
+        'backup_settings': backup_settings,
+    }
+
+    return render(request, 'letters/admin/pages/admin_dashboard.html', context)
 
 
 @never_cache
