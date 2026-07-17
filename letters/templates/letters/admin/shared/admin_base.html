@@ -98,7 +98,7 @@
 
                 <a href="{% url 'custom_admin_dashboard' %}" class="glass-nav-item group {% if request.resolver_match.url_name == 'custom_admin_dashboard' %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">
                     <i class="fas fa-tachometer-alt w-6 text-center"></i>
-                    <span class="ml-3">{% trans "Dashboard" %}</span>
+                    <span class="ml-3">{% trans "Overview" %}</span>
                 </a>
 
                 <div class="px-2 mt-8 mb-2 text-[12px] font-bold uppercase tracking-widest opacity-50">{% trans "Management" %}</div>
@@ -141,7 +141,7 @@
             <header class="h-20 px-8 flex justify-between items-center shrink-0 border-b border-gray-200 dark:border-gray-700/30 bg-white/50 dark:bg-black/10 backdrop-blur-md">
                 <div>
                     <h1 class="text-2xl font-black text-gray-800 dark:text-white flex items-center gap-3">
-                        {% block header_title %}{% trans "Admin Control Panel" %}{% endblock %}
+                        {% block header_title %}{% trans "Main Control Panel" %}{% endblock %}
                     </h1>
                 </div>
 
