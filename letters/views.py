@@ -16,6 +16,9 @@ from datetime import datetime
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 
+from .models import BackupSettings
+from .utils import run_db_backup
+
 # --- PUBLIC PORTAL ---
 
 @never_cache  # Security: Prevents "Back" button from showing this after logout
@@ -676,6 +679,40 @@ def admin_global_audit(request):
         'search_query': search_query,
     }
     return render(request, 'letters/admin/pages/admin_global_audit.html', context)
+
+@never_cache
+@login_required
+def manual_backup(request):
+    if not request.user.is_superuser:
+        return redirect('custom_admin_dashboard')
+
+    success, result = run_db_backup(is_auto=False)
+
+    if success:
+        messages.success(request, f"Manual backup created successfully: {result}")
+    else:
+        messages.error(request, f"Backup failed: {result}")
+
+    return redirect('custom_admin_dashboard')
+
+@never_cache
+@login_required
+def toggle_auto_backup(request):
+    if not request.user.is_superuser:
+        return redirect('custom_admin_dashboard')
+
+    settings_obj, _ = BackupSettings.objects.get_or_create(id=1)
+    settings_obj.auto_backup_enabled = not settings_obj.auto_backup_enabled
+    settings_obj.save()
+
+    state = "Enabled" if settings_obj.auto_backup_enabled else "Disabled"
+    messages.success(request, f"Automatic daily backups are now {state}.")
+
+    return redirect('custom_admin_dashboard')
+
+
+
+
 
 
 

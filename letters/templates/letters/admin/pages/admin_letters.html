@@ -120,19 +120,19 @@
                 <td class="px-4 py-3 bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-gray-200 dark:border-transparent group-hover:border-transparent">
                     {% if letter.status == 'REPLIED' %}
                         <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg">
-                            <i class="fas fa-check-circle"></i> Replied
+                            <i class="fas fa-check-circle"></i> {% trans "Replied" %}
                         </span>
                     {% elif letter.status == 'NOT_REQUIRED' %}
                         <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-gray-600 dark:text-gray-400 bg-gray-100/50 dark:bg-gray-800/50 px-2 py-1 rounded-lg">
-                            <i class="fas fa-minus-circle"></i> No Action
+                            <i class="fas fa-minus-circle"></i> {% trans "No Action" %}
                         </span>
                     {% elif letter.status == 'OLD_RECORD' %}
                         <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-900/30 px-2 py-1 rounded-lg">
-                            <i class="fas fa-archive"></i> Old Record
+                            <i class="fas fa-archive"></i> {% trans "Old Record" %}
                         </span>
                     {% else %}
                         <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded-lg">
-                            <i class="fas fa-clock"></i> Pending
+                            <i class="fas fa-clock"></i> {% trans "Pending" %}
                         </span>
                     {% endif %}
                 </td>

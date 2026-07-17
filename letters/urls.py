@@ -39,4 +39,8 @@ urlpatterns = [
 
     path('custom-admin/letters/<int:pk>/audit/', views.admin_letter_audit_log, name='admin_letter_audit'),
     path('custom-admin/audit-logs/', views.admin_global_audit, name='admin_global_audit'),
+
+    # Backup
+    path('custom-admin/backup/manual/', views.manual_backup, name='manual_backup'),
+    path('custom-admin/backup/toggle/', views.toggle_auto_backup, name='toggle_auto_backup'),
 ]

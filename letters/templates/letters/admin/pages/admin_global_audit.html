@@ -1,15 +1,15 @@
 {% extends 'letters/admin/shared/admin_base.html' %}
 {% load i18n %}
 
-{% block header_title %}{% trans "System Audit Logs" %}{% endblock %}
+{% block header_title %}{% trans "Main Control Panel" %}{% endblock %}
 
 {% block admin_content %}
 <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-    <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">{% trans "Global Action Ledger" %}</h3>
+    <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">{% trans "Audit Logs" %}</h3>
 
     <!-- Search Form -->
     <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all bg-white dark:bg-transparent border border-gray-300 dark:border-white/10">
-        <input type="text" name="q" class="bg-transparent border-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 py-1 px-3 w-48 outline-none" placeholder="Search Serial Number..." value="{{ search_query }}">
+        <input type="text" name="q" class="bg-transparent border-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 py-1 px-3 w-48 outline-none" placeholder="{% trans 'Search Serial Number...' %}" value="{{ search_query }}">
         <button type="submit" class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 transition-colors">
             <i class="fas fa-search text-xs"></i>
         </button>
@@ -38,11 +38,11 @@
                 </td>
                 <td class="px-6 py-4">
                     {% if record.history_type == '+' %}
-                        <span class="px-2 py-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-md text-xs font-bold"><i class="fas fa-plus mr-1"></i> Created</span>
+                        <span class="px-2 py-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-md text-xs font-bold"><i class="fas fa-plus mr-1"></i>{% trans "Created" %}</span>
                     {% elif record.history_type == '~' %}
-                        <span class="px-2 py-1 bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md text-xs font-bold"><i class="fas fa-pen mr-1"></i> Updated</span>
+                        <span class="px-2 py-1 bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md text-xs font-bold"><i class="fas fa-pen mr-1"></i>{% trans "Updated" %}</span>
                     {% elif record.history_type == '-' %}
-                        <span class="px-2 py-1 bg-red-100/50 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-md text-xs font-bold"><i class="fas fa-trash mr-1"></i> Deleted</span>
+                        <span class="px-2 py-1 bg-red-100/50 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-md text-xs font-bold"><i class="fas fa-trash mr-1"></i>{% trans "Deleted" %}</span>
                     {% endif %}
                 </td>
                 <td class="px-6 py-4 text-sm font-mono opacity-80">
@@ -51,7 +51,7 @@
                 <td class="px-6 py-4 text-right">
                     <!-- Links to the detailed "Diff" view for this specific letter -->
                     <a href="{% url 'admin_letter_audit' record.id %}" class="text-indigo-500 hover:text-indigo-700 font-bold text-sm underline">
-                        {% trans "View Diff" %}
+                        {% trans "View Difference" %}
                     </a>
                 </td>
             </tr>

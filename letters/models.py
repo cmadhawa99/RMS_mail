@@ -145,3 +145,11 @@ class LetterImage(models.Model):
 
     def __str__(self):
         return f"Page for Letter #{self.letter.serial_number}"
+
+
+class BackupSettings(models.Model):
+    auto_backup_enabled = models.BooleanField(default=False)
+    last_auto_backup_date = models.DateField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Backup Settings"
