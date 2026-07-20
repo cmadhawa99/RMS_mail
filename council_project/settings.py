@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+
+from django.conf.global_settings import SECURE_CONTENT_TYPE_NOSNIFF, SECURE_HSTS_SECONDS, SECURE_REFERRER_POLICY
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -21,7 +23,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['wps-lipi', '127.0.0.1']
 
 
 # Application definition
@@ -144,3 +146,21 @@ AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = timedelta(minutes=5)
 AXES_RESET_ON_SUCCESS = True
 AXES_LOCKOUT_TEMPLATE = 'letters/common/access_denied.html'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = [
+    'https://wps-lipi'
+]
+
+
+# Security Headers
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+SECURE_REFERRER_POLICY = 'same-origin'
+SECURE_BROWSER_XSS_FILTER = True
