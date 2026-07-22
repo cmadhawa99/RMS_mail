@@ -76,7 +76,6 @@ def process_scanned_image(image_field, field_name):
 
 
 class Letter(models.Model):
-    """The blueprint for every incoming letter"""
 
     serial_number = models.IntegerField(unique=True, verbose_name="අනු අංකය")
     date_received = models.DateField(blank=True, null=True)
