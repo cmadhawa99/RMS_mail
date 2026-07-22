@@ -139,11 +139,11 @@
                                 </div>
                                 <i class="fas fa-minus-circle text-2xl ml-1"></i>
                             </div>
-                        {% elif letter.status == 'OLD_RECORD' %}
+                        {% elif letter.status == 'ADMIN_UPDATED' %}
                             <div class="glass-panel px-6 py-3 rounded-2xl bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center gap-3">
                                 <div class="w-2 h-2 rounded-full bg-blue-500"></div>
                                 <div class="text-right">
-                                    <div class="text-base font-black uppercase tracking-wider">{% trans "Old Record" %}</div>
+                                    <div class="text-base font-black uppercase tracking-wider">{% trans "Admin Updated" %}</div>
                                 </div>
                                 <i class="fas fa-archive text-2xl ml-1"></i>
                             </div>
@@ -209,10 +209,10 @@
                                 </h3>
                                 <p class="text-gray-500/60 dark:text-gray-400/60 text-xs font-bold uppercase tracking-wider mb-4">File Closed</p>
                             </div>
-                        {% elif letter.status == 'OLD_RECORD' %}
+                        {% elif letter.status == 'ADMIN_UPDATED' %}
                             <div class="glass-panel p-6 rounded-2xl border-l-4 border-blue-500 bg-blue-50/50 dark:bg-blue-900/10">
                                 <h3 class="text-blue-600 dark:text-blue-400 font-black text-sm mb-1 flex items-center gap-2">
-                                    <i class="fas fa-archive"></i> {% trans "Old Record" %}
+                                    <i class="fas fa-archive"></i> {% trans "Admin Updated" %}
                                 </h3>
                                 <p class="text-blue-500/60 dark:text-blue-400/60 text-xs font-bold uppercase tracking-wider mb-4">Archived Record</p>
                             </div>

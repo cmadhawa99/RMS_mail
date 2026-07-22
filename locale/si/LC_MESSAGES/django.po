@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-17 09:17+0530\n"
+"POT-Creation-Date: 2026-07-22 12:02+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\council_project\settings.py:117
+#: .\council_project\settings.py:121
 msgid "English"
 msgstr ""
 
-#: .\council_project\settings.py:118
+#: .\council_project\settings.py:122
 msgid "Sinhala"
 msgstr ""
 
@@ -91,13 +91,10 @@ msgid "Not Required"
 msgstr "පිළිතුරු සැපයීම අවශ්‍ය නැත"
 
 #: .\letters\models.py:34
-#: .\letters\templates\letters\admin\pages\admin_letter_detail.html:46
 #: .\letters\templates\letters\admin\pages\admin_letters.html:131
-#: .\letters\templates\letters\user\dashboard.html:329
-#: .\letters\templates\letters\user\letter_detail.html:146
-#: .\letters\templates\letters\user\letter_detail.html:215
-msgid "Old Record"
-msgstr "පැරණි වාර්තාවක්"
+#| msgid "Updated"
+msgid "Admin Updated"
+msgstr "පරිපාලක යාවත්කාලීන කරන ලද"
 
 #: .\letters\templates\letters\admin\pages\admin_dashboard.html:6
 #: .\letters\templates\letters\admin\shared\admin_base.html:101
@@ -117,15 +114,27 @@ msgid "Operational"
 msgstr "ක්‍රියාත්මකව ඇත"
 
 #: .\letters\templates\letters\admin\pages\admin_dashboard.html:34
+msgid "Database Backup"
+msgstr ""
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:39
+msgid "Run Manual Backup"
+msgstr ""
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:44
+msgid "Auto Daily Backup"
+msgstr ""
+
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:58
 msgid "Quick Actions"
 msgstr "ක්ෂණික ක්‍රියාමාර්ග"
 
-#: .\letters\templates\letters\admin\pages\admin_dashboard.html:38
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:62
 #: .\letters\templates\letters\user\user_add_letter.html:120
 msgid "Add New Letter"
 msgstr "නව ලිපියක් ඇතුලත් කරන්න"
 
-#: .\letters\templates\letters\admin\pages\admin_dashboard.html:41
+#: .\letters\templates\letters\admin\pages\admin_dashboard.html:65
 msgid "Create Officer"
 msgstr "නව නිළධාරියෙක් ඇතුලත් කරන්න"
 
@@ -140,7 +149,6 @@ msgid "Audit Logs"
 msgstr "විගණන වාර්තා"
 
 #: .\letters\templates\letters\admin\pages\admin_global_audit.html:12
-#| msgid "Serial Number"
 msgid "Search Serial Number..."
 msgstr "අනු අංකය සොයන්න..."
 
@@ -189,23 +197,23 @@ msgid "Audit Log"
 msgstr "විගණන වාර්තා"
 
 #: .\letters\templates\letters\admin\pages\admin_letter_audit.html:12
-#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:65
+#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:64
 msgid "Close Record"
 msgstr "වාර්තාව වසන්න"
 
-#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:33
+#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:32
 msgid "Revised Field"
 msgstr "සංශෝධිත ක්ෂේත්‍රය"
 
-#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:34
+#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:33
 msgid "Pre Value"
 msgstr "පෙර අගය"
 
-#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:35
+#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:34
 msgid "Revised Value"
 msgstr "සංශෝධිත අගය"
 
-#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:72
+#: .\letters\templates\letters\admin\pages\admin_letter_audit.html:71
 msgid "No audit history available yet."
 msgstr "පද්ධතියේ කිසිදු විගණන වාර්තාවක් නොමැත"
 
@@ -220,6 +228,13 @@ msgstr "සම්පූර්ණ තොරතුරු"
 #: .\letters\templates\letters\admin\pages\admin_letter_detail.html:22
 msgid "Letter Details"
 msgstr "ලිපියේ විස්තර"
+
+#: .\letters\templates\letters\admin\pages\admin_letter_detail.html:46
+#: .\letters\templates\letters\user\dashboard.html:329
+#: .\letters\templates\letters\user\letter_detail.html:146
+#: .\letters\templates\letters\user\letter_detail.html:215
+msgid "Old Record"
+msgstr "පැරණි වාර්තාවක්"
 
 #: .\letters\templates\letters\admin\pages\admin_letter_detail.html:57
 msgid "Pending Action"

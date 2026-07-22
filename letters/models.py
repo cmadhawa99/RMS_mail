@@ -31,7 +31,7 @@ STATUS_CHOICES = [
     ('PENDING', _('Pending')),
     ('REPLIED', _('Replied')),
     ('NOT_REQUIRED', _('Not Required')),
-    ('OLD_RECORD', _('Old Record')),
+    ('ADMIN_UPDATED', _('Admin Updated')),
 ]
 
 def letter_directory_path (instance, filename):

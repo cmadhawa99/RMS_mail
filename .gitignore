@@ -116,3 +116,6 @@ media/
 # !**/migrations/__init__.py
 
 *.exe
+
+# Custom ignores
+backups/

@@ -542,8 +542,8 @@ def export_letters_excel(request):
             status = "පිළිතුරු යොමු කර ඇත"
         elif letter.status == 'NOT_REQUIRED':
             status = "අවශ්‍ය නොවේ"
-        elif letter.status == 'OLD_RECORD':
-            status = "පැරණි වාර්තාවක්"
+        elif letter.status == 'ADMIN_UPDATED':
+            status = "Admin Updated"
         else:
             status = "විමර්ශනය වෙමින් පවතී"
 
