@@ -1,18 +1,3 @@
-"""
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Model Tests
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Tests for all model classes: Letter, SectorProfile, LetterImage, BackupSettings
-and the process_scanned_image utility function.
-
-These tests ensure:
-- Model field validation
-- Business logic in save() methods
-- Relationships between models
-- String representations
-- Default values and choices
-"""
-
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile

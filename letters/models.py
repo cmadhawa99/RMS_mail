@@ -86,7 +86,7 @@ class Letter(models.Model):
     administrated_by = models.CharField(max_length=40, choices=OFFICER_CHOICES, blank=True, null=True)
     status = models.CharField(max_length=40, choices=STATUS_CHOICES, default='PENDING')
     created_at = models.DateTimeField(auto_now_add=True)
-    replied_at = models.DateTimeField(null=True, blank=True)
+    replied_at = models.DateField(null=True, blank=True)
 
     attachment_1 = models.FileField(upload_to=letter_directory_path, null=True, blank=True)
     attachment_2 = models.FileField(upload_to=letter_directory_path, null=True, blank=True)
