@@ -263,8 +263,8 @@ class TestLetterForm:
         # Valid: Create letter with received and reply dates
         form_data = {
             'serial_number': 501,
-            'date_received': '2024-01-15',
-            'replied_at': '2024-01-20',
+            'date_received': '2026-06-15',
+            'replied_at': '2026-06-20',
             'sender_details': 'Date Test Sender',
             'letter_type': 'Date Test Type',
             'target_sector': 'GOVERNING',
@@ -276,8 +276,8 @@ class TestLetterForm:
 
         assert form.is_valid(), f"Form should be valid, errors: {form.errors}"
         letter = form.save()
-        assert str(letter.date_received) == '2024-01-15'
-        assert letter.replied_at.strftime('%Y-%m-%d') == '2024-01-20'
+        assert str(letter.date_received) == '2026-06-15'
+        assert letter.replied_at.strftime('%Y-%m-%d') == '2026-06-20'
 
     def test_all_status_choices_available(self):
         # Valid: All status choices are available in form
@@ -314,7 +314,7 @@ class TestUserLetterForm:
         # Invalid: REPLIED status without replied_at should fail
         form_data = {
             'serial_number': 601,
-            'date_received': '2024-01-15',
+            'date_received': '2026-06-15',
             'sender_details': 'Reply Test Sender',
             'letter_type': 'Reply Test Type',
             'target_sector': 'GOVERNING',
@@ -333,39 +333,39 @@ class TestUserLetterForm:
         # Valid: REPLIED status with reply date should pass
         form_data = {
             'serial_number': 602,
-            'date_received': '2024-01-15',
+            'date_received': '2026-06-15',
             'sender_details': 'Reply Test Sender',
             'letter_type': 'Reply Test Type',
             'target_sector': 'GOVERNING',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'REPLIED',
-            'replied_at': '2024-01-20'
+            'replied_at': '2026-06-20'
         }
         form = UserLetterForm(data=form_data)
 
         assert form.is_valid(), f"Form should be valid, errors: {form.errors}"
         letter = form.save()
         assert letter.status == 'REPLIED'
-        assert letter.replied_at.strftime('%Y-%m-%d') == '2024-01-20'
+        assert letter.replied_at.strftime('%Y-%m-%d') == '2026-06-20'
 
     def test_not_required_status_clears_reply_date(self):
         # Valid: NOT_REQUIRED status sets replied_at to None
         letter = Letter.objects.create(
             serial_number=701,
-            date_received='2024-01-15',
+            date_received='2026-06-15',
             sender_details='Not Required Sender',
             letter_type='Not Required Type',
             target_sector='GOVERNING',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-001',
             status='PENDING',
-            replied_at='2024-01-18'
+            replied_at='2026-06-18'
         )
 
         form_data = {
             'serial_number': 701,
-            'date_received': '2024-01-15',
+            'date_received': '2026-06-15',
             'sender_details': 'Not Required Sender',
             'letter_type': 'Not Required Type',
             'target_sector': 'GOVERNING',
@@ -385,7 +385,7 @@ class TestUserLetterForm:
         # Invalid: Cannot change serial number of existing letter
         letter = Letter.objects.create(
             serial_number=801,
-            date_received='2024-01-15',
+            date_received='2026-06-15',
             sender_details='Lock Test Sender',
             letter_type='Lock Test Type',
             target_sector='GOVERNING',
@@ -395,7 +395,7 @@ class TestUserLetterForm:
 
         form_data = {
             'serial_number': 999,  # Different serial
-            'date_received': '2024-01-15',
+            'date_received': '2026-06-15',
             'sender_details': 'Lock Test Sender',
             'letter_type': 'Lock Test Type',
             'target_sector': 'GOVERNING',
@@ -424,7 +424,7 @@ class TestUserLetterForm:
         # Valid: Certain fields are locked (readonly) for existing letters
         letter = Letter.objects.create(
             serial_number=901,
-            date_received='2024-01-15',
+            date_received='2026-06-15',
             sender_details='Readonly Test Sender',
             letter_type='Readonly Test Type',
             target_sector='GOVERNING',
@@ -446,7 +446,7 @@ class TestUserLetterForm:
         # Valid: Create new letter with all required fields
         form_data = {
             'serial_number': 1001,
-            'date_received': '2024-01-15',
+            'date_received': '2026-06-15',
             'sender_details': 'New Letter Sender',
             'letter_type': 'New Letter Type',
             'target_sector': 'GOVERNING',

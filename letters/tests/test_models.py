@@ -74,7 +74,7 @@ class TestLetterModel(TestCase):
         # Create a sample letter for testing
         self.letter = Letter.objects.create(
             serial_number=1001,
-            date_received=date(2024, 1, 15),
+            date_received=date(2026, 6, 15),
             sender_details="ඩී.යූ.සී.කිරිබණ්ඩා, කහටගස්දෙනිය",
             letter_type="ආදායම් බදු ගෙවීම - සල්ලි ගස්වලින් කඩනවා යැයි සිතන මහත්වරුන්ටයි",
             accepting_officer_id="ආ/67",
@@ -282,12 +282,12 @@ class TestBackupSettingsModel(TestCase):
         # Should allow updating backup settings
         settings = BackupSettings.objects.create()
         settings.auto_backup_enabled = True
-        settings.last_auto_backup_date = date(2024, 1, 15)
+        settings.last_auto_backup_date = date(2026, 6, 15)
         settings.save()
 
         settings.refresh_from_db()
         self.assertTrue(settings.auto_backup_enabled)
-        self.assertEqual(settings.last_auto_backup_date, date(2024, 1, 15))
+        self.assertEqual(settings.last_auto_backup_date, date(2026, 6, 15))
 
     def test_backup_settings_verbose_name_plural(self):
         # Should have correct verbose name plural
