@@ -1,4 +1,5 @@
 import os
+from fileinput import filename
 from pathlib import Path
 
 from django.conf.global_settings import SECURE_CONTENT_TYPE_NOSNIFF, SECURE_HSTS_SECONDS, SECURE_REFERRER_POLICY
@@ -164,3 +165,35 @@ SECURE_HSTS_PRELOAD = True
 
 SECURE_REFERRER_POLICY = 'same-origin'
 SECURE_BROWSER_XSS_FILTER = True
+
+# Cookie Attributes
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename' : BASE_DIR / 'logs' / 'django_error.log',
+            'maxBytes': 5 * 1024 * 1024,
+            'backupCount': 5,
+            'level': 'ERROR',
+            'formatter': 'verbose',
+        },
+    },
+
+    'formatters': {
+        'verbose': {'format': '{asctime} {levelname} {name} {message}', 'style': '{'},
+    },
+
+    'loggers': {
+'django.request': {'handlers': ['file'], 'level': 'ERROR', 'propagate': True},
+    },
+}
+

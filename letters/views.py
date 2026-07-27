@@ -613,6 +613,8 @@ def export_letters_excel(request):
 @never_cache
 @login_required
 def admin_letter_audit_log(request, pk):
+    if not request.user.is_superuser:
+        return redirect('sector_dashboard')
     letter = get_object_or_404(Letter, pk=pk)
 
     history_records = letter.history.all()
@@ -671,6 +673,8 @@ def admin_letter_audit_log(request, pk):
 @never_cache
 @login_required
 def admin_global_audit(request):
+    if not request.user.is_superuser:
+        return redirect('sector_dashboard')
     all_history = Letter.history.all().order_by('-history_date')
 
     search_query = request.GET.get('q', '')

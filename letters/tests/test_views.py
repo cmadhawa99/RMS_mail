@@ -1007,7 +1007,8 @@ class TestAdminLetterAuditLogView:
         response = client.get(reverse('admin_letter_audit', kwargs={'pk': letter.pk}))
 
         # View requires superuser - check it shows access denied or redirects
-        assert response.status_code in [200, 302]  # Either access denied page or redirect
+        assert response.status_code == 302
+        assert response.url == reverse('sector_dashboard')
 
     def test_audit_log_shows_history(self, client):
         # Should display letter history
@@ -1034,7 +1035,8 @@ class TestAdminGlobalAuditView:
         response = client.get(reverse('admin_global_audit'))
 
         # View requires superuser - check it shows access denied or redirects
-        assert response.status_code in [200, 302]  # Either access denied page or redirect
+        assert response.status_code == 302
+        assert response.url == reverse('sector_dashboard')
 
     def test_global_audit_shows_all_history(self, client):
         # Should display all letter history
