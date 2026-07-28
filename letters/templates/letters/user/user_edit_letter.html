@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load i18n %}
+{% load static %}
 {% load tailwind_cli %}
 <html lang="si" dir="ltr" class="light">
 
@@ -8,70 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     {% tailwind_css %}
 
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: { extend: { fontFamily: { sans: ['"Noto Sans Sinhala"', 'sans-serif'], }, } }
-        }
-    </script>
-
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .glass { @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl; }
-            .glass-panel { @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-white/5 shadow-lg transition-all duration-300; }
-            .glass-btn { @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-white/20 shadow-md backdrop-blur-sm hover:shadow-lg hover:border-white/40; }
-        }
-
-        body {
-            background:
-                radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(var(--accent-rgb), 0.10) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(var(--accent-rgb), 0.15) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, rgba(var(--accent-rgb), 0.10) 0px, transparent 50%),
-                linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
-            min-height: 100vh;
-        }
-        .dark body {
-            background:
-                radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.2) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(var(--accent-rgb), 0.2) 0px, transparent 50%),
-                linear-gradient(to bottom right, #111827, #1f2937);
-        }
-
-        input[type="text"], input[type="number"], select, input[type="date"], input[type="datetime-local"], textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border-radius: 0.75rem;
-            background-color: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            color: #111827;
-            font-weight: 600;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.2s;
-            resize: none;
-        }
-        input:focus, select:focus, textarea:focus {
-            background-color: white;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.1);
-        }
-        .dark input[type="text"], .dark input[type="number"], .dark select, .dark textarea, .dark input[type="date"] {
-            background-color: rgba(30, 41, 59, 0.6);
-            color: white;
-            border-color: rgba(255,255,255,0.1);
-        }
-        .dark input:focus, .dark select:focus, .dark textarea:focus {
-            background-color: rgba(15, 23, 42, 0.8);
-            border-color: var(--accent);
-            box-shadow: none;
-        }
-        .dark select option { background-color: #1f2937; color: white; }
-    </style>
 </head>
 
 {% if selected_sector == 'GOVERNING' %}     <style>:root{ --accent: #d99694; --accent-rgb: 217, 150, 148; }</style>
