@@ -12,6 +12,10 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+STATICFILES_DIRS = [BASE_DIR / "static"]
+TAILWIND_CLI_SRC_CSS = "static/css/styles.css"
+TAILWIND_CLI_VERSION = "3.4.17"
+
 BACKUP_DIR = os.environ.get('BACKUP_DIR', BASE_DIR / 'backups')
 
 
@@ -39,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'simple_history',
     'axes',
+    "django_tailwind_cli"
 ]
 
 MIDDLEWARE = [
@@ -196,4 +201,11 @@ LOGGING = {
 'django.request': {'handlers': ['file'], 'level': 'ERROR', 'propagate': True},
     },
 }
+
+# Tailwind
+
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 

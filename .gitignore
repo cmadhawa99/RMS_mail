@@ -119,3 +119,5 @@ media/
 
 # Custom ignores
 backups/
+static/css/tailwind.css
+.django_tailwind_cli
