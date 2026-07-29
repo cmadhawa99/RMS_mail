@@ -8,17 +8,18 @@
     <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">{% trans "Audit Logs" %}</h3>
 
     <!-- Search Form -->
-    <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all bg-white dark:bg-transparent border border-gray-300 dark:border-white/10">
-        <input type="text" name="q" class="bg-transparent border-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 py-1 px-3 w-48 outline-none" placeholder="{% trans 'Search Serial Number...' %}" value="{{ search_query }}">
-        <button type="submit" class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 transition-colors">
+    <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all bg-white dark:bg-transparent border border-gray-300 dark:border-white/10 shadow-sm">
+        <!-- Used !important modifiers for input to prevent override -->
+        <input type="text" name="q" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-3 !w-48 outline-none" placeholder="{% trans 'Search Serial Number...' %}" value="{{ search_query }}">
+        <button type="submit" class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 transition-colors shadow-md">
             <i class="fas fa-search text-xs"></i>
         </button>
     </form>
 </div>
 
-<div class="glass-panel rounded-2xl overflow-hidden p-1">
+<div class="glass-panel rounded-2xl overflow-hidden p-1 shadow-sm border border-gray-200 dark:border-gray-700">
     <table class="w-full text-left border-collapse">
-        <thead class="text-xs uppercase text-gray-500 dark:text-gray-400 font-bold bg-white/50 dark:bg-black/20">
+        <thead class="text-[11px] uppercase text-gray-500 dark:text-gray-400 font-bold bg-gray-50/80 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700">
             <tr>
                 <th class="px-6 py-4">{% trans "Date & Time" %}</th>
                 <th class="px-6 py-4">{% trans "User" %}</th>
@@ -27,10 +28,10 @@
                 <th class="px-6 py-4 text-right">{% trans "Details" %}</th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200/50 dark:divide-gray-700/50">
+        <tbody class="divide-y divide-gray-200/50 dark:divide-gray-700/50 bg-white/40 dark:bg-gray-900/40">
             {% for record in history_records %}
-            <tr class="hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
-                <td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200">
+            <tr class="hover:bg-white/80 dark:hover:bg-gray-800/80 transition-colors">
+                <td class="px-6 py-4 text-sm font-semibold text-gray-800 dark:text-gray-200">
                     {{ record.history_date|date:"Y-m-d H:i:s" }}
                 </td>
                 <td class="px-6 py-4 text-sm font-bold text-indigo-600 dark:text-indigo-400">
@@ -38,27 +39,29 @@
                 </td>
                 <td class="px-6 py-4">
                     {% if record.history_type == '+' %}
-                        <span class="px-2 py-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-md text-xs font-bold"><i class="fas fa-plus mr-1"></i>{% trans "Created" %}</span>
+                        <span class="px-2.5 py-1 bg-emerald-100/80 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 rounded-md text-[11px] font-bold border border-emerald-200 dark:border-emerald-800"><i class="fas fa-plus mr-1.5"></i>{% trans "Created" %}</span>
                     {% elif record.history_type == '~' %}
-                        <span class="px-2 py-1 bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md text-xs font-bold"><i class="fas fa-pen mr-1"></i>{% trans "Updated" %}</span>
+                        <span class="px-2.5 py-1 bg-blue-100/80 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded-md text-[11px] font-bold border border-blue-200 dark:border-blue-800"><i class="fas fa-pen mr-1.5"></i>{% trans "Updated" %}</span>
                     {% elif record.history_type == '-' %}
-                        <span class="px-2 py-1 bg-red-100/50 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-md text-xs font-bold"><i class="fas fa-trash mr-1"></i>{% trans "Deleted" %}</span>
+                        <span class="px-2.5 py-1 bg-red-100/80 dark:bg-red-900/40 text-red-700 dark:text-red-400 rounded-md text-[11px] font-bold border border-red-200 dark:border-red-800"><i class="fas fa-trash mr-1.5"></i>{% trans "Deleted" %}</span>
                     {% endif %}
                 </td>
-                <td class="px-6 py-4 text-sm font-mono opacity-80">
+                <td class="px-6 py-4 text-sm font-mono opacity-80 font-bold">
                     #{{ record.serial_number }}
                 </td>
                 <td class="px-6 py-4 text-right">
-                    <!-- Links to the detailed "Diff" view for this specific letter -->
-                    <a href="{% url 'admin_letter_audit' record.id %}" class="text-indigo-500 hover:text-indigo-700 font-bold text-sm underline">
+                    <a href="{% url 'admin_letter_audit' record.id %}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold text-xs underline decoration-2 underline-offset-2">
                         {% trans "View Difference" %}
                     </a>
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5" class="px-6 py-12 text-center text-gray-500 opacity-60 font-bold">
-                    {% trans "No audit records found." %}
+                <td colspan="5" class="px-6 py-16 text-center">
+                    <div class="w-16 h-16 rounded-full bg-gray-200/50 dark:bg-gray-700/50 flex items-center justify-center mx-auto mb-4 text-gray-400 text-2xl">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <span class="text-gray-500 opacity-60 font-bold text-sm">{% trans "No audit records found." %}</span>
                 </td>
             </tr>
             {% endfor %}
@@ -71,10 +74,10 @@
     <span class="text-[10px] font-bold uppercase tracking-wider opacity-50">Page {{ history_records.number }} of {{ history_records.paginator.num_pages }}</span>
     <div class="flex gap-2">
         {% if history_records.has_previous %}
-            <a href="?page={{ history_records.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white"><i class="fas fa-chevron-left text-xs"></i></a>
+            <a href="?page={{ history_records.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white shadow-sm"><i class="fas fa-chevron-left text-xs"></i></a>
         {% endif %}
         {% if history_records.has_next %}
-            <a href="?page={{ history_records.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white"><i class="fas fa-chevron-right text-xs"></i></a>
+            <a href="?page={{ history_records.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white shadow-sm"><i class="fas fa-chevron-right text-xs"></i></a>
         {% endif %}
     </div>
 </div>

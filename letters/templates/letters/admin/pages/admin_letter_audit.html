@@ -2,73 +2,87 @@
 {% load i18n %}
 
 {% block admin_content %}
-<div class="max-w-4xl mx-auto space-y-8">
+<div class="max-w-4xl mx-auto space-y-6">
 
-    <div class="flex justify-between items-center">
-        <h2 class="text-2xl font-black text-gray-800 dark:text-white tracking-tight flex items-center gap-3">
-            <i class="fas fa-history text-indigo-500"></i> {% trans "Audit Log" %}: #{{ letter.serial_number }}
-        </h2>
-        <a href="{% url 'admin_letter_detail' letter.pk %}" class="glass-btn px-6 py-2 rounded-xl bg-gray-600 text-white hover:bg-gray-700 font-bold text-sm transition-colors shadow-lg border-none">
-            {% trans "Close Record" %}
+    <!-- Header Actions -->
+    <div class="flex justify-between items-center mb-4">
+        <a href="{% url 'admin_global_audit' %}" class="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+            <i class="fas fa-arrow-left"></i> {% trans "Back to Audit Logs" %}
         </a>
     </div>
-    
+
     {% for log in audit_data %}
-    <div class="glass-panel p-8 rounded-3xl bg-[#2b2b2b] dark:bg-[#252525] border border-gray-600/30 text-gray-200 shadow-2xl relative overflow-hidden">
-        
-        <!-- Header -->
-        <div class="flex items-center gap-3 mb-8">
-            <i class="fas fa-history text-2xl text-blue-400"></i>
-            <h3 class="text-xl font-medium tracking-wide text-white">
-                {{ log.type }}: {{ letter.serial_number }}
-            </h3>
-            <span class="ml-auto text-xs font-bold opacity-50 uppercase tracking-widest">
-                {{ log.date|date:"Y-m-d H:i" }} | By: {{ log.user|default:"System" }}
-            </span>
-        </div>
+    <div class="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden">
 
-        <!-- Table Headers -->
-        <div class="grid grid-cols-3 border-b border-gray-600/50 pb-3 mb-3 text-sm font-semibold opacity-70">
-            <div>{% trans "Revised Field" %}</div>
-            <div>{% trans "Pre Value" %}</div>
-            <div>{% trans "Revised Value" %}</div>
-        </div>
+        <!-- Geometric Shapes -->
+        <div class="absolute right-0 top-0 w-32 h-32 bg-blue-500/5 rounded-bl-[4rem] pointer-events-none"></div>
 
-        <!-- Data Rows -->
-        <div class="space-y-3">
-            {% for change in log.changes %}
-            <div class="grid grid-cols-3 text-sm items-center">
-                <div class="text-gray-300 font-medium">{{ change.field }}</div>
-
-                <div class="text-red-400">
-                    {% if change.old == "-" %}
-                        -
-                    {% else %}
-                        {{ change.old|truncatechars:40 }}
-                    {% endif %}
+        <!-- Card Header -->
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-200 dark:border-blue-800/50">
+                    <i class="fas fa-history text-lg"></i>
                 </div>
-
-                <div class="text-emerald-400">
-                    {% if change.new == "-" or change.new == "None" or change.new == "" %}
-                        None
-                    {% else %}
-                        {{ change.new|truncatechars:40 }}
-                    {% endif %}
+                <div>
+                    <h3 class="text-base font-bold text-gray-800 dark:text-white">
+                        {{ log.type }}: #{{ letter.serial_number }}
+                    </h3>
+                    <div class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mt-0.5">
+                        {{ log.date|date:"Y-m-d H:i" }} | By: {{ log.user|default:"System" }}
+                    </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
 
-        <div class="border-t border-gray-600/50 mt-8 pt-6 flex justify-end">
-             <a href="{% url 'admin_letter_detail' letter.pk %}" class="bg-[#404040] hover:bg-[#505050] text-gray-200 px-6 py-2 rounded-md transition-colors text-sm font-medium border border-gray-600">
-                {% trans "Close Record" %}
+        <!-- Table Data -->
+        <div class="p-6">
+            <div class="grid grid-cols-3 border-b border-gray-200 dark:border-gray-700 pb-3 mb-4 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <div>{% trans "Revised Field" %}</div>
+                <div>{% trans "Pre Value" %}</div>
+                <div>{% trans "Revised Value" %}</div>
+            </div>
+
+            <div class="space-y-4">
+                {% for change in log.changes %}
+                <div class="grid grid-cols-3 text-sm items-center gap-4">
+                    <div class="text-gray-700 dark:text-gray-300 font-semibold bg-gray-50 dark:bg-gray-900/50 px-3 py-1.5 rounded-lg inline-block border border-gray-200 dark:border-gray-700 w-max max-w-full truncate">
+                        {{ change.field }}
+                    </div>
+
+                    <div class="text-red-600 dark:text-red-400 font-medium">
+                        {% if change.old == "-" %}
+                            <span class="opacity-50">-</span>
+                        {% else %}
+                            <del>{{ change.old|truncatechars:40 }}</del>
+                        {% endif %}
+                    </div>
+
+                    <div class="text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1.5 rounded-lg border border-emerald-100 dark:border-emerald-800/50 inline-block w-max max-w-full truncate">
+                        {% if change.new == "-" or change.new == "None" or change.new == "" %}
+                            None
+                        {% else %}
+                            {{ change.new|truncatechars:40 }}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/30 flex justify-end">
+             <a href="{% url 'admin_letter_detail' letter.pk %}" class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-2 rounded-xl transition-colors text-sm font-bold border border-gray-300 dark:border-gray-600 shadow-sm">
+                {% trans "View Full Letter" %}
             </a>
         </div>
     </div>
     {% empty %}
-    <div class="glass-panel p-10 rounded-3xl text-center text-gray-500">
-        <i class="fas fa-ghost text-4xl mb-4 opacity-50"></i>
-        <h3 class="text-lg font-bold">{% trans "No audit history available yet." %}</h3>
+    <div class="bg-white dark:bg-gray-800 p-12 rounded-3xl border border-gray-200 dark:border-gray-700 text-center text-gray-500 shadow-sm">
+        <div class="w-20 h-20 mx-auto bg-gray-100 dark:bg-gray-900/50 rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-ghost text-3xl text-gray-400"></i>
+        </div>
+        <h3 class="text-base font-bold text-gray-700 dark:text-gray-300">{% trans "No audit history available yet." %}</h3>
+        <p class="text-sm mt-1">{% trans "Modifications to this record will appear here." %}</p>
     </div>
     {% endfor %}
 

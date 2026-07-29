@@ -10,12 +10,11 @@
     <title>{% trans "Council Administration" %}</title>
 
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
     {% tailwind_css %}
 
 </head>
 
-<body class="h-screen w-screen overflow-hidden text-gray-700 dark:text-gray-200 transition-colors duration-500">
+<body class="h-screen w-screen overflow-hidden text-gray-700 dark:text-gray-200 transition-colors duration-500 bg-gray-50 dark:bg-gray-900">
 
     <div id="transition-overlay" class="fixed inset-0 bg-gray-950 z-[9999] opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
@@ -27,84 +26,131 @@
         }
     </script>
 
+    <!-- Base Background using semi-professional subtle gradients -->
+    <div class="fixed inset-0 z-[-1] pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800"></div>
+        <div class="absolute top-0 left-0 w-full h-96 bg-indigo-500/5 dark:bg-indigo-500/10 rounded-b-[100%] blur-3xl"></div>
+    </div>
+
     <div class="flex h-full w-full p-4 gap-4">
 
-        <aside class="w-72 hidden md:flex flex-col glass rounded-3xl z-20 relative h-full transition-all duration-300">
-            <div class="p-6 flex items-center gap-4 border-b border-gray-200 dark:border-gray-700/30">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xl shadow-lg">
-                    <i class="fas fa-shield-alt"></i>
+        <aside class="w-72 hidden md:flex flex-col bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl border border-gray-200 dark:border-gray-700 shadow-sm z-20 relative h-full transition-all duration-300">
+            <div class="p-6 flex items-center gap-4 border-b border-gray-200/50 dark:border-gray-700/50">
+                <div class="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-xl shadow-md">
+                    <i class="fas fa-landmark"></i>
                 </div>
                 <div>
-                    <div class="text-[12px] font-bold uppercase tracking-wider opacity-60">{% trans "Divisional Council" %}</div>
-                    <div class="text-xl font-black tracking-tight dark:text-white">{% trans "Weligepola" %}</div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider opacity-60 text-indigo-600 dark:text-indigo-400">{% trans "Divisional Council" %}</div>
+                    <div class="text-lg font-black tracking-tight dark:text-white leading-tight">{% trans "Weligepola" %}</div>
                 </div>
             </div>
 
             <nav class="flex-1 overflow-y-auto px-4 space-y-1 custom-scrollbar py-6">
-                <div class="px-2 mb-2 text-[12px] font-bold uppercase tracking-widest opacity-50">{% trans "Main Menu" %}</div>
+                <div class="px-2 mb-2 text-[11px] font-bold uppercase tracking-widest opacity-50">{% trans "Main Menu" %}</div>
 
-                <a href="{% url 'custom_admin_dashboard' %}" class="glass-nav-item group {% if request.resolver_match.url_name == 'custom_admin_dashboard' %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">
-                    <i class="fas fa-tachometer-alt w-6 text-center"></i>
+                <a href="{% url 'custom_admin_dashboard' %}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 group text-sm font-semibold text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 {% if request.resolver_match.url_name == 'custom_admin_dashboard' %}!bg-indigo-50 dark:!bg-indigo-900/30 !text-indigo-700 dark:!text-indigo-300{% endif %}">
+                    <i class="fas fa-tachometer-alt w-6 text-center {% if request.resolver_match.url_name == 'custom_admin_dashboard' %}text-indigo-600 dark:text-indigo-400{% endif %}"></i>
                     <span class="ml-3">{% trans "Overview" %}</span>
                 </a>
 
-                <div class="px-2 mt-8 mb-2 text-[12px] font-bold uppercase tracking-widest opacity-50">{% trans "Management" %}</div>
+                <div class="px-2 mt-8 mb-2 text-[11px] font-bold uppercase tracking-widest opacity-50">{% trans "Management" %}</div>
 
                 <div class="relative group">
-                    <a href="{% url 'custom_admin_users' %}" class="glass-nav-item {% if 'user' in request.resolver_match.url_name %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">
-                        <i class="fas fa-users w-6 text-center"></i>
+                    <a href="{% url 'custom_admin_users' %}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 group text-sm font-semibold text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 {% if 'user' in request.resolver_match.url_name %}!bg-indigo-50 dark:!bg-indigo-900/30 !text-indigo-700 dark:!text-indigo-300{% endif %}">
+                        <i class="fas fa-users-cog w-6 text-center {% if 'user' in request.resolver_match.url_name %}text-indigo-600 dark:text-indigo-400{% endif %}"></i>
                         <span class="ml-3">{% trans "Officers" %}</span>
                     </a>
-                    <a href="{% url 'create_user' %}" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center bg-gray-200 dark:bg-black/20 hover:bg-emerald-500 hover:text-white transition-colors shadow-sm" title="Create New Officer">
-                        <i class="fas fa-plus text-xs"></i>
+                    <a href="{% url 'create_user' %}" class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center bg-gray-200/50 dark:bg-gray-700/50 hover:bg-indigo-100 dark:hover:bg-indigo-800 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-300 transition-colors shadow-sm border border-transparent hover:border-indigo-200 dark:hover:border-indigo-700" title="Create New Officer">
+                        <i class="fas fa-plus text-[10px]"></i>
                     </a>
                 </div>
 
                 <div class="relative group mt-1">
-                    <a href="{% url 'custom_admin_letters' %}" class="glass-nav-item {% if 'letter' in request.resolver_match.url_name %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">
-                        <i class="fas fa-envelope w-6 text-center"></i>
+                    <a href="{% url 'custom_admin_letters' %}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 group text-sm font-semibold text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 {% if 'letter' in request.resolver_match.url_name %}!bg-indigo-50 dark:!bg-indigo-900/30 !text-indigo-700 dark:!text-indigo-300{% endif %}">
+                        <i class="fas fa-folder-open w-6 text-center {% if 'letter' in request.resolver_match.url_name %}text-indigo-600 dark:text-indigo-400{% endif %}"></i>
                         <span class="ml-3">{% trans "Letters" %}</span>
                     </a>
-                    <a href="{% url 'add_letter' %}" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center bg-gray-200 dark:bg-black/20 hover:bg-emerald-500 hover:text-white transition-colors shadow-sm" title="Add New Letter">
-                        <i class="fas fa-plus text-xs"></i>
+                    <a href="{% url 'add_letter' %}" class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center bg-gray-200/50 dark:bg-gray-700/50 hover:bg-indigo-100 dark:hover:bg-indigo-800 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-300 transition-colors shadow-sm border border-transparent hover:border-indigo-200 dark:hover:border-indigo-700" title="Add New Letter">
+                        <i class="fas fa-plus text-[10px]"></i>
                     </a>
                 </div>
 
                 <div class="relative group mt-1">
-                    <a href="{% url 'admin_global_audit' %}" class="glass-nav-item {% if 'audit' in request.resolver_match.url_name %}bg-indigo-500 !text-white shadow-lg shadow-indigo-500/30 hover:!bg-indigo-600{% endif %}">
-                        <i class="fas fa-history w-6 text-center"></i>
+                    <a href="{% url 'admin_global_audit' %}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 group text-sm font-semibold text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 {% if 'audit' in request.resolver_match.url_name %}!bg-indigo-50 dark:!bg-indigo-900/30 !text-indigo-700 dark:!text-indigo-300{% endif %}">
+                        <i class="fas fa-clipboard-list w-6 text-center {% if 'audit' in request.resolver_match.url_name %}text-indigo-600 dark:text-indigo-400{% endif %}"></i>
                         <span class="ml-3">{% trans "Audit Logs" %}</span>
                     </a>
                 </div>
-
-
             </nav>
 
-            <div class="p-6 mt-auto">
-                <div class="glass-panel p-4 rounded-2xl flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500">
+            <div class="p-4 mt-auto">
+                <div class="bg-gray-50 dark:bg-gray-900 p-3 rounded-2xl flex items-center gap-3 border border-gray-200/50 dark:border-gray-700/50">
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
                         <i class="fas fa-user-shield"></i>
                     </div>
                     <div class="overflow-hidden">
-                        <div class="text-xs font-bold truncate">{{ user.username }}</div>
-                        <div class="text-[10px] opacity-60 uppercase tracking-wider">Administrator</div>
+                        <div class="text-sm font-bold text-gray-800 dark:text-white truncate">{{ user.username }}</div>
+                        <div class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Administrator</div>
                     </div>
                 </div>
             </div>
         </aside>
 
-        <main class="flex-1 flex flex-col h-full relative z-10 glass rounded-3xl overflow-hidden">
-            <header class="h-20 px-8 flex justify-between items-center shrink-0 border-b border-gray-200 dark:border-gray-700/30 bg-white/50 dark:bg-black/10 backdrop-blur-md">
+        <main class="flex-1 flex flex-col h-full relative z-10 bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+
+            <header class="h-20 px-8 flex justify-between items-center shrink-0 border-b border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-gray-900/40">
                 <div>
-                    <h1 class="text-2xl font-black text-gray-800 dark:text-white flex items-center gap-3">
+                    <h1 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-3">
                         {% block header_title %}{% trans "Main Control Panel" %}{% endblock %}
                     </h1>
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <div class="text-right hidden sm:block glass-panel px-4 py-1.5 rounded-xl border-l-4 border-indigo-500">
-                        <div id="liveTime" class="text-lg font-black font-mono tracking-widest text-gray-700 dark:text-gray-100">--:--</div>
-                        <div class="text-[9px] font-bold uppercase tracking-widest opacity-60">System Active</div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block px-4 py-1.5 border-r border-gray-300 dark:border-gray-600 mr-2">
+                        <div id="liveTime" class="text-sm font-bold font-mono text-gray-700 dark:text-gray-200">--:--</div>
+                        <div id="liveDate" class="text-[9px] font-bold uppercase tracking-widest opacity-60 text-gray-500 dark:text-gray-400">-- --- ----</div>
+                        <div class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest flex items-center justify-end gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> System Active
+                        </div>
+                    </div>
+
+                    <!-- Notification Dropdown Menu -->
+                    <div class="relative">
+                        <button id="notifButton" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative outline-none" title="Notifications">
+                            <i class="fas fa-bell"></i>
+                            {% if messages %}
+                            <span class="absolute top-2 right-2 flex h-2.5 w-2.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border border-white dark:border-gray-800"></span>
+                            </span>
+                            {% endif %}
+                        </button>
+
+                        <div id="notifDropdown" class="absolute right-0 mt-3 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 hidden z-50 flex flex-col overflow-hidden origin-top-right transition-all">
+                            <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 flex justify-between items-center">
+                                <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100">{% trans "System Notifications" %}</h3>
+                                {% if messages %}<span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 py-0.5 rounded-full">{{ messages|length }} {% trans "New" %}</span>{% endif %}
+                            </div>
+                            <div class="max-h-72 overflow-y-auto custom-scrollbar p-2 space-y-1">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="p-3 rounded-xl text-[13px] flex gap-3 items-start border border-transparent
+                                            {% if message.tags == 'success' %}bg-emerald-50/80 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200 border-emerald-100 dark:border-emerald-800/50
+                                            {% elif message.tags == 'error' %}bg-red-50/80 text-red-800 dark:bg-red-900/30 dark:text-red-200 border-red-100 dark:border-red-800/50
+                                            {% elif message.tags == 'warning' %}bg-amber-50/80 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200 border-amber-100 dark:border-amber-800/50
+                                            {% else %}bg-blue-50/80 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200 border-blue-100 dark:border-blue-800/50{% endif %}">
+                                            <i class="fas mt-0.5 {% if message.tags == 'success' %}fa-check-circle text-emerald-500{% elif message.tags == 'error' %}fa-exclamation-circle text-red-500{% else %}fa-info-circle text-blue-500{% endif %}"></i>
+                                            <span class="font-medium leading-snug">{{ message }}</span>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="p-6 text-center text-gray-400 text-xs font-medium flex flex-col items-center gap-2">
+                                        <i class="far fa-bell-slash text-2xl opacity-50"></i>
+                                        {% trans "No new notifications" %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
 
                     <form id="language-form" action="{% url 'set_language' %}" method="post" class="m-0 flex items-center">
@@ -114,25 +160,25 @@
 
                         {% if LANGUAGE_CODE == 'en' %}
                             <input name="language" type="hidden" value="si">
-                            <button type="submit" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="සිංහලට මාරු වන්න">
+                            <button type="submit" class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="සිංහලට මාරු වන්න">
                                 සිං
                             </button>
                         {% else %}
                             <input name="language" type="hidden" value="en">
-                            <button type="submit" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="Switch to English">
+                            <button type="submit" class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Switch to English">
                                 EN
                             </button>
                         {% endif %}
                     </form>
 
-                    <button id="themeToggle" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-yellow-400 hover:bg-white/80" title="Toggle Theme">
+                    <button id="themeToggle" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Toggle Theme">
                         <i class="fas fa-moon dark:hidden"></i>
                         <i class="fas fa-sun hidden dark:block"></i>
                     </button>
 
                     <form id="logout-form" action="{% url 'logout' %}" method="post">
                         {% csrf_token %}
-                        <button type="submit" class="glass-btn w-11 h-11 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-colors" title="Log Out">
+                        <button type="submit" class="w-10 h-10 rounded-full flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" title="Log Out">
                             <i class="fas fa-power-off"></i>
                         </button>
                     </form>
@@ -140,26 +186,7 @@
             </header>
 
             <div class="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-8 relative">
-                {% if messages %}
-                <div class="mb-6 space-y-3">
-                    {% for message in messages %}
-                        <div class="glass-panel p-4 rounded-xl flex items-center justify-between animate-float
-                            {% if message.tags == 'success' %}border-l-4 border-emerald-500 bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-100
-                            {% elif message.tags == 'error' %}border-l-4 border-red-500 bg-red-50 text-red-800 dark:bg-red-900/30 dark:text-red-100
-                            {% elif message.tags == 'warning' %}border-l-4 border-amber-500 bg-amber-50 text-amber-800 dark:bg-amber-900/30 dark:text-amber-100
-                            {% else %}border-l-4 border-blue-500 bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-100{% endif %}">
-
-                            <div class="flex items-center gap-3">
-                                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} text-lg"></i>
-                                <span class="font-bold text-sm">{{ message }}</span>
-                            </div>
-                            <button onclick="this.parentElement.remove()" class="text-sm opacity-50 hover:opacity-100"><i class="fas fa-times"></i></button>
-                        </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-                <div class="w-full">
+                <div class="w-full max-w-7xl mx-auto">
                     {% block admin_content %}{% endblock %}
                 </div>
             </div>
@@ -168,9 +195,20 @@
 
     <script>
         // 1. Clock Logic
+
         function updateTime() {
             const now = new Date();
-            document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+            // Time Options (Hours, Minutes, Seconds with AM/PM)
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+
+            // Date Options (Weekday, Year, Month, Day)
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+            document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
+
+            // දිනය පෙන්වීම සඳහා (සිංහල භාෂාවෙන් අවශ්‍ය නම් 'si-LK' ලෙසද, ඉංග්‍රීසියෙන් අවශ්‍ය නම් 'en-US' ලෙසද ලබා දෙන්න)
+            document.getElementById('liveDate').textContent = now.toLocaleDateString('si-LK', dateOptions);
         }
         setInterval(updateTime, 1000);
         updateTime();
@@ -187,10 +225,26 @@
             const overlay = document.getElementById("transition-overlay");
             const langForm = document.getElementById("language-form");
             const themeToggleBtn = document.getElementById('themeToggle');
-            const logoutForm = document.getElementById('logout-form'); // NEW: Get the logout form
+            const logoutForm = document.getElementById('logout-form');
 
-            // --- LANGUAGE TRANSITION LOGIC ---
+            // --- NOTIFICATION DROPDOWN LOGIC ---
+            const notifBtn = document.getElementById('notifButton');
+            const notifDropdown = document.getElementById('notifDropdown');
 
+            if(notifBtn && notifDropdown) {
+                notifBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notifDropdown.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function(e) {
+                    if(!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+                        notifDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            // --- PAGE TRANSITION LOGICS ---
             if (sessionStorage.getItem("switching_state") === "true") {
                 setTimeout(() => {
                     overlay.classList.add("transition-opacity", "duration-500");
@@ -203,52 +257,35 @@
             if (langForm) {
                 langForm.addEventListener("submit", function(e) {
                     e.preventDefault();
-
                     overlay.classList.add("transition-opacity", "duration-300");
                     overlay.classList.remove("opacity-0");
                     overlay.classList.add("opacity-100", "pointer-events-auto");
-
                     sessionStorage.setItem("switching_state", "true");
-
-                    setTimeout(() => {
-                        langForm.submit();
-                    }, 300);
+                    setTimeout(() => { langForm.submit(); }, 300);
                 });
             }
-
-            // --- THEME TRANSITION LOGIC ---
 
             if (themeToggleBtn) {
                 themeToggleBtn.addEventListener('click', () => {
                     overlay.classList.add("transition-opacity", "duration-300");
                     overlay.classList.remove("opacity-0");
                     overlay.classList.add("opacity-100", "pointer-events-auto");
-
                     setTimeout(() => {
                         html.classList.toggle('dark');
                         localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
-
                         overlay.classList.remove("opacity-100", "pointer-events-auto");
                         overlay.classList.add("opacity-0");
                     }, 300);
                 });
             }
 
-            // --- LOGOUT TRANSITION LOGIC ---
-
             if (logoutForm) {
                 logoutForm.addEventListener("submit", function(e) {
-                    e.preventDefault(); // Stop immediate submission
-
-                    // Trigger the fade to black
+                    e.preventDefault();
                     overlay.classList.add("transition-opacity", "duration-300");
                     overlay.classList.remove("opacity-0");
                     overlay.classList.add("opacity-100", "pointer-events-auto");
-
-                    // Wait 300ms for the screen to go completely dark, then actually log out
-                    setTimeout(() => {
-                        logoutForm.submit();
-                    }, 300);
+                    setTimeout(() => { logoutForm.submit(); }, 300);
                 });
             }
         });

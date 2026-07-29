@@ -148,37 +148,41 @@
 
             <div class="flex-1 flex flex-col px-8 pb-6 overflow-hidden">
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-6 shrink-0">
-                    <div class="glass-panel rounded-2xl p-5 flex items-center gap-5 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
-                        <div class="absolute right-0 top-0 w-24 h-24 bg-blue-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
-                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
+                <!--
+                  වෙනස: gap-6 -> gap-4, my-6 -> my-4
+                  padding, icon size සහ text sizes කුඩා කර ඇත.
+                -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 shrink-0">
+                    <div class="glass-panel rounded-2xl p-3.5 flex items-center gap-4 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
+                        <div class="absolute right-0 top-0 w-16 h-16 bg-blue-500/10 rounded-bl-full -mr-2 -mt-2 transition-transform group-hover:scale-150"></div>
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
                             <i class="fas fa-inbox"></i>
                         </div>
                         <div class="relative">
-                            <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ total }}</div>
-                            <div class="text-[14px] font-bold uppercase tracking-wider opacity-60">{% trans "Total Letters" %}</div>
+                            <div class="text-2xl font-black text-gray-800 dark:text-white tracking-tight leading-none">{{ total }}</div>
+                            <div class="text-[11px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Total Letters" %}</div>
                         </div>
                     </div>
 
-                    <div class="glass-panel rounded-2xl p-5 flex items-center gap-5 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
-                        <div class="absolute right-0 top-0 w-24 h-24 bg-amber-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
-                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform duration-300">
+                    <div class="glass-panel rounded-2xl p-3.5 flex items-center gap-4 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
+                        <div class="absolute right-0 top-0 w-16 h-16 bg-amber-500/10 rounded-bl-full -mr-2 -mt-2 transition-transform group-hover:scale-150"></div>
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white text-xl shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform duration-300">
                             <i class="fas fa-clock"></i>
                         </div>
                         <div class="relative">
-                            <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ pending }}</div>
-                            <div class="text-[14px] font-bold uppercase tracking-wider opacity-60">{% trans "Pending Letters" %}</div>
+                            <div class="text-2xl font-black text-gray-800 dark:text-white tracking-tight leading-none">{{ pending }}</div>
+                            <div class="text-[11px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Pending Letters" %}</div>
                         </div>
                     </div>
 
-                    <div class="glass-panel rounded-2xl p-5 flex items-center gap-5 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
-                        <div class="absolute right-0 top-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
-                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
+                    <div class="glass-panel rounded-2xl p-3.5 flex items-center gap-4 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
+                        <div class="absolute right-0 top-0 w-16 h-16 bg-emerald-500/10 rounded-bl-full -mr-2 -mt-2 transition-transform group-hover:scale-150"></div>
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xl shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
                             <i class="fas fa-check-circle"></i>
                         </div>
                         <div class="relative">
-                            <div class="text-3xl font-black text-gray-800 dark:text-white tracking-tight">{{ resolved }}</div>
-                            <div class="text-[14px] font-bold uppercase tracking-wider opacity-60">{% trans "Replied Letters" %}</div>
+                            <div class="text-2xl font-black text-gray-800 dark:text-white tracking-tight leading-none">{{ resolved }}</div>
+                            <div class="text-[11px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Replied Letters" %}</div>
                         </div>
                     </div>
                 </div>
@@ -198,13 +202,15 @@
                             {% if selected_sector != 'ALL' %}<input type="hidden" name="sector" value="{{ selected_sector }}">{% endif %}
 
                             <div class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-[var(--accent)] transition-all">
-                                <select name="search_type" id="userSearchType" class="bg-transparent border-none text-xs font-bold text-gray-600 dark:text-gray-300 focus:ring-0 cursor-pointer py-2 pl-3 pr-8 outline-none appearance-none">
+                                <!-- වෙනස: !bg-transparent !border-none වැනි !important modifiers එකතු කර ඇත -->
+                                <select name="search_type" id="userSearchType" class="!bg-transparent !border-none text-xs font-bold text-gray-600 dark:text-gray-300 focus:ring-0 cursor-pointer !py-1.5 !pl-3 !pr-6 outline-none appearance-none !shadow-none">
                                     <option value="all" {% if search_type == 'all' %}selected{% endif %}>{% trans "All" %}</option>
                                     <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>{% trans "Serial" %}</option>
                                     <option value="date" {% if search_type == 'date' %}selected{% endif %}>{% trans "Date" %}</option>
                                 </select>
                                 <div class="w-px h-5 bg-gray-400/30 mx-1"></div>
-                                <input type="text" name="q" id="userSearchInput" class="bg-transparent border-none text-sm font-bold text-black dark:text-white placeholder-gray-500 focus:ring-0 py-1 px-2 w-40 outline-none" placeholder="{% trans 'Search...' %}" value="{{ search_query }}">
+                                <!-- වෙනස: !bg-transparent !border-none !w-40 වැනි !important modifiers එකතු කර ඇත -->
+                                <input type="text" name="q" id="userSearchInput" class="!bg-transparent !border-none text-sm font-bold text-black dark:text-white placeholder-gray-500 focus:ring-0 !py-1 !px-2 !w-40 outline-none !shadow-none" placeholder="{% trans 'Search...' %}" value="{{ search_query }}">
                             </div>
 
                             <button type="submit" class="glass-btn w-10 h-10 rounded-xl text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white shadow-md">
@@ -355,7 +361,7 @@
             localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
         });
 
-        // 3. Search Bar Type Toggle Logic
+        // 3. Search Bar Type Toggle Logic (Updated for !important modifiers)
         document.addEventListener('DOMContentLoaded', function() {
             const searchType = document.getElementById('userSearchType');
             const searchInput = document.getElementById('userSearchInput');
@@ -363,12 +369,12 @@
                 searchType.addEventListener('change', function() {
                     if(this.value === 'date') {
                         searchInput.type = 'date';
-                        searchInput.classList.remove('w-40');
-                        searchInput.classList.add('w-auto');
+                        searchInput.classList.remove('!w-40');
+                        searchInput.classList.add('!w-auto');
                     } else {
                         searchInput.type = 'text';
-                        searchInput.classList.add('w-40');
-                        searchInput.classList.remove('w-auto');
+                        searchInput.classList.add('!w-40');
+                        searchInput.classList.remove('!w-auto');
                     }
                 });
             }

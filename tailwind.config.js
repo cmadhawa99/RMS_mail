@@ -5,11 +5,13 @@ module.exports = {
   content: [
     './letters/templates/**/*.html',
     './letters/**/*.py',
+    './templates/**/*.html',
+    './**/templates/**/*.html',
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Noto Sans Sinhala"', 'sans-serif'],
+        sans: ['"Noto Serif Sinhala"', 'sans-serif'],
       },
       colors: {
         primary: '#3b82f6',

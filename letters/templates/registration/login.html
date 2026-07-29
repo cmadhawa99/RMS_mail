@@ -9,13 +9,13 @@
     <title>පිවිසෙන්න - System Login</title>
 
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     {% tailwind_css %}
 
 </head>
 
-<body class="h-screen w-screen overflow-hidden flex items-center justify-center text-gray-700 dark:text-gray-200 transition-colors duration-500 relative">
+<!-- Body classes changed for better responsiveness -->
+<body class="min-h-screen w-full flex items-center justify-center p-4 overflow-x-hidden text-gray-700 dark:text-gray-200 transition-colors duration-500 relative">
 
     <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <i class="fas fa-gavel absolute top-[10%] left-[10%] text-6xl text-red-600 opacity-20 dark:text-red-500 dark:opacity-10 animate-float-slow"></i>
@@ -59,8 +59,9 @@
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                         <i class="fas fa-user"></i>
                     </div>
+                    <!-- Added !pl-11 and !pr-4 to override global CSS -->
                     <input type="text" name="username" id="id_username" required autofocus
-                        class="glass-panel w-full pl-11 pr-4 py-3.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/60 dark:focus:bg-black/30 transition-all font-bold text-gray-700 dark:text-white placeholder-gray-400/50"
+                        class="glass-panel w-full !pl-11 !pr-4 py-3.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/60 dark:focus:bg-black/30 transition-all font-bold text-gray-700 dark:text-white placeholder-gray-400/50"
                         placeholder="Enter your ID">
                 </div>
             </div>
@@ -71,8 +72,9 @@
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                         <i class="fas fa-lock"></i>
                     </div>
+                    <!-- Added !pl-11 and !pr-12 to override global CSS -->
                     <input type="password" name="password" id="id_password" required
-                        class="glass-panel w-full pl-11 pr-12 py-3.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/60 dark:focus:bg-black/30 transition-all font-bold text-gray-700 dark:text-white placeholder-gray-400/50"
+                        class="glass-panel w-full !pl-11 !pr-12 py-3.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/60 dark:focus:bg-black/30 transition-all font-bold text-gray-700 dark:text-white placeholder-gray-400/50"
                         placeholder="••••••••">
 
                     <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-500 transition-colors cursor-pointer outline-none">
@@ -81,6 +83,7 @@
                 </div>
             </div>
 
+            <!-- Gradient classes will now correctly generate due to updated tailwind.config.js -->
             <button type="submit" class="w-full glass-btn bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-4 rounded-xl text-sm uppercase tracking-widest shadow-lg shadow-blue-500/30 mt-4 border-none relative overflow-hidden group">
                 <span class="relative z-10 flex items-center gap-2">
                     පිවිසෙන්න <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>

@@ -6,9 +6,10 @@
     <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">{% trans "Registered Officers" %}</h3>
 
     <div class="flex gap-3 w-full md:w-auto">
-        <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all flex-grow md:flex-grow-0 bg-white dark:bg-transparent border border-gray-300 dark:border-white/10">
+        <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all flex-grow md:flex-grow-0 bg-white dark:bg-transparent border border-gray-300 dark:border-white/10 shadow-sm">
             <div class="pl-3 pr-2 text-gray-400"><i class="fas fa-search text-xs"></i></div>
-            <input type="text" name="q" class="bg-transparent border-none text-sm font-medium text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:ring-0 py-1 px-2 w-full md:w-48 outline-none" placeholder="Search officers..." value="{{ search_query }}">
+            <!-- Used !important modifiers for input to prevent override -->
+            <input type="text" name="q" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-2 !w-full md:!w-48 outline-none" placeholder="Search officers..." value="{{ search_query }}">
             <button type="submit" class="hidden">Go</button>
         </form>
 
@@ -24,13 +25,13 @@
             <tr>
                 <th class="px-6 py-2">{% trans "Officer Name" %}</th>
                 <th class="px-6 py-2">{% trans "Assigned Sector" %}</th>
-                <th class="px-6 py-2">{% trans "Actions" %}</th>
+                <th class="px-6 py-2 text-right">{% trans "Actions" %}</th>
             </tr>
         </thead>
         <tbody>
             {% for u in users %}
-            <tr class="group hover:bg-gray-5 dark:hover:bg-white/5 transition-all duration-200">
-                <td class="px-6 py-3 rounded-l-xl bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-l border-gray-200 dark:border-transparent group-hover:border-transparent">
+            <tr class="group hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-sm hover:shadow-md">
+                <td class="px-6 py-3 rounded-l-xl bg-white/60 dark:bg-gray-800/40 border-y border-l border-gray-200 dark:border-gray-700/50">
                     <div class="flex items-center">
                         <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-violet-500 text-white flex items-center justify-center font-bold text-lg shadow-md mr-4">
                             {{ u.username|make_list|first|upper }}
@@ -41,13 +42,13 @@
                         </div>
                     </div>
                 </td>
-                <td class="px-6 py-3 bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-gray-200 dark:border-transparent group-hover:border-transparent">
-                    <span class="px-3 py-1.5 rounded-full text-[10px] font-extrabold uppercase bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 tracking-wide">
+                <td class="px-6 py-3 bg-white/60 dark:bg-gray-800/40 border-y border-gray-200 dark:border-gray-700/50">
+                    <span class="px-3 py-1.5 rounded-full text-[10px] font-extrabold uppercase bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 tracking-wide border border-gray-300 dark:border-gray-600">
                         {{ u.sectorprofile.get_sector_display }}
                     </span>
                 </td>
-                <td class="px-6 py-3 rounded-r-xl bg-white/60 dark:bg-gray-800/20 group-hover:bg-transparent border-y border-r border-gray-200 dark:border-transparent group-hover:border-transparent">
-                    <a href="{% url 'admin_user_detail' u.id %}" class="glass-btn inline-flex px-4 py-1.5 rounded-lg text-indigo-500 hover:bg-indigo-500 hover:text-white font-bold text-sm">
+                <td class="px-6 py-3 rounded-r-xl bg-white/60 dark:bg-gray-800/40 border-y border-r border-gray-200 dark:border-gray-700/50 text-right">
+                    <a href="{% url 'admin_user_detail' u.id %}" class="glass-btn inline-flex px-4 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500 hover:text-white border border-indigo-200 dark:border-indigo-800 font-bold text-xs shadow-sm">
                         {% trans "View Profile" %}
                     </a>
                 </td>
@@ -55,6 +56,9 @@
             {% empty %}
             <tr>
                 <td colspan="3" class="py-12 text-center">
+                    <div class="w-16 h-16 rounded-full bg-gray-200/50 dark:bg-gray-700/50 flex items-center justify-center mx-auto mb-4 text-gray-400 text-2xl">
+                        <i class="fas fa-users-slash"></i>
+                    </div>
                     <p class="text-sm font-bold opacity-50">{% trans "No officers found" %}</p>
                     {% if search_query %}
                     <a href="{% url 'custom_admin_users' %}" class="text-indigo-500 text-xs font-bold hover:underline mt-2 inline-block">Clear Search</a>
