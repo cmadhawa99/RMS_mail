@@ -11,7 +11,8 @@ from django.contrib.auth import logout  # <--- Needed for logout
 
 import openpyxl
 from openpyxl import Workbook
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse, Http404
+from django.urls import reverse
 from datetime import datetime
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
@@ -193,29 +194,53 @@ def letter_detail(request, pk):
 def view_letter_images(request, pk):
     letter = get_object_or_404(Letter, pk=pk)
 
-    try:
-        user_profile =  request.user.sectorprofile
-        user_sector = user_profile.sector
-    except SectorProfile.DoesNotExist:
-        user_sector = "NONE"
+    if not request.user.is_superuser:
+        try:
+            user_sector = request.user.sectorprofile.sector
+        except SectorProfile.DoesNotExist:
+            user_sector = "NONE"
 
-        if not request.user.is_superuser:
-            if user_sector != "ADMIN" and letter.target_sector != user_sector:
-                return render(request, 'letters/common/access_denied.html')
+        if letter.target_sector != user_sector:
+            return render(request, 'letters/common/access_denied.html')
+
+    attachment_fields = ['attachment_1', 'attachment_2', 'attachment_3',
+                         'attachment_4', 'attachment_5', 'attachment_6']
 
     attachments = []
-    if letter.attachment_1: attachments.append(letter.attachment_1)
-    if letter.attachment_2: attachments.append(letter.attachment_2)
-    if letter.attachment_3: attachments.append(letter.attachment_3)
-    if letter.attachment_4: attachments.append(letter.attachment_4)
-    if letter.attachment_5: attachments.append(letter.attachment_5)
-    if letter.attachment_6: attachments.append(letter.attachment_6)
+    for field_name in attachment_fields:
+        if getattr(letter, field_name):
+            attachments.append(reverse('serve_attachment', args=[letter.pk, field_name]))
 
     return render(request, 'letters/common/letter_images.html', {
         'letter': letter,
         'attachments': attachments,
+
     })
 
+@login_required
+def serve_attachment(request, pk, field_name):
+    letter = get_object_or_404(Letter, pk=pk)
+
+    allowed_fields = ['attachment_1', 'attachment_2', 'attachment_3',
+                       'attachment_4', 'attachment_5', 'attachment_6']
+
+    if field_name not in allowed_fields:
+        raise Http404()
+
+    if not request.user.is_superuser:
+        try:
+            user_sector = request.user.sectorprofile.sector
+        except SectorProfile.DoesNotExist:
+            user_sector = "NONE"
+
+        if letter.target_sector != user_sector:
+            raise Http404()
+
+    file_field = getattr(letter, field_name)
+    if not file_field:
+        raise Http404()
+
+    return FileResponse(file_field.open('rb'), content_type='image/jpeg')
 
 
 

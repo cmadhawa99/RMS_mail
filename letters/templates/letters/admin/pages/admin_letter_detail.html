@@ -112,12 +112,12 @@
 
                         {% if letter.attachment_1 or letter.attachment_2 or letter.attachment_3 or letter.attachment_4 or letter.attachment_5 or letter.attachment_6 %}
                             <div class="flex gap-3 flex-wrap mb-5">
-                                {% if letter.attachment_1 %} <img src="{{ letter.attachment_1.url }}" class="w-16 h-16 rounded-lg object-cover border border-gray-200 dark:border-gray-700 shadow-sm"> {% endif %}
-                                {% if letter.attachment_2 %} <img src="{{ letter.attachment_2.url }}" class="w-16 h-16 rounded-lg object-cover border border-gray-200 dark:border-gray-700 shadow-sm"> {% endif %}
-                                {% if letter.attachment_3 %} <img src="{{ letter.attachment_3.url }}" class="w-16 h-16 rounded-lg object-cover border border-gray-200 dark:border-gray-700 shadow-sm"> {% endif %}
-                                {% if letter.attachment_4 %} <img src="{{ letter.attachment_4.url }}" class="w-16 h-16 rounded-lg object-cover border border-gray-200 dark:border-gray-700 shadow-sm"> {% endif %}
-                                {% if letter.attachment_5 %} <img src="{{ letter.attachment_5.url }}" class="w-16 h-16 rounded-lg object-cover border border-gray-200 dark:border-gray-700 shadow-sm"> {% endif %}
-                                {% if letter.attachment_6 %} <img src="{{ letter.attachment_6.url }}" class="w-16 h-16 rounded-lg object-cover border border-gray-200 dark:border-gray-700 shadow-sm"> {% endif %}
+                                    {% if letter.attachment_1 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{% url 'serve_attachment' letter.pk 'attachment_1' %}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_2 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{% url 'serve_attachment' letter.pk 'attachment_2' %}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_3 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{% url 'serve_attachment' letter.pk 'attachment_3' %}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_4 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{% url 'serve_attachment' letter.pk 'attachment_4' %}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_5 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{% url 'serve_attachment' letter.pk 'attachment_5' %}" class="w-full h-full object-cover"> </div> {% endif %}
+                                    {% if letter.attachment_6 %} <div class="aspect-square rounded-lg overflow-hidden border border-white/20"> <img src="{% url 'serve_attachment' letter.pk 'attachment_6' %}" class="w-full h-full object-cover"> </div> {% endif %}
                             </div>
                             <a href="{% url 'view_letter_images' letter.pk %}" class="w-full inline-flex items-center justify-center py-2.5 rounded-xl bg-gray-800 dark:bg-gray-700 text-white hover:bg-gray-900 dark:hover:bg-gray-600 font-bold text-sm gap-2 transition-colors">
                                 <i class="fas fa-search-plus"></i> {% trans "Open Document Viewer" %}
