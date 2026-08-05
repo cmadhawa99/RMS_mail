@@ -2,14 +2,6 @@
 {% block admin_content %}
 {% load i18n %}
 
-<style>
-    .badge-sector-GOVERNING { background-color: #d99694; color: white; }
-    .badge-sector-HEALTH { background-color: #b3a2c7; color: white; }
-    .badge-sector-DEVELOPMENT { background-color: #e46c0a; color: white; }
-    .badge-sector-INCOME { background-color: #ffff00; color: #451a03; font-weight: 800; }
-    .badge-sector-ACCOUNTS { background-color: #95b3d7; color: white; }
-</style>
-
 <!-- Stat Boxes -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
@@ -17,12 +9,15 @@
     <div class="glass-panel p-4 rounded-2xl relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60 transition-all border border-white/40 dark:border-gray-700/50 shadow-sm">
         <div class="absolute right-0 top-0 w-20 h-full bg-blue-500/10 -skew-x-12 translate-x-4 group-hover:translate-x-6 transition-transform duration-700"></div>
         <div class="flex items-center gap-4 relative z-10">
-            <div class="w-12 h-12 rounded-[1rem] bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
+            <div class="w-12 h-12
+
+
+             rounded-[1rem] bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
                 <i class="fas fa-inbox"></i>
             </div>
             <div>
                 <div class="text-2xl font-black text-gray-800 dark:text-white tracking-tight leading-none">{{ total_letters|default:"0" }}</div>
-                <div class="text-[11px] font-bold uppercase tracking-wider opacity-60 mt-1">{% trans "Total Letters" %}</div>
+                <div class="text-[20px] font-bold uppercase tracking-wider opacity-60 mt-1">{% trans "Total Letters" %}</div>
             </div>
         </div>
     </div>
@@ -36,7 +31,7 @@
             </div>
             <div>
                 <div class="text-2xl font-black text-gray-800 dark:text-white tracking-tight leading-none">{{ pending_letters|default:"0" }}</div>
-                <div class="text-[11px] font-bold uppercase tracking-wider opacity-60 mt-1">{% trans "Pending Letters" %}</div>
+                <div class="text-[20px] font-bold uppercase tracking-wider opacity-60 mt-1">{% trans "Pending Letters" %}</div>
             </div>
         </div>
     </div>
@@ -50,7 +45,7 @@
             </div>
             <div>
                 <div class="text-2xl font-black text-gray-800 dark:text-white tracking-tight leading-none">{{ replied_letters|default:"0" }}</div>
-                <div class="text-[11px] font-bold uppercase tracking-wider opacity-60 mt-1">{% trans "Replied Letters" %}</div>
+                <div class="text-[20px] font-bold uppercase tracking-wider opacity-60 mt-1">{% trans "Replied Letters" %}</div>
             </div>
         </div>
     </div>
@@ -123,7 +118,7 @@
                         {{ letter.get_target_sector_display }}
                     </span>
                 </td>
-                <td class="px-4 py-3 bg-white/60 dark:bg-gray-800/40 border-y border-gray-200 dark:border-gray-700/50 text-xs opacity-60">
+                <td class="px-4 py-3 bg-white/50 dark:bg-gray-800/40 border-y border-gray-200 dark:border-gray-700/50 text-xs opacity-80">
                     {{ letter.accepting_officer_id|default:"-" }}
                 </td>
                 <td class="px-4 py-3 bg-white/60 dark:bg-gray-800/40 border-y border-gray-200 dark:border-gray-700/50">

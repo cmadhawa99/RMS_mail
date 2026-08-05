@@ -14,11 +14,11 @@
 
 </head>
 
-{% if selected_sector == 'GOVERNING' %}     <style>:root{ --accent: #d99694; --accent-rgb: 217, 150, 148; }</style>
-{% elif selected_sector == 'HEALTH' %}      <style>:root{ --accent: #b3a2c7; --accent-rgb: 179, 162, 199; }</style>
+{% if selected_sector == 'GOVERNING' %}     <style>:root{ --accent: #bf716f; --accent-rgb: 191, 113, 111; }</style>
+{% elif selected_sector == 'HEALTH' %}      <style>:root{ --accent: #7b5ca1; --accent-rgb: 123, 92, 161; }</style>
 {% elif selected_sector == 'DEVELOPMENT' %} <style>:root{ --accent: #e46c0a; --accent-rgb: 228, 108, 10; }</style>
 {% elif selected_sector == 'INCOME' %}      <style>:root{ --accent: #ffd700; --accent-rgb: 255, 215, 0; }</style>
-{% elif selected_sector == 'ACCOUNTS' %}    <style>:root{ --accent: #95b3d7; --accent-rgb: 149, 179, 215; }</style>
+{% elif selected_sector == 'ACCOUNTS' %}    <style>:root{ --accent: #598cc9; --accent-rgb: 89, 140, 201; }</style>
 {% else %}                                  <style>:root{ --accent: #3b82f6; --accent-rgb: 59, 130, 246; }</style>
 {% endif %}
 
@@ -83,7 +83,7 @@
                     </div>
                     <div>
                         <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400">System Online</div>
-                        <div class="text-[10px] opacity-60 uppercase tracking-wider">v1.0 Glass UI</div>
+                        <div class="text-[10px] opacity-60 uppercase tracking-wider">v1.0</div>
                     </div>
                 </div>
             </div>
@@ -160,7 +160,7 @@
                         </div>
                         <div class="relative">
                             <div class="text-2xl font-black text-gray-800 dark:text-white tracking-tight leading-none">{{ total }}</div>
-                            <div class="text-[11px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Total Letters" %}</div>
+                            <div class="text-[16px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Total Letters" %}</div>
                         </div>
                     </div>
 
@@ -171,7 +171,7 @@
                         </div>
                         <div class="relative">
                             <div class="text-2xl font-black text-gray-800 dark:text-white tracking-tight leading-none">{{ pending }}</div>
-                            <div class="text-[11px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Pending Letters" %}</div>
+                            <div class="text-[16px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Pending Letters" %}</div>
                         </div>
                     </div>
 
@@ -182,7 +182,7 @@
                         </div>
                         <div class="relative">
                             <div class="text-2xl font-black text-gray-800 dark:text-white tracking-tight leading-none">{{ resolved }}</div>
-                            <div class="text-[11px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Replied Letters" %}</div>
+                            <div class="text-[16px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Replied Letters" %}</div>
                         </div>
                     </div>
                 </div>
@@ -343,7 +343,7 @@
             const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
-            document.getElementById('liveDate').textContent = now.toLocaleDateString('si-LK', dateOptions);
+            document.getElementById('liveDate').textContent = now.toLocaleDateString('en-US', dateOptions);
         }
         setInterval(updateTime, 1000);
         updateTime();

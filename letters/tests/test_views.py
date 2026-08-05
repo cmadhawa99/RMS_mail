@@ -151,8 +151,8 @@ class TestSectorDashboardView:
         response = client.get(reverse('sector_dashboard'))
 
         assert response.context['total'] == 4
-        assert response.context['resolved'] == 1  # Only REPLIED
-        assert response.context['pending'] == 3  # Total - resolved
+        assert response.context['pending'] == 2  # Only status=PENDING
+        assert response.context['resolved'] == 2  # REPLIED + NOT_REQUIRED
 
     def test_sector_dashboard_context_data(self, client):
         # Dashboard should provide all required context data

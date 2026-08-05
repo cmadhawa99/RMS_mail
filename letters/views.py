@@ -63,9 +63,8 @@ def sector_dashboard(request):
         )
 
     total_count = letters.count()
-    # CHANGED: Use status='REPLIED' instead of is_replied=True
-    resolved_count = letters.filter(status='REPLIED').count()
-    pending_count = total_count - resolved_count
+    pending_count = letters.filter(status='PENDING').count()
+    resolved_count = total_count - pending_count
 
     paginator = Paginator(letters, 20)
     page_number = request.GET.get('page')
@@ -301,9 +300,8 @@ def custom_admin_letters(request):
         )
 
     total_letters = letters_list.count()
-    # CHANGED: Use status='REPLIED' instead of is_replied=True
-    replied_letters = letters_list.filter(status='REPLIED').count()
-    pending_letters = total_letters - replied_letters
+    pending_letters = letters_list.filter(status='PENDING').count()
+    replied_letters = total_letters - pending_letters
 
     paginator = Paginator(letters_list, 20)
     page_number = request.GET.get('page')

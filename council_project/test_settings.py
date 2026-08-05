@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'simple_history',
     'axes',
+    "django_tailwind_cli",
+    'fontawesomefree',
 ]
 
 MIDDLEWARE = [

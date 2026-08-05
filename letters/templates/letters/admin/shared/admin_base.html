@@ -140,7 +140,7 @@
                                             {% elif message.tags == 'warning' %}bg-amber-50/80 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200 border-amber-100 dark:border-amber-800/50
                                             {% else %}bg-blue-50/80 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200 border-blue-100 dark:border-blue-800/50{% endif %}">
                                             <i class="fas mt-0.5 {% if message.tags == 'success' %}fa-check-circle text-emerald-500{% elif message.tags == 'error' %}fa-exclamation-circle text-red-500{% else %}fa-info-circle text-blue-500{% endif %}"></i>
-                                            <span class="font-medium leading-snug">{{ message }}</span>
+                                            <span class="font-medium leading-snug break-all">{{ message }}</span>
                                         </div>
                                     {% endfor %}
                                 {% else %}
@@ -186,7 +186,7 @@
             </header>
 
             <div class="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-8 relative">
-                <div class="w-full max-w-7xl mx-auto">
+                <div class="w-full h-full">
                     {% block admin_content %}{% endblock %}
                 </div>
             </div>
@@ -206,9 +206,7 @@
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
             document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
-
-            // දිනය පෙන්වීම සඳහා (සිංහල භාෂාවෙන් අවශ්‍ය නම් 'si-LK' ලෙසද, ඉංග්‍රීසියෙන් අවශ්‍ය නම් 'en-US' ලෙසද ලබා දෙන්න)
-            document.getElementById('liveDate').textContent = now.toLocaleDateString('si-LK', dateOptions);
+            document.getElementById('liveDate').textContent = now.toLocaleDateString('en-US', dateOptions);
         }
         setInterval(updateTime, 1000);
         updateTime();

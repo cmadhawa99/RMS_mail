@@ -69,6 +69,13 @@
     .glass-btn {
         @apply flex items-center justify-center transition-all duration-300 active:scale-95 border border-gray-300 dark:border-white/20 shadow-sm backdrop-blur-sm hover:shadow-md hover:border-gray-300 dark:hover:border-white/40;
     }
+
+    .badge-sector-GOVERNING { background-color: #bf716f; color: #1e293b; }
+    .badge-sector-HEALTH { background-color: #7b5ca1; color: #1e293b; }
+    .badge-sector-DEVELOPMENT { background-color: #e46c0a; color: #1e293b; }
+    .badge-sector-INCOME { background-color: #ffff00; color: #1e293b; font-weight: 800; }
+    .badge-sector-ACCOUNTS { background-color: #598cc9; color: #1e293b; }
+
 }
 
 /* Animations */
