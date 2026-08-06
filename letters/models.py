@@ -37,7 +37,7 @@ STATUS_CHOICES = [
 def letter_directory_path (instance, filename):
     return f'letters/{instance.serial_number}/{filename}'
 
-def process_scanned_image(image_field, field_name):
+def process_scanned_image(image_field, field_name, serial_number):
     if not image_field:
         return image_field
 
@@ -61,7 +61,8 @@ def process_scanned_image(image_field, field_name):
     img.save(output, format='JPEG', quality=60, optimize=True)
     output.seek(0)
 
-    filename = f"{field_name}.jpg"
+    attachment_number = field_name.split('_')[-1]
+    filename = f"Attachment_{serial_number}_{attachment_number}.jpg"
 
     new_image = InMemoryUploadedFile (
         output,
@@ -106,7 +107,6 @@ class Letter(models.Model):
     def __str__(self):
         return f"{self.serial_number} ({self.get_target_sector_display()})"
 
-
     def save(self, *args, **kwargs):
         attachment_fields = [
             'attachment_1', 'attachment_2', 'attachment_3',
@@ -118,11 +118,12 @@ class Letter(models.Model):
 
             if field and isinstance(field.file, UploadedFile):
                 try:
-                    processed_file = process_scanned_image(field, field_name)
+                    processed_file = process_scanned_image(field, field_name, self.serial_number)
                     setattr(self, field_name, processed_file)
                 except Exception as e:
                     ext = os.path.splitext(field.name)[1]
-                    field.name = f"{field_name}{ext}"
+                    attachment_number = field_name.split('_')[-1]
+                    field.name = f"Attachment_{self.serial_number}_{attachment_number}{ext}"
 
         super().save(*args, **kwargs)
 
