@@ -15,10 +15,10 @@
 </head>
 
 {% if selected_sector == 'GOVERNING' %}     <style>:root{ --accent: #bf716f; --accent-rgb: 191, 113, 111; }</style>
-{% elif selected_sector == 'HEALTH' %}      <style>:root{ --accent: #7b5ca1; --accent-rgb: 123, 92, 161; }</style>
+{% elif selected_sector == 'HEALTH' %}      <style>:root{ --accent: #8e74ad; --accent-rgb: 142, 116, 173; }</style>
 {% elif selected_sector == 'DEVELOPMENT' %} <style>:root{ --accent: #e46c0a; --accent-rgb: 228, 108, 10; }</style>
-{% elif selected_sector == 'INCOME' %}      <style>:root{ --accent: #ffd700; --accent-rgb: 255, 215, 0; }</style>
-{% elif selected_sector == 'ACCOUNTS' %}    <style>:root{ --accent: #598cc9; --accent-rgb: 89, 140, 201; }</style>
+{% elif selected_sector == 'INCOME' %}      <style>:root{ --accent: #ffff00; --accent-rgb: 255, 255, 0; }</style>
+{% elif selected_sector == 'ACCOUNTS' %}    <style>:root{ --accent: #6997cf; --accent-rgb: 105, 151, 207; }</style>
 {% else %}                                  <style>:root{ --accent: #3b82f6; --accent-rgb: 59, 130, 246; }</style>
 {% endif %}
 
@@ -66,8 +66,11 @@
 
                         {% if user_sector == sec %}
                             <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                                {% if selected_sector == sec %} <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
-                                {% else %} <span class="text-[8px] font-black uppercase bg-[var(--accent)] text-white px-1.5 py-0.5 rounded">MY</span> {% endif %}
+                                {% if selected_sector == sec %}
+                                    <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                                {% else %}
+                                    <span class="text-[8px] font-black uppercase bg-[var(--accent)] {% if sec == 'INCOME' %}text-[#0f172a]{% else %}text-white{% endif %} px-1.5 py-0.5 rounded">MY</span>
+                                {% endif %}
                             </div>
                         {% endif %}
                     </a>
@@ -253,7 +256,7 @@
                                     </td>
 
                                     <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wide badge-sector-{{ letter.target_sector }} shadow-md">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[12px] font-extrabold uppercase tracking-wide badge-sector-{{ letter.target_sector }} shadow-md">
                                             {{ letter.get_target_sector_display }}
                                         </span>
                                     </td>
