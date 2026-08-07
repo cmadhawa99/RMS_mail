@@ -43,7 +43,7 @@ msgstr "අංශ ප්‍රධානි"
 
 #: .\letters\models.py:23 .\letters\templates\letters\user\dashboard.html:114
 #: .\letters\templates\letters\user\dashboard.html:155
-msgid "Governing Section"
+msgid "Administration Section"
 msgstr "පාලන අංශය"
 
 #: .\letters\models.py:24 .\letters\templates\letters\user\dashboard.html:115
@@ -58,7 +58,7 @@ msgstr "සංවර්ධන අංශය"
 
 #: .\letters\models.py:26 .\letters\templates\letters\user\dashboard.html:117
 #: .\letters\templates\letters\user\dashboard.html:158
-msgid "Income Section"
+msgid "Revenue Section"
 msgstr "ආදයම් අංශය"
 
 #: .\letters\models.py:27 .\letters\templates\letters\user\dashboard.html:118

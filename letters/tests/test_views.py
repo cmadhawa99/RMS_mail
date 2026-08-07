@@ -52,7 +52,7 @@ class TestSectorDashboardView:
 
         # Create letters for different sectors
         Letter.objects.create(serial_number=1, target_sector='HEALTH')
-        Letter.objects.create(serial_number=2, target_sector='GOVERNING')
+        Letter.objects.create(serial_number=2, target_sector='ADMINISTRATION')
         Letter.objects.create(serial_number=3, target_sector='HEALTH')
 
         response = client.get(reverse('sector_dashboard'))
@@ -67,7 +67,7 @@ class TestSectorDashboardView:
         client.force_login(user)
 
         Letter.objects.create(serial_number=1, target_sector='HEALTH')
-        Letter.objects.create(serial_number=2, target_sector='GOVERNING')
+        Letter.objects.create(serial_number=2, target_sector='ADMINISTRATION')
         Letter.objects.create(serial_number=3, target_sector='DEVELOPMENT')
 
         response = client.get(reverse('sector_dashboard'), {'sector': 'HEALTH'})
@@ -157,7 +157,7 @@ class TestSectorDashboardView:
     def test_sector_dashboard_context_data(self, client):
         # Dashboard should provide all required context data
         user = User.objects.create_user(username='context_user', password='pass')
-        SectorProfile.objects.create(user=user, sector='GOVERNING')
+        SectorProfile.objects.create(user=user, sector='ADMINISTRATION')
         client.force_login(user)
 
         response = client.get(reverse('sector_dashboard'))
@@ -219,7 +219,7 @@ class TestUserAddLetterView:
     def test_user_add_letter_post_valid(self, client):
         # Valid POST should create letter and redirect
         user = User.objects.create_user(username='create_user', password='pass')
-        SectorProfile.objects.create(user=user, sector='GOVERNING')
+        SectorProfile.objects.create(user=user, sector='ADMINISTRATION')
         client.force_login(user)
 
         post_data = {
@@ -239,7 +239,7 @@ class TestUserAddLetterView:
 
         letter = Letter.objects.get(serial_number=1001)
         assert letter.created_by == 'create_user'
-        assert letter.target_sector == 'GOVERNING'
+        assert letter.target_sector == 'ADMINISTRATION'
 
     def test_user_add_letter_sets_target_sector_automatically(self, client):
         # Form should automatically set target_sector to user's sector
@@ -304,7 +304,7 @@ class TestUserEditLetterView:
         SectorProfile.objects.create(user=user, sector='HEALTH')
         client.force_login(user)
 
-        letter = Letter.objects.create(serial_number=1, target_sector='GOVERNING')
+        letter = Letter.objects.create(serial_number=1, target_sector='ADMINISTRATION')
         response = client.get(reverse('user_edit_letter', kwargs={'pk': letter.pk}))
 
         assert response.status_code == 302
@@ -435,7 +435,7 @@ class TestLetterDetailView:
         SectorProfile.objects.create(user=user, sector='HEALTH')
         client.force_login(user)
 
-        letter = Letter.objects.create(serial_number=1, target_sector='GOVERNING')
+        letter = Letter.objects.create(serial_number=1, target_sector='ADMINISTRATION')
         response = client.get(reverse('letter_detail', kwargs={'pk': letter.pk}))
 
         assert response.status_code == 200
@@ -585,7 +585,7 @@ class TestCustomAdminLettersView:
         client.force_login(admin)
 
         Letter.objects.create(serial_number=1, target_sector='HEALTH')
-        Letter.objects.create(serial_number=2, target_sector='GOVERNING')
+        Letter.objects.create(serial_number=2, target_sector='ADMINISTRATION')
         Letter.objects.create(serial_number=3, target_sector='DEVELOPMENT')
 
         response = client.get(reverse('custom_admin_letters'))
@@ -749,7 +749,7 @@ class TestEditUserView:
             'username': 'to_update',
             'first_name': 'Updated',
             'last_name': 'Name',
-            'sector': 'GOVERNING',
+            'sector': 'ADMINISTRATION',
             'new_password': ''
         }
 

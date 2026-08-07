@@ -487,18 +487,18 @@ def export_letters_excel(request):
     # --- Styles added 2026-01-29 ---
 
     sector_colors = {
-        'GOVERNING': 'd99694',
-        'HEALTH': 'b3a2c7',
+        'ADMINISTRATION': 'bf716f',
+        'HEALTH': '8e74ad',
         'DEVELOPMENT': 'e46c0a',
-        'INCOME': 'ffff00',
-        'ACCOUNTS': '95b3d7'
+        'REVENUE': 'ffff00',
+        'ACCOUNTS': '6997cf'
     }
 
     sector_map = {
-        'GOVERNING': 'පාලන අංශය',
+        'ADMINISTRATION': 'පාලන අංශය',
         'HEALTH': 'සෞඛ්‍ය අංශය',
         'DEVELOPMENT': 'සංවර්ධන අංශය',
-        'INCOME': 'ආදායම් අංශය',
+        'REVENUE': 'ආදායම් අංශය',
         'ACCOUNTS': 'ගිණුම් අංශය',
     }
 

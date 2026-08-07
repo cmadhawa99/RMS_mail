@@ -8,10 +8,10 @@ module.exports = {
     './**/templates/**/*.html',
   ],
   safelist: [
-    'badge-sector-GOVERNING',
+    'badge-sector-ADMINISTRATION',
     'badge-sector-HEALTH',
     'badge-sector-DEVELOPMENT',
-    'badge-sector-INCOME',
+    'badge-sector-REVENUE',
     'badge-sector-ACCOUNTS',
   ],
   theme: {

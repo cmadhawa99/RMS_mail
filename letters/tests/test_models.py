@@ -44,10 +44,10 @@ class TestSectorChoices(TestCase):
     def test_sector_choices_values(self):
         # Should contain expected sectors
         choice_values = [choice[0] for choice in SECTOR_CHOICES]
-        self.assertIn('GOVERNING', choice_values)
+        self.assertIn('ADMINISTRATION', choice_values)
         self.assertIn('HEALTH', choice_values)
         self.assertIn('DEVELOPMENT', choice_values)
-        self.assertIn('INCOME', choice_values)
+        self.assertIn('REVENUE', choice_values)
         self.assertIn('ACCOUNTS', choice_values)
 
 

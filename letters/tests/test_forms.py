@@ -17,7 +17,7 @@ class TestUserForm:
             'username': 'john_doe',
             'first_name': 'John',
             'last_name': 'Doe',
-            'sector': 'GOVERNING',  # Use actual choice value
+            'sector': 'ADMINISTRATION',  # Use actual choice value
             'new_password': 'SecurePass123!'
         }
         form = UserForm(data=form_data)
@@ -34,7 +34,7 @@ class TestUserForm:
 
         # Verify sector profile created
         assert hasattr(user, 'sectorprofile')
-        assert user.sectorprofile.sector == 'GOVERNING'
+        assert user.sectorprofile.sector == 'ADMINISTRATION'
 
     def test_create_user_without_password_fails(self):
         # Invalid: New user without password should fail
@@ -83,7 +83,7 @@ class TestUserForm:
             'username': 'sector_test',
             'first_name': 'Sector',
             'last_name': 'Test',
-            'sector': 'INCOME',
+            'sector': 'REVENUE',
             'new_password': ''
         }
         form = UserForm(data=form_data, instance=user)
@@ -93,7 +93,7 @@ class TestUserForm:
 
         # Refresh from DB
         user.refresh_from_db()
-        assert user.sectorprofile.sector == 'INCOME'
+        assert user.sectorprofile.sector == 'REVENUE'
 
     def test_all_sector_choices_available(self):
         # Valid: All sector choices are available in form
@@ -126,7 +126,7 @@ class TestLetterForm:
             'serial_number': 1,
             'sender_details': 'John Doe, ABC Corp, Colombo',
             'letter_type': 'Inquiry about services',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-123',
             'status': 'PENDING'
@@ -144,7 +144,7 @@ class TestLetterForm:
             serial_number=100,
             sender_details='Original Sender',
             letter_type='Original Type',
-            target_sector='GOVERNING',
+            target_sector='ADMINISTRATION',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-001'
         )
@@ -170,7 +170,7 @@ class TestLetterForm:
             serial_number=201,
             sender_details='Sender 1',
             letter_type='Type 1',
-            target_sector='GOVERNING',
+            target_sector='ADMINISTRATION',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-001'
         )
@@ -205,7 +205,7 @@ class TestLetterForm:
             serial_number=301,
             sender_details='Original Sender',
             letter_type='Original Type',
-            target_sector='GOVERNING',
+            target_sector='ADMINISTRATION',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-001'
         )
@@ -214,7 +214,7 @@ class TestLetterForm:
             'serial_number': 301,  # Same as before
             'sender_details': 'Updated Sender Details',
             'letter_type': 'Updated Type',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'PENDING'
@@ -244,7 +244,7 @@ class TestLetterForm:
             'serial_number': 401,
             'sender_details': 'Sender with image attachment',
             'letter_type': 'Scanned Letter',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'PENDING'
@@ -267,7 +267,7 @@ class TestLetterForm:
             'replied_at': '2026-06-20',
             'sender_details': 'Date Test Sender',
             'letter_type': 'Date Test Type',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'REPLIED'
@@ -317,7 +317,7 @@ class TestUserLetterForm:
             'date_received': '2026-06-15',
             'sender_details': 'Reply Test Sender',
             'letter_type': 'Reply Test Type',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'REPLIED',
@@ -336,7 +336,7 @@ class TestUserLetterForm:
             'date_received': '2026-06-15',
             'sender_details': 'Reply Test Sender',
             'letter_type': 'Reply Test Type',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'REPLIED',
@@ -356,7 +356,7 @@ class TestUserLetterForm:
             date_received='2026-06-15',
             sender_details='Not Required Sender',
             letter_type='Not Required Type',
-            target_sector='GOVERNING',
+            target_sector='ADMINISTRATION',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-001',
             status='PENDING',
@@ -368,7 +368,7 @@ class TestUserLetterForm:
             'date_received': '2026-06-15',
             'sender_details': 'Not Required Sender',
             'letter_type': 'Not Required Type',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'NOT_REQUIRED',
@@ -388,7 +388,7 @@ class TestUserLetterForm:
             date_received='2026-06-15',
             sender_details='Lock Test Sender',
             letter_type='Lock Test Type',
-            target_sector='GOVERNING',
+            target_sector='ADMINISTRATION',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-001'
         )
@@ -398,7 +398,7 @@ class TestUserLetterForm:
             'date_received': '2026-06-15',
             'sender_details': 'Lock Test Sender',
             'letter_type': 'Lock Test Type',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'PENDING'
@@ -427,7 +427,7 @@ class TestUserLetterForm:
             date_received='2026-06-15',
             sender_details='Readonly Test Sender',
             letter_type='Readonly Test Type',
-            target_sector='GOVERNING',
+            target_sector='ADMINISTRATION',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-001'
         )
@@ -449,7 +449,7 @@ class TestUserLetterForm:
             'date_received': '2026-06-15',
             'sender_details': 'New Letter Sender',
             'letter_type': 'New Letter Type',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'PENDING'
@@ -472,7 +472,7 @@ class TestFormSecurity:
             'username': 'regular_user',
             'first_name': 'Regular',
             'last_name': 'User',
-            'sector': 'GOVERNING',
+            'sector': 'ADMINISTRATION',
             'new_password': 'SecurePass123!'
         }
         form = UserForm(data=form_data)
@@ -487,7 +487,7 @@ class TestFormSecurity:
             serial_number=1101,
             sender_details='ICT Sender',
             letter_type='ICT Type',
-            target_sector='GOVERNING',
+            target_sector='ADMINISTRATION',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-001'
         )
@@ -519,7 +519,7 @@ class TestFormSecurity:
             'serial_number': 1201,
             'sender_details': 'Multi Attachment Sender',
             'letter_type': 'Multi Attachment Type',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'PENDING'

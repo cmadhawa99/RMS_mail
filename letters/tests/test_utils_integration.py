@@ -198,7 +198,7 @@ class TestCompleteLetterWorkflow:
             serial_number=1002,
             sender_details='Original Sender',
             letter_type='Original Type',
-            target_sector='GOVERNING',
+            target_sector='ADMINISTRATION',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-001'
         )
@@ -207,7 +207,7 @@ class TestCompleteLetterWorkflow:
             'serial_number': 1002,
             'sender_details': 'Updated Sender',
             'letter_type': 'Updated Type',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-001',
             'status': 'PENDING'
@@ -329,7 +329,7 @@ class TestCompleteLetterWorkflow:
 class TestMultiUserSectorIsolation:
     # Integration tests for multi-user sector isolation
 
-    def test_health_user_cannot_see_governing_letters_in_dashboard(self, client):
+    def test_health_user_cannot_see_administration_letters_in_dashboard(self, client):
         # Health sector user should only see HEALTH letters in filtered view
         health_user = User.objects.create_user(username='health_user', password='pass')
         SectorProfile.objects.create(user=health_user, sector='HEALTH')
@@ -337,7 +337,7 @@ class TestMultiUserSectorIsolation:
 
         # Create letters for different sectors
         Letter.objects.create(serial_number=3001, target_sector='HEALTH', sender_details='Health Letter')
-        Letter.objects.create(serial_number=3002, target_sector='GOVERNING', sender_details='Governing Letter')
+        Letter.objects.create(serial_number=3002, target_sector='ADMINISTRATION', sender_details='Administration Letter')
         Letter.objects.create(serial_number=3003, target_sector='DEVELOPMENT', sender_details='Development Letter')
 
         # Filter by HEALTH sector
@@ -348,14 +348,14 @@ class TestMultiUserSectorIsolation:
         letters = list(response.context['letters'])
         assert letters[0].target_sector == 'HEALTH'
 
-    def test_income_user_cannot_access_other_sector_filter(self, client):
-        # Income sector user filtering by other sector should return empty
-        income_user = User.objects.create_user(username='income_user', password='pass')
-        SectorProfile.objects.create(user=income_user, sector='INCOME')
-        client.force_login(income_user)
+    def test_revenue_user_cannot_access_other_sector_filter(self, client):
+        # Revenue sector user filtering by other sector should return empty
+        revenue_user = User.objects.create_user(username='revenue_user', password='pass')
+        SectorProfile.objects.create(user=revenue_user, sector='REVENUE')
+        client.force_login(revenue_user)
 
         # Create letters
-        Letter.objects.create(serial_number=3011, target_sector='INCOME', sender_details='Income Letter')
+        Letter.objects.create(serial_number=3011, target_sector='REVENUE', sender_details='Revenue Letter')
         Letter.objects.create(serial_number=3012, target_sector='ACCOUNTS', sender_details='Accounts Letter')
 
         # Try to filter by ACCOUNTS (should work but shows only ACCOUNTS letters)
@@ -370,21 +370,21 @@ class TestMultiUserSectorIsolation:
         health_user = User.objects.create_user(username='multi_health', password='pass')
         SectorProfile.objects.create(user=health_user, sector='HEALTH')
 
-        governing_user = User.objects.create_user(username='multi_gov', password='pass')
-        SectorProfile.objects.create(user=governing_user, sector='GOVERNING')
+        administration_user = User.objects.create_user(username='multi_gov', password='pass')
+        SectorProfile.objects.create(user=administration_user, sector='ADMINISTRATION')
 
         # Create sector-specific letters
         Letter.objects.create(serial_number=3021, target_sector='HEALTH', sender_details='Health Only')
-        Letter.objects.create(serial_number=3022, target_sector='GOVERNING', sender_details='Governing Only')
+        Letter.objects.create(serial_number=3022, target_sector='ADMINISTRATION', sender_details='Administration Only')
         Letter.objects.create(serial_number=3023, target_sector='HEALTH', sender_details='Another Health')
 
         # Health user filters by HEALTH
         client.force_login(health_user)
         response_health = client.get(reverse('sector_dashboard'), {'sector': 'HEALTH'})
 
-        # Governing user filters by GOVERNING
-        client.force_login(governing_user)
-        response_gov = client.get(reverse('sector_dashboard'), {'sector': 'GOVERNING'})
+        # Administration user filters by ADMINISTRATION
+        client.force_login(administration_user)
+        response_gov = client.get(reverse('sector_dashboard'), {'sector': 'ADMINISTRATION'})
 
         assert response_health.context['total'] == 2
         assert response_gov.context['total'] == 1
@@ -395,9 +395,9 @@ class TestMultiUserSectorIsolation:
         client.force_login(admin)
 
         Letter.objects.create(serial_number=3031, target_sector='HEALTH')
-        Letter.objects.create(serial_number=3032, target_sector='GOVERNING')
+        Letter.objects.create(serial_number=3032, target_sector='ADMINISTRATION')
         Letter.objects.create(serial_number=3033, target_sector='DEVELOPMENT')
-        Letter.objects.create(serial_number=3034, target_sector='INCOME')
+        Letter.objects.create(serial_number=3034, target_sector='REVENUE')
         Letter.objects.create(serial_number=3035, target_sector='ACCOUNTS')
 
         response = client.get(reverse('custom_admin_letters'))
@@ -454,7 +454,7 @@ class TestPermissionBoundaries:
     def test_regular_user_cannot_access_admin_letters_view(self, client):
         # Regular users cannot access admin letters management
         user = User.objects.create_user(username='regular3', password='pass')
-        SectorProfile.objects.create(user=user, sector='GOVERNING')
+        SectorProfile.objects.create(user=user, sector='ADMINISTRATION')
         client.force_login(user)
 
         response = client.get(reverse('custom_admin_letters'))
@@ -590,17 +590,17 @@ class TestPermissionBoundaries:
         SectorProfile.objects.create(user=health_user, sector='HEALTH')
         client.force_login(health_user)
 
-        governing_letter = Letter.objects.create(
+        administration_letter = Letter.objects.create(
             serial_number=4020,
-            sender_details='Governing Boundary Test',
+            sender_details='Administration Boundary Test',
             letter_type='Test',
-            target_sector='GOVERNING',
+            target_sector='ADMINISTRATION',
             administrated_by='CHAIRMAN',
             accepting_officer_id='OFF-G01'
         )
 
         # Try to access admin edit view (should redirect non-superuser)
-        response = client.get(reverse('edit_letter', args=[governing_letter.pk]))
+        response = client.get(reverse('edit_letter', args=[administration_letter.pk]))
 
         assert response.status_code == 302
 

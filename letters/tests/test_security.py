@@ -157,10 +157,10 @@ class TestAuthorizationSectorIsolation:
         assert response.status_code == 302
         assert response.url == reverse('sector_dashboard')
 
-    def test_governing_user_redirected_from_admin_users(self, client):
+    def test_administration_user_redirected_from_admin_users(self, client):
         # Regular users cannot access user management
         gov_user = User.objects.create_user(username='gov_auth', password='pass')
-        SectorProfile.objects.create(user=gov_user, sector='GOVERNING')
+        SectorProfile.objects.create(user=gov_user, sector='ADMINISTRATION')
         client.force_login(gov_user)
 
         response = client.get(reverse('custom_admin_users'))
@@ -177,11 +177,11 @@ class TestAuthorizationSectorIsolation:
 
         assert response.status_code == 302
 
-    def test_income_user_cannot_create_users(self, client):
+    def test_revenue_user_cannot_create_users(self, client):
         # Regular users cannot create new users
-        income_user = User.objects.create_user(username='income_auth', password='pass')
-        SectorProfile.objects.create(user=income_user, sector='INCOME')
-        client.force_login(income_user)
+        revenue_user = User.objects.create_user(username='revenue_auth', password='pass')
+        SectorProfile.objects.create(user=revenue_user, sector='REVENUE')
+        client.force_login(revenue_user)
 
         response = client.get(reverse('create_user'))
 
@@ -530,7 +530,7 @@ class TestInputValidation:
             'serial_number': 7001,
             'sender_details': 'Duplicate',
             'letter_type': 'Duplicate',
-            'target_sector': 'GOVERNING',
+            'target_sector': 'ADMINISTRATION',
             'administrated_by': 'CHAIRMAN',
             'accepting_officer_id': 'OFF-DUP',
             'status': 'PENDING'

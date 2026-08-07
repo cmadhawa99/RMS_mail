@@ -20,10 +20,10 @@ OFFICER_CHOICES = [
 ]
 
 SECTOR_CHOICES = [
-    ('GOVERNING', _('Governing Section')),
+    ('ADMINISTRATION', _('Administration Section')),
     ('HEALTH', _('Health Section')),
     ('DEVELOPMENT', _('Development Section')),
-    ('INCOME', _('Income Section')),
+    ('REVENUE', _('Revenue Section')),
     ('ACCOUNTS', _('Accounts Section')),
 ]
 

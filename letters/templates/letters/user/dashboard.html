@@ -14,10 +14,10 @@
 
 </head>
 
-{% if selected_sector == 'GOVERNING' %}     <style>:root{ --accent: #bf716f; --accent-rgb: 191, 113, 111; }</style>
+{% if selected_sector == 'ADMINISTRATION' %}     <style>:root{ --accent: #bf716f; --accent-rgb: 191, 113, 111; }</style>
 {% elif selected_sector == 'HEALTH' %}      <style>:root{ --accent: #8e74ad; --accent-rgb: 142, 116, 173; }</style>
 {% elif selected_sector == 'DEVELOPMENT' %} <style>:root{ --accent: #e46c0a; --accent-rgb: 228, 108, 10; }</style>
-{% elif selected_sector == 'INCOME' %}      <style>:root{ --accent: #ffff00; --accent-rgb: 255, 255, 0; }</style>
+{% elif selected_sector == 'REVENUE' %}      <style>:root{ --accent: #ffff00; --accent-rgb: 255, 255, 0; }</style>
 {% elif selected_sector == 'ACCOUNTS' %}    <style>:root{ --accent: #6997cf; --accent-rgb: 105, 151, 207; }</style>
 {% else %}                                  <style>:root{ --accent: #3b82f6; --accent-rgb: 59, 130, 246; }</style>
 {% endif %}
@@ -46,19 +46,19 @@
 
                 <div class="px-2 mt-8 mb-2 text-[10px] font-bold uppercase tracking-widest opacity-50">{% trans "Section By Section" %}</div>
 
-                {% with 'GOVERNING HEALTH DEVELOPMENT INCOME ACCOUNTS' as sectors %}
+                {% with 'ADMINISTRATION HEALTH DEVELOPMENT REVENUE ACCOUNTS' as sectors %}
                     {% for sec in sectors.split %}
                     <a href="?sector={{ sec }}" class="relative flex items-center px-4 py-3 rounded-xl transition-all duration-200 group mb-1
-                        {% if selected_sector == sec %} bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/40 {% if sec == 'INCOME' %}!text-black{% endif %}
+                        {% if selected_sector == sec %} bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/40 {% if sec == 'REVENUE' %}!text-black{% endif %}
                         {% else %} hover:bg-white/40 dark:hover:bg-white/10 hover:translate-x-1 text-gray-600 dark:text-gray-400 {% endif %}
                         {% if user_sector == sec and selected_sector != sec %} border-2 border-[var(--accent)] text-[var(--accent)] {% endif %}">
 
-                        <i class="fas {% if sec == 'GOVERNING' %}fa-gavel{% elif sec == 'HEALTH' %}fa-heartbeat{% elif sec == 'DEVELOPMENT' %}fa-hard-hat{% elif sec == 'INCOME' %}fa-coins{% else %}fa-file-invoice-dollar{% endif %} w-6 text-center"></i>
+                        <i class="fas {% if sec == 'ADMINISTRATION' %}fa-gavel{% elif sec == 'HEALTH' %}fa-heartbeat{% elif sec == 'DEVELOPMENT' %}fa-hard-hat{% elif sec == 'REVENUE' %}fa-coins{% else %}fa-file-invoice-dollar{% endif %} w-6 text-center"></i>
                         <span class="font-bold ml-3 text-sm">
-                            {% if sec == 'GOVERNING' %}{% trans "Governing Section" %}
+                            {% if sec == 'ADMINISTRATION' %}{% trans "Administration Section" %}
                             {% elif sec == 'HEALTH' %}{% trans "Health Section" %}
                             {% elif sec == 'DEVELOPMENT' %}{% trans "Development Section" %}
-                            {% elif sec == 'INCOME' %}{% trans "Income Section" %}
+                            {% elif sec == 'REVENUE' %}{% trans "Revenue Section" %}
                             {% elif sec == 'ACCOUNTS' %}{% trans "Accounts Section" %}
 
                             {% endif %}
@@ -69,7 +69,7 @@
                                 {% if selected_sector == sec %}
                                     <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
                                 {% else %}
-                                    <span class="text-[8px] font-black uppercase bg-[var(--accent)] {% if sec == 'INCOME' %}text-[#0f172a]{% else %}text-white{% endif %} px-1.5 py-0.5 rounded">MY</span>
+                                    <span class="text-[8px] font-black uppercase bg-[var(--accent)] {% if sec == 'REVENUE' %}text-[#0f172a]{% else %}text-white{% endif %} px-1.5 py-0.5 rounded">MY</span>
                                 {% endif %}
                             </div>
                         {% endif %}
@@ -97,12 +97,12 @@
             <header class="h-20 px-8 flex justify-between items-center shrink-0 border-b border-gray-200/30 dark:border-gray-700/30 bg-white/20 dark:bg-black/10 backdrop-blur-md">
                 <div>
                     <h1 class="text-2xl font-black dark:text-white flex items-center gap-3 drop-shadow-sm
-                        {% if selected_sector == 'INCOME' %}text-accent-adaptive{% else %}text-[var(--accent)]{% endif %}">
+                        {% if selected_sector == 'REVENUE' %}text-accent-adaptive{% else %}text-[var(--accent)]{% endif %}">
                         {% if selected_sector == 'ALL' %} {% trans "All Sections" %}
-                        {% elif selected_sector == 'GOVERNING' %} {% trans "Governing Section" %}
+                        {% elif selected_sector == 'ADMINISTRATION' %} {% trans "Administration Section" %}
                         {% elif selected_sector == 'HEALTH' %} {% trans "Health Section" %}
                         {% elif selected_sector == 'DEVELOPMENT' %} {% trans "Development Section" %}
-                        {% elif selected_sector == 'INCOME' %} {% trans "Income Section" %}
+                        {% elif selected_sector == 'REVENUE' %} {% trans "Revenue Section" %}
                         {% elif selected_sector == 'ACCOUNTS' %} {% trans "Accounts Section" %}
                         {% else %} {{ selected_sector }} {% trans "Sector Not Defined" %} {% endif %}
                     </h1>
