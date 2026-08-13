@@ -9,7 +9,7 @@
         <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all flex-grow md:flex-grow-0 bg-white dark:bg-transparent border border-gray-300 dark:border-white/10 shadow-sm">
             <div class="pl-3 pr-2 text-gray-400"><i class="fas fa-search text-xs"></i></div>
             <!-- Used !important modifiers for input to prevent override -->
-            <input type="text" name="q" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-2 !w-full md:!w-48 outline-none" placeholder="Search officers..." value="{{ search_query }}">
+            <input type="text" name="q" autocomplete="off" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-2 !w-full md:!w-48 outline-none" placeholder="{% trans 'Search...' %}" value="{{ search_query }}">
             <button type="submit" class="hidden">Go</button>
         </form>
 

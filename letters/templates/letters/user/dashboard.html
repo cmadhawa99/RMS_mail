@@ -213,7 +213,7 @@
                                 </select>
                                 <div class="w-px h-5 bg-gray-400/30 mx-1"></div>
                                 <!-- වෙනස: !bg-transparent !border-none !w-40 වැනි !important modifiers එකතු කර ඇත -->
-                                <input type="text" name="q" id="userSearchInput" class="!bg-transparent !border-none text-sm font-bold text-black dark:text-white placeholder-gray-500 focus:ring-0 !py-1 !px-2 !w-40 outline-none !shadow-none" placeholder="{% trans 'Search...' %}" value="{{ search_query }}">
+                                <input type="text" name="q" autocomplete="off" id="userSearchInput" class="!bg-transparent !border-none text-sm font-bold text-black dark:text-white placeholder-gray-500 focus:ring-0 !py-1 !px-2 !w-40 outline-none !shadow-none" placeholder="{% trans 'Search...' %}" value="{{ search_query }}">
                             </div>
 
                             <button type="submit" class="glass-btn w-10 h-10 rounded-xl text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white shadow-md">

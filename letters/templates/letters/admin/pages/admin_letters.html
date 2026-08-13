@@ -86,7 +86,7 @@
             <div class="w-px h-5 bg-gray-400/30 mx-1"></div>
 
             <!-- Used !important modifiers for input -->
-            <input type="text" name="q" id="adminSearchInput" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-2 !w-32 md:!w-48 outline-none" placeholder="Search..." value="{{ search_query }}">
+            <input type="text" name="q" id="adminSearchInput" autocomplete="off" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-2 !w-32 md:!w-48 outline-none" placeholder="{% trans 'Search...' %}" value="{{ search_query }}">
             <button type="submit" class="shrink-0 w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 transition-colors shadow-md">
     <i class="fas fa-search text-xs"></i>
 </button>

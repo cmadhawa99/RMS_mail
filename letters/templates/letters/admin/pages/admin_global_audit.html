@@ -10,7 +10,7 @@
     <!-- Search Form -->
     <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all bg-white dark:bg-transparent border border-gray-300 dark:border-white/10 shadow-sm">
         <!-- Used !important modifiers for input to prevent override -->
-        <input type="text" name="q" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-3 !w-48 outline-none" placeholder="{% trans 'Search Serial Number...' %}" value="{{ search_query }}">
+        <input type="text" name="q" autocomplete="off" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-3 !w-48 outline-none" placeholder="{% trans 'Search Serial Number...' %}" value="{{ search_query }}">
         <button type="submit" class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 transition-colors shadow-md">
             <i class="fas fa-search text-xs"></i>
         </button>
