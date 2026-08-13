@@ -302,7 +302,7 @@ class TestProcessScannedImage(TestCase):
 
     def test_process_none_image(self):
         # Should return None when given None
-        result = process_scanned_image(None, 'test_field')
+        result = process_scanned_image(None, 'test_field', 1001)
         self.assertIsNone(result)
 
     def test_process_valid_image(self):
@@ -318,11 +318,11 @@ class TestProcessScannedImage(TestCase):
         image_file = ContentFile(img_data.read(), name='test.jpg')
 
         # Process the image
-        result = process_scanned_image(image_file, 'attachment_1')
+        result = process_scanned_image(image_file, 'attachment_1', 1001)
 
         # Verify result is a file-like object
         self.assertIsNotNone(result)
-        self.assertEqual(result.name, 'attachment_1.jpg')
+        self.assertEqual(result.name, 'Attachment_1001_1.jpg')
         self.assertEqual(result.content_type, 'image/jpeg')
 
     def test_process_image_grayscale(self):
@@ -335,7 +335,7 @@ class TestProcessScannedImage(TestCase):
         from django.core.files.base import ContentFile
         image_file = ContentFile(img_data.read(), name='test.jpg')
 
-        result = process_scanned_image(image_file, 'attachment_1')
+        result = process_scanned_image(image_file, 'attachment_1', 1001)
 
         # Load the processed image to verify it's grayscale
         processed_img = Image.open(result)
@@ -352,7 +352,7 @@ class TestProcessScannedImage(TestCase):
         from django.core.files.base import ContentFile
         image_file = ContentFile(img_data.read(), name='test.jpg')
 
-        result = process_scanned_image(image_file, 'attachment_1')
+        result = process_scanned_image(image_file, 'attachment_1', 1001)
 
         # Verify dimensions are within limits
         processed_img = Image.open(result)
@@ -369,7 +369,7 @@ class TestProcessScannedImage(TestCase):
         from django.core.files.base import ContentFile
         image_file = ContentFile(img_data.read(), name='test.jpg')
 
-        result = process_scanned_image(image_file, 'attachment_1')
+        result = process_scanned_image(image_file, 'attachment_1', 1001)
 
         processed_img = Image.open(result)
         # Original aspect ratio is 2:1, should be preserved

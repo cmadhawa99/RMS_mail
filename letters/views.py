@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Letter, SectorProfile
+from .models import Letter, SectorProfile, SECTOR_CHOICES, STATUS_CHOICES
 from django.views.decorators.cache import never_cache  # <--- CRITICAL SECURITY TOOL
 from django.core.paginator import Paginator
 from .forms import UserForm, LetterForm, UserLetterForm
@@ -285,6 +285,8 @@ def custom_admin_letters(request):
 
     search_query = request.GET.get('q', '')
     search_type = request.GET.get('search_type', 'all')
+    filter_sector = request.GET.get('sector', 'all')
+    filter_status = request.GET.get('status', 'all')
 
     if search_query:
         if search_type == 'serial':
@@ -299,6 +301,12 @@ def custom_admin_letters(request):
             Q(target_sector__icontains=search_query)
         )
 
+    if filter_sector != 'all':
+        letters_list = letters_list.filter(target_sector=filter_sector)
+
+    if filter_status != 'all':
+        letters_list = letters_list.filter(status=filter_status)
+
     total_letters = letters_list.count()
     pending_letters = letters_list.filter(status='PENDING').count()
     replied_letters = total_letters - pending_letters
@@ -311,6 +319,10 @@ def custom_admin_letters(request):
         'letters': letters,
         'search_query': search_query,
         'search_type': search_type,
+        'filter_sector': filter_sector,
+        'filter_status': filter_status,
+        'SECTOR_CHOICES': SECTOR_CHOICES,
+        'STATUS_CHOICES': STATUS_CHOICES,
         'total_letters': total_letters,
         'pending_letters': pending_letters,
         'replied_letters': replied_letters
@@ -462,6 +474,8 @@ def export_letters_excel(request):
     #1) Get the data (Apply search filter if it exists)
     letters = Letter.objects.all().order_by('serial_number')
     search_query = request.GET.get('q', '')
+    filter_sector = request.GET.get('sector', 'all')
+    filter_status = request.GET.get('status', 'all')
 
     if search_query:
         letters = letters.filter(
@@ -477,6 +491,12 @@ def export_letters_excel(request):
     else:
         year = datetime.now().year
         filename = f"Weligepola_Pradeshiya_sabha_letters_database_{year}.xlsx"
+
+    if filter_sector != 'all':
+        letters = letters.filter(target_sector=filter_sector)
+
+    if filter_status != 'all':
+        letters = letters.filter(status=filter_status)
 
 
     # 2) Create the Excel Workbook
