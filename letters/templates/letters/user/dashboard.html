@@ -7,11 +7,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ප්‍රාදේශීය සභා ද්වාරය - Dashboard</title>
-
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     {% tailwind_css %}
-
 </head>
 
 {% if selected_sector == 'ADMINISTRATION' %}     <style>:root{ --accent: #bf716f; --accent-rgb: 191, 113, 111; }</style>
@@ -52,7 +50,6 @@
                         {% if selected_sector == sec %} bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/40 {% if sec == 'REVENUE' %}!text-black{% endif %}
                         {% else %} hover:bg-white/40 dark:hover:bg-white/10 hover:translate-x-1 text-gray-600 dark:text-gray-400 {% endif %}
                         {% if user_sector == sec and selected_sector != sec %} border-2 border-[var(--accent)] text-[var(--accent)] {% endif %}">
-
                         <i class="fas {% if sec == 'ADMINISTRATION' %}fa-gavel{% elif sec == 'HEALTH' %}fa-heartbeat{% elif sec == 'DEVELOPMENT' %}fa-hard-hat{% elif sec == 'REVENUE' %}fa-coins{% else %}fa-file-invoice-dollar{% endif %} w-6 text-center"></i>
                         <span class="font-bold ml-3 text-sm">
                             {% if sec == 'ADMINISTRATION' %}{% trans "Administration Section" %}
@@ -60,10 +57,8 @@
                             {% elif sec == 'DEVELOPMENT' %}{% trans "Development Section" %}
                             {% elif sec == 'REVENUE' %}{% trans "Revenue Section" %}
                             {% elif sec == 'ACCOUNTS' %}{% trans "Accounts Section" %}
-
                             {% endif %}
                         </span>
-
                         {% if user_sector == sec %}
                             <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
                                 {% if selected_sector == sec %}
@@ -93,7 +88,6 @@
         </aside>
 
         <main class="flex-1 flex flex-col h-full relative z-10 glass rounded-3xl overflow-hidden">
-
             <header class="h-20 px-8 flex justify-between items-center shrink-0 border-b border-gray-200/30 dark:border-gray-700/30 bg-white/20 dark:bg-black/10 backdrop-blur-md">
                 <div>
                     <h1 class="text-2xl font-black dark:text-white flex items-center gap-3 drop-shadow-sm
@@ -121,17 +115,12 @@
                         {% csrf_token %}
                         <input name="next" type="hidden" value="{{ request.get_full_path }}">
                         {% get_current_language as LANGUAGE_CODE %}
-
                         {% if LANGUAGE_CODE == 'en' %}
                             <input name="language" type="hidden" value="si">
-                            <button type="submit" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="සිංහලට මාරු වන්න">
-                                සිං
-                            </button>
+                            <button type="submit" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="සිංහලට මාරු වන්න">සිං</button>
                         {% else %}
                             <input name="language" type="hidden" value="en">
-                            <button type="submit" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="Switch to English">
-                                EN
-                            </button>
+                            <button type="submit" class="glass-btn w-11 h-11 rounded-full text-gray-600 dark:text-gray-200 hover:bg-white/80 font-bold" title="Switch to English">EN</button>
                         {% endif %}
                     </form>
 
@@ -150,11 +139,6 @@
             </header>
 
             <div class="flex-1 flex flex-col px-8 pb-6 overflow-hidden">
-
-                <!--
-                  වෙනස: gap-6 -> gap-4, my-6 -> my-4
-                  padding, icon size සහ text sizes කුඩා කර ඇත.
-                -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 shrink-0">
                     <div class="glass-panel rounded-2xl p-3.5 flex items-center gap-4 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
                         <div class="absolute right-0 top-0 w-16 h-16 bg-blue-500/10 rounded-bl-full -mr-2 -mt-2 transition-transform group-hover:scale-150"></div>
@@ -166,7 +150,6 @@
                             <div class="text-[16px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Total Letters" %}</div>
                         </div>
                     </div>
-
                     <div class="glass-panel rounded-2xl p-3.5 flex items-center gap-4 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
                         <div class="absolute right-0 top-0 w-16 h-16 bg-amber-500/10 rounded-bl-full -mr-2 -mt-2 transition-transform group-hover:scale-150"></div>
                         <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white text-xl shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform duration-300">
@@ -177,7 +160,6 @@
                             <div class="text-[16px] font-bold uppercase tracking-wider opacity-60 mt-0.5">{% trans "Pending Letters" %}</div>
                         </div>
                     </div>
-
                     <div class="glass-panel rounded-2xl p-3.5 flex items-center gap-4 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-gray-800/60">
                         <div class="absolute right-0 top-0 w-16 h-16 bg-emerald-500/10 rounded-bl-full -mr-2 -mt-2 transition-transform group-hover:scale-150"></div>
                         <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xl shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
@@ -195,34 +177,27 @@
                         <div>
                             <h2 class="text-lg font-bold text-gray-800 dark:text-white">{% trans "Letter Registry" %}</h2>
                         </div>
-
                         <form method="GET" action="" class="flex gap-3 items-center">
-
                             <a href="{% url 'user_add_letter' %}" class="glass-btn w-10 h-10 rounded-xl text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 transition-colors shadow-md" title="New Letter">
                                 <i class="fas fa-plus"></i>
                             </a>
-
                             {% if selected_sector != 'ALL' %}<input type="hidden" name="sector" value="{{ selected_sector }}">{% endif %}
-
                             <div class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-[var(--accent)] transition-all">
-                                <!-- වෙනස: !bg-transparent !border-none වැනි !important modifiers එකතු කර ඇත -->
                                 <select name="search_type" id="userSearchType" class="!bg-transparent !border-none text-xs font-bold text-gray-600 dark:text-gray-300 focus:ring-0 cursor-pointer !py-1.5 !pl-3 !pr-6 outline-none appearance-none !shadow-none">
                                     <option value="all" {% if search_type == 'all' %}selected{% endif %}>{% trans "All" %}</option>
                                     <option value="serial" {% if search_type == 'serial' %}selected{% endif %}>{% trans "Serial" %}</option>
                                     <option value="date" {% if search_type == 'date' %}selected{% endif %}>{% trans "Date" %}</option>
                                 </select>
                                 <div class="w-px h-5 bg-gray-400/30 mx-1"></div>
-                                <!-- වෙනස: !bg-transparent !border-none !w-40 වැනි !important modifiers එකතු කර ඇත -->
                                 <input type="text" name="q" autocomplete="off" id="userSearchInput" class="!bg-transparent !border-none text-sm font-bold text-black dark:text-white placeholder-gray-500 focus:ring-0 !py-1 !px-2 !w-40 outline-none !shadow-none" placeholder="{% trans 'Search...' %}" value="{{ search_query }}">
                             </div>
-
                             <button type="submit" class="glass-btn w-10 h-10 rounded-xl text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white shadow-md">
                                 <i class="fas fa-search"></i>
                             </button>
                         </form>
                     </div>
 
-                    <div class="overflow-y-auto flex-1 custom-scrollbar p-2">
+                    <div class="overflow-y-auto flex-1 custom-scrollbar p-2" id="table-container">
                         <table class="w-full text-left border-separate border-spacing-y-2 px-2">
                             <thead class="sticky top-0 bg-white/80 dark:bg-gray-800/90 backdrop-blur-md z-10 text-[12px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider shadow-sm">
                                 <tr>
@@ -236,11 +211,10 @@
                             </thead>
                             <tbody>
                                 {% for letter in letters %}
-                                <tr class="group hover:bg-white/40 dark:hover:bg-white/5 transition-colors duration-200">
+                                <tr {% if highlight_serial == letter.serial_number %}id="highlighted-row"{% endif %} class="group hover:bg-white/40 dark:hover:bg-white/5 transition-colors duration-200 {% if highlight_serial == letter.serial_number %} bg-indigo-100 dark:bg-indigo-900/40 border-l-4 border-indigo-500 {% endif %}">
                                     <td class="px-6 py-3 rounded-l-xl border-l border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
                                         <span class="font-mono font-bold opacity-70 text-sm">#{{ letter.serial_number }}</span>
                                     </td>
-
                                     <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
                                         {% if letter.target_sector == user_sector or user_sector == 'ADMIN' %}
                                             <a href="{% url 'letter_detail' letter.pk %}" class="font-bold text-gray-800 dark:text-white hover:text-[var(--accent)] transition-colors text-sm line-clamp-1">
@@ -254,20 +228,17 @@
                                         {% endif %}
                                         <div class="text-[11px] font-bold opacity-50 uppercase mt-0.5">{{ letter.sender_details|truncatechars:40 }}</div>
                                     </td>
-
                                     <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[12px] font-extrabold uppercase tracking-wide badge-sector-{{ letter.target_sector }} shadow-md">
                                             {{ letter.get_target_sector_display }}
                                         </span>
                                     </td>
-
                                     <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
                                         <div class="flex items-center gap-2 text-xs font-bold opacity-80">
                                             <i class="far fa-calendar opacity-50"></i>
                                             {{ letter.date_received }}
                                         </div>
                                     </td>
-
                                     <td class="px-6 py-3 border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
                                         {% if letter.status == 'REPLIED' %}
                                             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg">
@@ -291,7 +262,6 @@
                                             </span>
                                         {% endif %}
                                     </td>
-
                                     <td class="px-6 py-3 rounded-r-xl text-right border-r border-y border-transparent group-hover:border-white/20 dark:group-hover:border-white/5">
                                         {% if letter.status != 'PENDING' %}
                                             <span class="text-[10px] font-bold uppercase opacity-40 select-none">{% trans "Completed" %}</span>
@@ -322,14 +292,18 @@
                         <span class="opacity-50 uppercase tracking-widest">Page {{ letters.number }} / {{ letters.paginator.num_pages }}</span>
                         <div class="flex gap-2">
                             {% if letters.has_previous %}
+                                <a href="?page=1&sector={{ selected_sector }}&q={{ search_query }}&search_type={{ search_type }}" class="glass-btn w-9 h-9 rounded-lg hover:bg-[var(--accent)] hover:text-white"><i class="fas fa-angle-double-left"></i></a>
                                 <a href="?page={{ letters.previous_page_number }}&sector={{ selected_sector }}&q={{ search_query }}&search_type={{ search_type }}" class="glass-btn w-9 h-9 rounded-lg hover:bg-[var(--accent)] hover:text-white"><i class="fas fa-chevron-left"></i></a>
                             {% else %}
+                                <button disabled class="glass-btn w-9 h-9 rounded-lg opacity-30 cursor-not-allowed"><i class="fas fa-angle-double-left"></i></button>
                                 <button disabled class="glass-btn w-9 h-9 rounded-lg opacity-30 cursor-not-allowed"><i class="fas fa-chevron-left"></i></button>
                             {% endif %}
                             {% if letters.has_next %}
                                 <a href="?page={{ letters.next_page_number }}&sector={{ selected_sector }}&q={{ search_query }}&search_type={{ search_type }}" class="glass-btn w-9 h-9 rounded-lg hover:bg-[var(--accent)] hover:text-white"><i class="fas fa-chevron-right"></i></a>
+                                <a href="?page={{ letters.paginator.num_pages }}&sector={{ selected_sector }}&q={{ search_query }}&search_type={{ search_type }}" class="glass-btn w-9 h-9 rounded-lg hover:bg-[var(--accent)] hover:text-white"><i class="fas fa-angle-double-right"></i></a>
                             {% else %}
                                 <button disabled class="glass-btn w-9 h-9 rounded-lg opacity-30 cursor-not-allowed"><i class="fas fa-chevron-right"></i></button>
+                                <button disabled class="glass-btn w-9 h-9 rounded-lg opacity-30 cursor-not-allowed"><i class="fas fa-angle-double-right"></i></button>
                             {% endif %}
                         </div>
                     </div>
@@ -340,7 +314,6 @@
     </div>
 
     <script>
-        // 1. Clock Logic
         function updateTime() {
             const now = new Date();
             const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
@@ -351,7 +324,6 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // 2. Theme Toggle Logic
         const themeToggleBtn = document.getElementById('themeToggle');
         const html = document.documentElement;
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -364,7 +336,6 @@
             localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
         });
 
-        // 3. Search Bar Type Toggle Logic (Updated for !important modifiers)
         document.addEventListener('DOMContentLoaded', function() {
             const searchType = document.getElementById('userSearchType');
             const searchInput = document.getElementById('userSearchInput');
@@ -380,6 +351,14 @@
                         searchInput.classList.remove('!w-auto');
                     }
                 });
+            }
+
+            // Auto-scroll logic for highlighted row
+            const highlightedRow = document.getElementById('highlighted-row');
+            if (highlightedRow) {
+                setTimeout(() => {
+                    highlightedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
             }
         });
     </script>

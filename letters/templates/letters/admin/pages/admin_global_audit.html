@@ -4,81 +4,90 @@
 {% block header_title %}{% trans "Main Control Panel" %}{% endblock %}
 
 {% block admin_content %}
-<div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-    <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">{% trans "Audit Logs" %}</h3>
+<!-- Wrap everything in a full-height flex column so the table can scroll internally -->
+<div class="flex flex-col h-full overflow-hidden w-full">
 
-    <!-- Search Form -->
-    <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all bg-white dark:bg-transparent border border-gray-300 dark:border-white/10 shadow-sm">
-        <!-- Used !important modifiers for input to prevent override -->
-        <input type="text" name="q" autocomplete="off" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-3 !w-48 outline-none" placeholder="{% trans 'Search Serial Number...' %}" value="{{ search_query }}">
-        <button type="submit" class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 transition-colors shadow-md">
-            <i class="fas fa-search text-xs"></i>
-        </button>
-    </form>
-</div>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 shrink-0">
+        <h3 class="text-2xl font-black text-gray-700 dark:text-white tracking-tight">{% trans "Audit Logs" %}</h3>
 
-<div class="glass-panel rounded-2xl overflow-hidden p-1 shadow-sm border border-gray-200 dark:border-gray-700">
-    <table class="w-full text-left border-collapse">
-        <thead class="text-[11px] uppercase text-gray-500 dark:text-gray-400 font-bold bg-gray-50/80 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700">
-            <tr>
-                <th class="px-6 py-4">{% trans "Date & Time" %}</th>
-                <th class="px-6 py-4">{% trans "User" %}</th>
-                <th class="px-6 py-4">{% trans "Action Type" %}</th>
-                <th class="px-6 py-4">{% trans "Target Serial" %}</th>
-                <th class="px-6 py-4 text-right">{% trans "Details" %}</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200/50 dark:divide-gray-700/50 bg-white/40 dark:bg-gray-900/40">
-            {% for record in history_records %}
-            <tr class="hover:bg-white/80 dark:hover:bg-gray-800/80 transition-colors">
-                <td class="px-6 py-4 text-sm font-semibold text-gray-800 dark:text-gray-200">
-                    {{ record.history_date|date:"Y-m-d H:i:s" }}
-                </td>
-                <td class="px-6 py-4 text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                    {{ record.history_user.username|default:"System" }}
-                </td>
-                <td class="px-6 py-4">
-                    {% if record.history_type == '+' %}
-                        <span class="px-2.5 py-1 bg-emerald-100/80 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 rounded-md text-[11px] font-bold border border-emerald-200 dark:border-emerald-800"><i class="fas fa-plus mr-1.5"></i>{% trans "Created" %}</span>
-                    {% elif record.history_type == '~' %}
-                        <span class="px-2.5 py-1 bg-blue-100/80 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded-md text-[11px] font-bold border border-blue-200 dark:border-blue-800"><i class="fas fa-pen mr-1.5"></i>{% trans "Updated" %}</span>
-                    {% elif record.history_type == '-' %}
-                        <span class="px-2.5 py-1 bg-red-100/80 dark:bg-red-900/40 text-red-700 dark:text-red-400 rounded-md text-[11px] font-bold border border-red-200 dark:border-red-800"><i class="fas fa-trash mr-1.5"></i>{% trans "Deleted" %}</span>
-                    {% endif %}
-                </td>
-                <td class="px-6 py-4 text-sm font-mono opacity-80 font-bold">
-                    #{{ record.serial_number }}
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <a href="{% url 'admin_letter_audit' record.id %}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold text-xs underline decoration-2 underline-offset-2">
-                        {% trans "View Difference" %}
-                    </a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5" class="px-6 py-16 text-center">
-                    <div class="w-16 h-16 rounded-full bg-gray-200/50 dark:bg-gray-700/50 flex items-center justify-center mx-auto mb-4 text-gray-400 text-2xl">
-                        <i class="fas fa-clipboard-list"></i>
-                    </div>
-                    <span class="text-gray-500 opacity-60 font-bold text-sm">{% trans "No audit records found." %}</span>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-<!-- Pagination Controls -->
-<div class="flex justify-between items-center mt-4 px-2">
-    <span class="text-[10px] font-bold uppercase tracking-wider opacity-50">Page {{ history_records.number }} of {{ history_records.paginator.num_pages }}</span>
-    <div class="flex gap-2">
-        {% if history_records.has_previous %}
-            <a href="?page={{ history_records.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white shadow-sm"><i class="fas fa-chevron-left text-xs"></i></a>
-        {% endif %}
-        {% if history_records.has_next %}
-            <a href="?page={{ history_records.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white shadow-sm"><i class="fas fa-chevron-right text-xs"></i></a>
-        {% endif %}
+        <!-- Search Form -->
+        <form method="get" class="flex items-center glass rounded-xl px-1 py-1 focus-within:ring-2 focus-within:ring-indigo-500 transition-all bg-white dark:bg-transparent border border-gray-300 dark:border-white/10 shadow-sm">
+            <!-- Used !important modifiers for input to prevent override -->
+            <input type="text" name="q" autocomplete="off" class="!bg-transparent !border-none !shadow-none text-sm font-medium text-black dark:text-gray-200 placeholder-gray-400 focus:ring-0 !py-1 !px-3 !w-48 outline-none" placeholder="{% trans 'Search Serial Number...' %}" value="{{ search_query }}">
+            <button type="submit" class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 transition-colors shadow-md">
+                <i class="fas fa-search text-xs"></i>
+            </button>
+        </form>
     </div>
+
+    <!-- Table Container (Flex-1 and Scrollable) -->
+    <div class="glass-panel rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 flex-1 flex flex-col overflow-hidden min-h-0 mb-2">
+        <div class="flex-1 overflow-y-auto overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left border-collapse">
+                <!-- Sticky Header -->
+                <thead class="sticky top-0 z-10 text-[11px] uppercase text-gray-500 dark:text-gray-400 font-bold bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 shadow-sm">
+                    <tr>
+                        <th class="px-6 py-4 whitespace-nowrap">{% trans "Date & Time" %}</th>
+                        <th class="px-6 py-4 whitespace-nowrap">{% trans "User" %}</th>
+                        <th class="px-6 py-4 whitespace-nowrap">{% trans "Action Type" %}</th>
+                        <th class="px-6 py-4 whitespace-nowrap">{% trans "Target Serial" %}</th>
+                        <th class="px-6 py-4 text-right whitespace-nowrap">{% trans "Details" %}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200/50 dark:divide-gray-700/50 bg-white/40 dark:bg-gray-900/40">
+                    {% for record in history_records %}
+                    <tr class="hover:bg-white/80 dark:hover:bg-gray-800/80 transition-colors">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                            {{ record.history_date|date:"Y-m-d H:i:s" }}
+                        </td>
+                        <td class="px-6 py-4 text-sm font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">
+                            {{ record.history_user.username|default:"System" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if record.history_type == '+' %}
+                                <span class="px-2.5 py-1 bg-emerald-100/80 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 rounded-md text-[11px] font-bold border border-emerald-200 dark:border-emerald-800"><i class="fas fa-plus mr-1.5"></i>{% trans "Created" %}</span>
+                            {% elif record.history_type == '~' %}
+                                <span class="px-2.5 py-1 bg-blue-100/80 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded-md text-[11px] font-bold border border-blue-200 dark:border-blue-800"><i class="fas fa-pen mr-1.5"></i>{% trans "Updated" %}</span>
+                            {% elif record.history_type == '-' %}
+                                <span class="px-2.5 py-1 bg-red-100/80 dark:bg-red-900/40 text-red-700 dark:text-red-400 rounded-md text-[11px] font-bold border border-red-200 dark:border-red-800"><i class="fas fa-trash mr-1.5"></i>{% trans "Deleted" %}</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-sm font-mono opacity-80 font-bold whitespace-nowrap">
+                            #{{ record.serial_number }}
+                        </td>
+                        <td class="px-6 py-4 text-right whitespace-nowrap">
+                            <a href="{% url 'admin_letter_audit' record.id %}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold text-xs underline decoration-2 underline-offset-2">
+                                {% trans "View Difference" %}
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-16 text-center">
+                            <div class="w-16 h-16 rounded-full bg-gray-200/50 dark:bg-gray-700/50 flex items-center justify-center mx-auto mb-4 text-gray-400 text-2xl">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <span class="text-gray-500 opacity-60 font-bold text-sm">{% trans "No audit records found." %}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-between items-center mt-2 px-2 shrink-0 pt-2 border-t border-gray-200/30 dark:border-gray-700/30">
+        <span class="text-[10px] font-bold uppercase tracking-wider opacity-50">Page {{ history_records.number }} of {{ history_records.paginator.num_pages }}</span>
+        <div class="flex gap-2">
+            {% if history_records.has_previous %}
+                <a href="?page={{ history_records.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white shadow-sm"><i class="fas fa-chevron-left text-xs"></i></a>
+            {% endif %}
+            {% if history_records.has_next %}
+                <a href="?page={{ history_records.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="glass-btn w-8 h-8 rounded-lg hover:bg-indigo-500 hover:text-white shadow-sm"><i class="fas fa-chevron-right text-xs"></i></a>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}

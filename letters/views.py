@@ -42,23 +42,35 @@ def sector_dashboard(request):
     letters = Letter.objects.all().order_by('serial_number')
 
     selected_sector = request.GET.get('sector', 'ALL')
+    search_query = request.GET.get('q', '')
+    search_type = request.GET.get('search_type', 'all')
+    page_number = request.GET.get('page')
+    highlight_serial = None
 
     if selected_sector != "ALL":
         letters = letters.filter(target_sector=selected_sector)
 
-    search_query = request.GET.get('q', '')
-    search_type = request.GET.get('search_type', 'all')
-
     if search_query:
         if search_type == 'serial':
-            letters = letters.filter(serial_number__iexact=search_query)
+            target = letters.filter(serial_number__iexact=search_query).first()
+            if target:
+                highlight_serial = int(target.serial_number)
+
+                if not page_number:
+                    position = letters.filter(serial_number__lt=target.serial_number).count()
+                    page_number = (position // 20) + 1
+
+            else:
+                letters = letters.none()
+
+
         elif search_type == 'date':
             letters = letters.filter(date_received__icontains=search_query)
         else:
             letters = letters.filter(
-            Q(serial_number__icontains=search_query) |
-            Q(sender_details__icontains=search_query) |
-            Q(letter_type__icontains=search_query)
+                Q(serial_number__icontains=search_query) |
+                Q(sender_details__icontains=search_query) |
+                Q(letter_type__icontains=search_query)
 
         )
 
@@ -67,7 +79,6 @@ def sector_dashboard(request):
     resolved_count = total_count - pending_count
 
     paginator = Paginator(letters, 20)
-    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     context = {
@@ -79,6 +90,7 @@ def sector_dashboard(request):
         'total': total_count,
         'pending': pending_count,
         'resolved': resolved_count,
+        'highlight_serial': highlight_serial,
     }
 
     return render(request, 'letters/user/dashboard.html', context)
@@ -288,9 +300,26 @@ def custom_admin_letters(request):
     filter_sector = request.GET.get('sector', 'all')
     filter_status = request.GET.get('status', 'all')
 
+    page_number = request.GET.get('page')
+    highlight_serial = None
+
+    if filter_sector != 'all':
+        letters_list = letters_list.filter(target_sector=filter_sector)
+    if filter_status != 'all':
+        letters_list = letters_list.filter(status=filter_status)
+
     if search_query:
         if search_type == 'serial':
-            letters_list = letters_list.filter(serial_number__iexact=search_query)
+            target = letters_list.filter(serial_number__iexact=search_query).first()
+            if target:
+                highlight_serial = int(target.serial_number)
+                if not page_number:
+                    position = letters_list.filter(serial_number__lt=target.serial_number).count()
+                    page_number = (position // 20) + 1
+
+            else:
+                letters_list = letters_list.none()
+
         elif search_type == 'date':
             letters_list = letters_list.filter(date_received__icontains=search_query)
         else:
@@ -301,18 +330,11 @@ def custom_admin_letters(request):
             Q(target_sector__icontains=search_query)
         )
 
-    if filter_sector != 'all':
-        letters_list = letters_list.filter(target_sector=filter_sector)
-
-    if filter_status != 'all':
-        letters_list = letters_list.filter(status=filter_status)
-
     total_letters = letters_list.count()
     pending_letters = letters_list.filter(status='PENDING').count()
     replied_letters = total_letters - pending_letters
 
     paginator = Paginator(letters_list, 20)
-    page_number = request.GET.get('page')
     letters = paginator.get_page(page_number)
 
     context = {
@@ -325,7 +347,8 @@ def custom_admin_letters(request):
         'STATUS_CHOICES': STATUS_CHOICES,
         'total_letters': total_letters,
         'pending_letters': pending_letters,
-        'replied_letters': replied_letters
+        'replied_letters': replied_letters,
+        'highlight_serial': highlight_serial,
     }
 
     return render(request, 'letters/admin/pages/admin_letters.html', context)
