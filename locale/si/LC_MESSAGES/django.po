@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-13 09:23+0530\n"
+"POT-Creation-Date: 2026-08-18 14:08+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,42 +41,42 @@ msgstr "ප්‍රධාන කළමණාකරන නිළධාරි"
 msgid "Head Of Section"
 msgstr "අංශ ප්‍රධානි"
 
-#: .\letters\models.py:23 .\letters\templates\letters\user\dashboard.html:58
-#: .\letters\templates\letters\user\dashboard.html:102
+#: .\letters\models.py:23 .\letters\templates\letters\user\dashboard.html:55
+#: .\letters\templates\letters\user\dashboard.html:96
 msgid "Administration Section"
 msgstr "පාලන අංශය"
 
-#: .\letters\models.py:24 .\letters\templates\letters\user\dashboard.html:59
-#: .\letters\templates\letters\user\dashboard.html:103
+#: .\letters\models.py:24 .\letters\templates\letters\user\dashboard.html:56
+#: .\letters\templates\letters\user\dashboard.html:97
 msgid "Health Section"
 msgstr "සෞඛ්‍ය අංශය"
 
-#: .\letters\models.py:25 .\letters\templates\letters\user\dashboard.html:60
-#: .\letters\templates\letters\user\dashboard.html:104
+#: .\letters\models.py:25 .\letters\templates\letters\user\dashboard.html:57
+#: .\letters\templates\letters\user\dashboard.html:98
 msgid "Development Section"
 msgstr "සංවර්ධන අංශය"
 
-#: .\letters\models.py:26 .\letters\templates\letters\user\dashboard.html:61
-#: .\letters\templates\letters\user\dashboard.html:105
+#: .\letters\models.py:26 .\letters\templates\letters\user\dashboard.html:58
+#: .\letters\templates\letters\user\dashboard.html:99
 msgid "Revenue Section"
 msgstr "ආදයම් අංශය"
 
-#: .\letters\models.py:27 .\letters\templates\letters\user\dashboard.html:62
-#: .\letters\templates\letters\user\dashboard.html:106
+#: .\letters\models.py:27 .\letters\templates\letters\user\dashboard.html:59
+#: .\letters\templates\letters\user\dashboard.html:100
 msgid "Accounts Section"
 msgstr "ගිණුම් අංශය"
 
 #: .\letters\models.py:31
-#: .\letters\templates\letters\admin\pages\admin_letters.html:160
-#: .\letters\templates\letters\user\dashboard.html:290
+#: .\letters\templates\letters\admin\pages\admin_letters.html:136
+#: .\letters\templates\letters\user\dashboard.html:261
 #: .\letters\templates\letters\user\letter_detail.html:113
 msgid "Pending"
 msgstr "විමර්ශනය වෙමින් පවතී"
 
 #: .\letters\models.py:32
 #: .\letters\templates\letters\admin\pages\admin_letter_detail.html:31
-#: .\letters\templates\letters\admin\pages\admin_letters.html:148
-#: .\letters\templates\letters\user\dashboard.html:274
+#: .\letters\templates\letters\admin\pages\admin_letters.html:130
+#: .\letters\templates\letters\user\dashboard.html:245
 #: .\letters\templates\letters\user\letter_detail.html:86
 #: .\letters\templates\letters\user\letter_detail.html:152
 msgid "Replied"
@@ -84,7 +84,7 @@ msgstr "පිළිතුරු යොමු කර ඇත"
 
 #: .\letters\models.py:33
 #: .\letters\templates\letters\admin\pages\admin_letter_detail.html:37
-#: .\letters\templates\letters\user\dashboard.html:278
+#: .\letters\templates\letters\user\dashboard.html:249
 #: .\letters\templates\letters\user\letter_detail.html:94
 #: .\letters\templates\letters\user\letter_detail.html:164
 msgid "Not Required"
@@ -92,8 +92,8 @@ msgstr "පිළිතුරු සැපයීම අවශ්‍ය නැත
 
 #: .\letters\models.py:34
 #: .\letters\templates\letters\admin\pages\admin_letter_detail.html:43
-#: .\letters\templates\letters\admin\pages\admin_letters.html:156
-#: .\letters\templates\letters\user\dashboard.html:282
+#: .\letters\templates\letters\admin\pages\admin_letters.html:134
+#: .\letters\templates\letters\user\dashboard.html:253
 #: .\letters\templates\letters\user\letter_detail.html:102
 #: .\letters\templates\letters\user\letter_detail.html:171
 msgid "Admin Updated"
@@ -146,52 +146,52 @@ msgstr "නව නිළධාරියෙක් ඇතුලත් කරන්
 msgid "Main Control Panel"
 msgstr "ප්‍රධාන පාලක පුවරුව"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:8
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:11
 #: .\letters\templates\letters\admin\shared\admin_base.html:81
 msgid "Audit Logs"
 msgstr "විගණන වාර්තා"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:13
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:16
 msgid "Search Serial Number..."
 msgstr "අනු අංකය සොයන්න..."
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:24
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:30
 msgid "Date & Time"
 msgstr "දිනය හා වේලාව"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:25
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:31
 msgid "User"
 msgstr "පරිශීලක නාමය"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:26
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:32
 msgid "Action Type"
 msgstr "ක්‍රියාමාර්ග"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:27
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:33
 msgid "Target Serial"
 msgstr "ඉලක්කගත අනු අංකය"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:28
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:34
 msgid "Details"
 msgstr "විස්තර"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:42
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:48
 msgid "Created"
 msgstr "නිර්මාණය කරන ලදි"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:44
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:50
 msgid "Updated"
 msgstr "යාවත්කාලීන කරන ලදි"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:46
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:52
 msgid "Deleted"
 msgstr "ඉවත් කරන ලදි"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:54
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:60
 msgid "View Difference"
 msgstr "වෙනස්වීම් බලන්න"
 
-#: .\letters\templates\letters\admin\pages\admin_global_audit.html:64
+#: .\letters\templates\letters\admin\pages\admin_global_audit.html:70
 msgid "No audit records found."
 msgstr "පද්ධතියේ කිසිදු විගණන වාර්තාවක් නොමැත"
 
@@ -328,109 +328,113 @@ msgstr "තොරතුරු සංස්කරණය කරන්න"
 msgid "Delete Record"
 msgstr "මෙම වාර්තාව ඉවත් කරන්න"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:20
-#: .\letters\templates\letters\user\dashboard.html:166
+#: .\letters\templates\letters\admin\pages\admin_letters.html:16
+#: .\letters\templates\letters\user\dashboard.html:150
 msgid "Total Letters"
 msgstr "මුළු ලිපි ගොනු"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:34
-#: .\letters\templates\letters\user\dashboard.html:177
+#: .\letters\templates\letters\admin\pages\admin_letters.html:29
+#: .\letters\templates\letters\user\dashboard.html:160
 msgid "Pending Letters"
 msgstr "විමර්ශනය වෙමින් පවතින ලිපි"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:48
-#: .\letters\templates\letters\user\dashboard.html:188
+#: .\letters\templates\letters\admin\pages\admin_letters.html:42
+#: .\letters\templates\letters\user\dashboard.html:170
 msgid "Replied Letters"
 msgstr "පිළිතුරු යොමු කළ ලිපි"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:56
-#: .\letters\templates\letters\user\dashboard.html:196
+#: .\letters\templates\letters\admin\pages\admin_letters.html:49
+#: .\letters\templates\letters\user\dashboard.html:178
 msgid "Letter Registry"
 msgstr "ලිපි ගොනුව"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:63
-#| msgid "All Sections"
+#: .\letters\templates\letters\admin\pages\admin_letters.html:54
 msgid "All Sectors"
 msgstr "සියළුම අංශ"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:72
-#| msgid "Status"
+#: .\letters\templates\letters\admin\pages\admin_letters.html:61
 msgid "All Status"
 msgstr " සියළුම තත්ත්වයන්"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:81
-#: .\letters\templates\letters\user\dashboard.html:210
+#: .\letters\templates\letters\admin\pages\admin_letters.html:68
+#: .\letters\templates\letters\user\dashboard.html:187
 msgid "All"
 msgstr "සියල්ල"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:82
-#: .\letters\templates\letters\user\dashboard.html:211
+#: .\letters\templates\letters\admin\pages\admin_letters.html:69
+#: .\letters\templates\letters\user\dashboard.html:188
 msgid "Serial"
 msgstr "අංකය"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:83
-#: .\letters\templates\letters\user\dashboard.html:212
-#: .\letters\templates\letters\user\dashboard.html:232
+#: .\letters\templates\letters\admin\pages\admin_letters.html:70
+#: .\letters\templates\letters\user\dashboard.html:189
+#: .\letters\templates\letters\user\dashboard.html:207
 msgid "Date"
 msgstr "දිනය"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:99
+#: .\letters\templates\letters\admin\pages\admin_letters.html:73
+#: .\letters\templates\letters\admin\pages\admin_users.html:12
+#: .\letters\templates\letters\user\dashboard.html:192
+msgid "Search..."
+msgstr "සොයන්න..."
+
+#: .\letters\templates\letters\admin\pages\admin_letters.html:83
 msgid "Export"
 msgstr "වාර්තා ලබාගන්න"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:103
+#: .\letters\templates\letters\admin\pages\admin_letters.html:86
 #: .\letters\templates\letters\admin\shared\admin_base.html:132
 msgid "New"
 msgstr "නව ඇතුළත් කිරීම්"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:112
-#: .\letters\templates\letters\user\dashboard.html:229
+#: .\letters\templates\letters\admin\pages\admin_letters.html:95
+#: .\letters\templates\letters\user\dashboard.html:204
 #: .\letters\templates\letters\user\letter_detail.html:73
 msgid "Serial No"
 msgstr "අනු අංකය"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:113
-#: .\letters\templates\letters\user\dashboard.html:230
+#: .\letters\templates\letters\admin\pages\admin_letters.html:96
+#: .\letters\templates\letters\user\dashboard.html:205
 #: .\letters\templates\letters\user\letter_detail.html:128
 #: .\letters\templates\letters\user\user_add_letter.html:124
 #: .\letters\templates\letters\user\user_edit_letter.html:123
 msgid "Subject"
 msgstr "විෂයය"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:114
+#: .\letters\templates\letters\admin\pages\admin_letters.html:97
 msgid "Sender"
 msgstr "එවූ අයගේ නම/ලිපිනය"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:115
+#: .\letters\templates\letters\admin\pages\admin_letters.html:98
 msgid "Received"
 msgstr "ලැබුණු දිනය"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:116
-#: .\letters\templates\letters\user\dashboard.html:231
+#: .\letters\templates\letters\admin\pages\admin_letters.html:99
+#: .\letters\templates\letters\user\dashboard.html:206
 msgid "Sector"
 msgstr "අංශය"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:117
+#: .\letters\templates\letters\admin\pages\admin_letters.html:100
 msgid "Officer"
 msgstr "භාරගත් නිළධාරියා"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:118
-#: .\letters\templates\letters\user\dashboard.html:233
+#: .\letters\templates\letters\admin\pages\admin_letters.html:101
+#: .\letters\templates\letters\user\dashboard.html:208
 msgid "Status"
 msgstr "තත්ත්වය"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:119
-#: .\letters\templates\letters\user\dashboard.html:234
+#: .\letters\templates\letters\admin\pages\admin_letters.html:102
+#: .\letters\templates\letters\user\dashboard.html:209
 msgid "Action"
 msgstr "ක්‍රියාමාර්ග"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:152
+#: .\letters\templates\letters\admin\pages\admin_letters.html:132
 #, fuzzy
 #| msgid "Action"
 msgid "No Action"
 msgstr "ක්‍රියාමාර්ග"
 
-#: .\letters\templates\letters\admin\pages\admin_letters.html:176
+#: .\letters\templates\letters\admin\pages\admin_letters.html:151
 msgid "No letters found"
 msgstr "පද්ධතියේ කිසිදු ලිපියක් නොමැත"
 
@@ -557,6 +561,7 @@ msgid "I confirm that the details entered above are accurate."
 msgstr "ඉහත ඇතුළත් කළ තොරතුරු නිවැරදි බව මා විසින් තහවුරු කරමි"
 
 #: .\letters\templates\letters\admin\pages\letter_form.html:184
+#: .\letters\templates\letters\user\user_add_letter.html:226
 msgid "Save Record"
 msgstr "තොරතුරු සුරකින්න"
 
@@ -593,17 +598,17 @@ msgid "Council Administration"
 msgstr ""
 
 #: .\letters\templates\letters\admin\shared\admin_base.html:43
-#: .\letters\templates\letters\user\dashboard.html:34
+#: .\letters\templates\letters\user\dashboard.html:32
 msgid "Divisional Council"
 msgstr "ප්‍රාදේශීය සභාව"
 
 #: .\letters\templates\letters\admin\shared\admin_base.html:44
-#: .\letters\templates\letters\user\dashboard.html:35
+#: .\letters\templates\letters\user\dashboard.html:33
 msgid "Weligepola"
 msgstr "වැලිගෙපොල"
 
 #: .\letters\templates\letters\admin\shared\admin_base.html:49
-#: .\letters\templates\letters\user\dashboard.html:40
+#: .\letters\templates\letters\user\dashboard.html:38
 msgid "Main Menu"
 msgstr "ප්‍රධාන මෙනුව"
 
@@ -629,36 +634,32 @@ msgstr "පද්ධතියේ තත්ත්වය"
 msgid "No new notifications"
 msgstr ""
 
-#: .\letters\templates\letters\user\dashboard.html:44
-#: .\letters\templates\letters\user\dashboard.html:101
+#: .\letters\templates\letters\user\dashboard.html:42
+#: .\letters\templates\letters\user\dashboard.html:95
 msgid "All Sections"
 msgstr "සියළුම අංශ"
 
-#: .\letters\templates\letters\user\dashboard.html:47
+#: .\letters\templates\letters\user\dashboard.html:45
 msgid "Section By Section"
 msgstr "අංශ වශයෙන්"
 
-#: .\letters\templates\letters\user\dashboard.html:107
+#: .\letters\templates\letters\user\dashboard.html:101
 msgid "Sector Not Defined"
 msgstr "අංශය නම් කර නොමැත"
 
-#: .\letters\templates\letters\user\dashboard.html:110
+#: .\letters\templates\letters\user\dashboard.html:104
 msgid "Welcome"
 msgstr "ආයුබෝවන්"
 
-#: .\letters\templates\letters\user\dashboard.html:216
-msgid "Search..."
-msgstr "සොයන්න..."
-
-#: .\letters\templates\letters\user\dashboard.html:297
+#: .\letters\templates\letters\user\dashboard.html:267
 msgid "Completed"
 msgstr ""
 
-#: .\letters\templates\letters\user\dashboard.html:303
+#: .\letters\templates\letters\user\dashboard.html:273
 msgid "Read Only"
 msgstr ""
 
-#: .\letters\templates\letters\user\dashboard.html:313
+#: .\letters\templates\letters\user\dashboard.html:283
 msgid "No records found"
 msgstr "පද්ධතියේ කිසිදු ලිපියක් නොමැත"
 
@@ -681,6 +682,11 @@ msgid ""
 "cannot be changed further."
 msgstr ""
 "මෙම කොටස යාවත්කාලීන කළ පසු, ලිපිය තවදුරටත් වෙනස් කළ නොහැකි ලෙස සම්පූර්ණයෙන්ම අගුළු වැටෙනු ඇත."
+
+#: .\letters\templates\letters\user\user_edit_letter.html:218
+#| msgid "Save Record"
+msgid "Update Record"
+msgstr "තොරතුරු යාවත්කාලීන කරන්න"
 
 #~ msgid "Audit Log"
 #~ msgstr "විගණන වාර්තා"

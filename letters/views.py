@@ -79,6 +79,8 @@ def sector_dashboard(request):
     resolved_count = total_count - pending_count
 
     paginator = Paginator(letters, 20)
+    if not page_number:
+        page_number = paginator.num_pages
     page_obj = paginator.get_page(page_number)
 
     context = {
@@ -122,7 +124,7 @@ def user_add_letter(request):
 
             form.save()
             messages.success(request, "New letter added successfully.")
-            return redirect('sector_dashboard')
+            return redirect(f"{reverse('sector_dashboard')}?q={letter.serial_number}&search_type=serial")
     else:
         form = UserLetterForm(initial={'target_sector': user_sector})
 
@@ -165,7 +167,7 @@ def user_edit_letter(request, pk):
 
             form.save()
             messages.success(request, f"Letter #{letter.serial_number} updated successfully.")
-            return redirect('sector_dashboard')
+            return redirect(f"{reverse('sector_dashboard')}?q={letter.serial_number}&search_type=serial")
 
     else:
         form = UserLetterForm(instance=letter)
@@ -335,6 +337,8 @@ def custom_admin_letters(request):
     replied_letters = total_letters - pending_letters
 
     paginator = Paginator(letters_list, 20)
+    if not page_number:
+        page_number = paginator.num_pages
     letters = paginator.get_page(page_number)
 
     context = {
@@ -462,7 +466,7 @@ def edit_letter(request, pk):
 
             form.save()
             messages.success(request, "Letter updated successfully.")
-            return redirect('admin_letter_detail', pk=letter.pk)
+            return redirect(f"{reverse('custom_admin_letters')}?q={letter.serial_number}&search_type=serial")
     else:
         form = LetterForm(instance=letter)
 

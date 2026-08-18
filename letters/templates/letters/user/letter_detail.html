@@ -57,7 +57,7 @@
 
     <div class="max-w-5xl mx-auto">
 
-        <a href="{% url 'sector_dashboard' %}" class="inline-flex items-center gap-2 glass-btn px-6 py-3 rounded-2xl mb-6 text-gray-600 dark:text-gray-300 font-bold hover:bg-[var(--accent)] hover:text-white group transition-colors">
+        <a href="{% url 'sector_dashboard' %}?q={{ letter.serial_number }}&search_type=serial" class="inline-flex items-center gap-2 glass-btn px-6 py-3 rounded-2xl mb-6 text-gray-600 dark:text-gray-300 font-bold hover:bg-[var(--accent)] hover:text-white group transition-colors">
             <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
             <span class="text-base uppercase tracking-wider">{% trans "Dashboard" %}</span>
         </a>
