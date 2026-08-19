@@ -1,5 +1,5 @@
 from random import choices
-
+from django.utils.translation import gettext_lazy as _
 from django import forms
 from django.contrib.auth.models import User
 from .models import SectorProfile, SECTOR_CHOICES, Letter, OFFICER_CHOICES
@@ -99,8 +99,8 @@ class LetterForm(forms.ModelForm):
         }
 
         widgets = {
-            'sender_details': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter full sender name, organization, and address details...'}),
-            'letter_type': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter Subject Description'}),
+            'sender_details': forms.Textarea(attrs={'rows': 4, 'placeholder': _('Enter full sender name, organization, and address details...')}),
+            'letter_type': forms.Textarea(attrs={'rows': 3, 'placeholder': _('Enter Subject Description...')}),
         }
 
     # - - NEW SECURITY CHECK - -

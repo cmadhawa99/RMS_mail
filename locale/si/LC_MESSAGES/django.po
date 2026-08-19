@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-18 14:08+0530\n"
+"POT-Creation-Date: 2026-08-19 11:25+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,14 @@ msgstr ""
 #: .\council_project\settings.py:130 .\council_project\test_settings.py:101
 msgid "Sinhala"
 msgstr ""
+
+#: .\letters\forms.py:102
+msgid "Enter full sender name, organization, and address details..."
+msgstr "එවූ අයගේ සම්පූර්ණ නම, ආයතනය සහ ලිපින විස්තර ඇතුළත් කරන්න..."
+
+#: .\letters\forms.py:103
+msgid "Enter Subject Description..."
+msgstr "විෂය පිළිබඳ විස්තරය ඇතුළත් කරන්න..."
 
 #: .\letters\models.py:16
 msgid "Chairman"
@@ -196,10 +204,9 @@ msgid "No audit records found."
 msgstr "පද්ධතියේ කිසිදු විගණන වාර්තාවක් නොමැත"
 
 #: .\letters\templates\letters\admin\pages\admin_letter_audit.html:10
-#, fuzzy
 #| msgid "Audit Logs"
 msgid "Back to Audit Logs"
-msgstr "විගණන වාර්තා"
+msgstr "නැවත විගණන ලොග වෙත"
 
 #: .\letters\templates\letters\admin\pages\admin_letter_audit.html:40
 msgid "Revised Field"
@@ -480,10 +487,8 @@ msgid "Actions"
 msgstr "ක්‍රියාමාර්ග"
 
 #: .\letters\templates\letters\admin\pages\admin_users.html:52
-#, fuzzy
-#| msgid "Edit Profile"
 msgid "View Profile"
-msgstr "පැතිකඩ සංස්කරණය කරන්න"
+msgstr "පැතිකඩ පෙන්වන්න"
 
 #: .\letters\templates\letters\admin\pages\admin_users.html:62
 msgid "No officers found"
@@ -684,7 +689,6 @@ msgstr ""
 "මෙම කොටස යාවත්කාලීන කළ පසු, ලිපිය තවදුරටත් වෙනස් කළ නොහැකි ලෙස සම්පූර්ණයෙන්ම අගුළු වැටෙනු ඇත."
 
 #: .\letters\templates\letters\user\user_edit_letter.html:218
-#| msgid "Save Record"
 msgid "Update Record"
 msgstr "තොරතුරු යාවත්කාලීන කරන්න"
 
