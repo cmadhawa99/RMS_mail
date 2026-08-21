@@ -464,7 +464,6 @@ def edit_letter(request, pk):
             letter_obj.updated_by = request.user.username
             letter_obj.save()
 
-            form.save()
             messages.success(request, "Letter updated successfully.")
             return redirect(f"{reverse('custom_admin_letters')}?q={letter.serial_number}&search_type=serial")
     else:
